@@ -9,8 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.0",
+    "@heroicons/react": "^2.1.5",
     "@sanity/image-url": "^1.1.0",
     "@sanity/vision": "^3.64.1",
+    "framer-motion": "^11.11.17",
+    "groq": "^3.64.1",
     "next": "15.0.3",
     "next-sanity": "^9.8.15",
     "react": "^18.3.1",

@@ -51,6 +51,11 @@ export default {
             ],
         },
         {
+            name: "description",
+            title: "Description",
+            type: "text",
+        },
+        {
             name: 'bio',
             title: 'Artist Information',
             type: 'array',
@@ -58,8 +63,8 @@ export default {
                 {
                     type: 'object',
                     fields: [
-                        { name: 'header', title: 'Header', type: 'string' },
-                        { name: 'content', title: 'Content', type: 'array', of: [{ type: 'block' }] },
+                        {name: 'header', title: 'Header', type: 'string'},
+                        {name: 'content', title: 'Content', type: 'array', of: [{type: 'block'}]},
                     ],
                 },
             ],
@@ -71,7 +76,7 @@ export default {
             of: [
                 {
                     type: 'reference',
-                    to: [{ type: 'artisticStyle' }],
+                    to: [{type: 'artisticStyle'}],
                 },
             ],
         },
@@ -82,9 +87,22 @@ export default {
             of: [
                 {
                     type: 'reference',
-                    to: [{ type: 'paintingStyle' }],
+                    to: [{type: 'paintingStyle'}],
                 },
             ],
+        },
+        {
+            name: "artworks",
+            title: "Artworks",
+            type: "array",
+            of: [
+                {
+                    type: "reference",
+                    to: [{type: "product"}],
+                },
+            ],
+            validation: (Rule) => Rule.max(2),
+
         },
         {
             title: "SEO",

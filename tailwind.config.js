@@ -8,9 +8,25 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                background: "var(--background)",
+                primary: {
+                    DEFAULT: "#AE8974",
+                    light: "#E7E0DC",
+                },
+                black: "#181818",
+                gray: {
+                    DEFAULT: "#666666",
+                    dark: "#8A8A8A",
+                },
+                stroke : {
+                    DEFAULT: "#E2E2E2",
+                },
+
                 foreground: "var(--foreground)",
             },
+            maxWidth: {
+                'screen-xl': '1450px',
+                'column' : '800px',
+            }
         },
         fontFamily: {
             serif: ["var(--font-merriweather)", "serif"],

@@ -2,7 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+*::-webkit-scrollbar {
+  display: none;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
 }
+
+h1{
+  font-size: 56px;
+  letter-spacing: -0.2px;
+
+}
+/*input{*/
+/*  padding-block: 10px;*/
+/*  padding-inline: 15px;*/
+/*  background: #F8F8F8;*/
+/*}*/
+
+/**{*/
+/*  letter-spacing: -0.2px;*/
+/*}*/

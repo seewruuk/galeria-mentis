@@ -4,6 +4,11 @@ export default {
     type: 'document',
     fields: [
         {
+            title: "title",
+            name: "title",
+            type: "string",
+        },
+        {
             name: 'heroSection',
             title: 'Hero Section',
             type: 'array',
@@ -11,17 +16,22 @@ export default {
                 {
                     type: 'object',
                     fields: [
-                        { name: 'title', title: 'Title', type: 'string' },
-                        { name: 'text', title: 'Text', type: 'text' },
+                        {name: 'title', title: 'Title', type: 'string'},
+                        {name: 'text', title: 'Text', type: 'text'},
                         {
                             name: 'button',
                             title: 'Button',
                             type: 'object',
                             fields: [
-                                { name: 'label', title: 'Label', type: 'string' },
-                                { name: 'link', title: 'Link', type: 'url' },
+                                {name: 'label', title: 'Label', type: 'string'},
+                                {name: 'link', title: 'Link', type: 'string'},
                             ],
                         },
+                        {
+                            name: 'backgroundImage',
+                            title: 'Background Image',
+                            type: 'image',
+                        }
                     ],
                 },
             ],
@@ -33,7 +43,7 @@ export default {
             of: [
                 {
                     type: 'reference',
-                    to: [{ type: 'product' }],
+                    to: [{type: 'product'}],
                 },
             ],
             validation: Rule => Rule.max(4).warning('You can only select up to 4 products'),
@@ -50,7 +60,7 @@ export default {
                             name: 'artist',
                             title: 'Artist',
                             type: 'reference',
-                            to: [{ type: 'artist' }],
+                            to: [{type: 'artist'}],
                         },
                         {
                             name: 'works',
@@ -59,7 +69,7 @@ export default {
                             of: [
                                 {
                                     type: 'reference',
-                                    to: [{ type: 'product' }],
+                                    to: [{type: 'product'}],
                                 },
                             ],
                             validation: Rule => Rule.max(3).warning('You can only select up to 3 works per artist'),
@@ -76,9 +86,9 @@ export default {
                 {
                     type: 'object',
                     fields: [
-                        { name: 'icon', title: 'Icon', type: 'image' },
-                        { name: 'title', title: 'Title', type: 'string' },
-                        { name: 'text', title: 'Text', type: 'text' },
+                        {name: 'icon', title: 'Icon', type: 'image'},
+                        {name: 'title', title: 'Title', type: 'string'},
+                        {name: 'text', title: 'Text', type: 'text'},
                     ],
                 },
             ],
@@ -88,5 +98,10 @@ export default {
             title: 'Background Image',
             type: 'image',
         },
+        {
+            name: "seo",
+            title: "SEO",
+            type: "seo",
+        }
     ],
 };
