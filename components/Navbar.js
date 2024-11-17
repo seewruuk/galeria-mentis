@@ -53,6 +53,8 @@ const DesktopMenu = ({ pathname, totalQty }) => {
     const blackNavbarPages = ["/", '/artists']; // Podstrony z białym
     const isBlackTheme = blackNavbarPages.includes(pathname);
 
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ? process.env.NEXT_PUBLIC_BASE_URL : "https://galeria-mentis.vercel.app";
+
     const logoSrc = isBlackTheme
         ? `${process.env.NEXT_PUBLIC_BASE_URL}/assets/logo-white.svg`
         : `${process.env.NEXT_PUBLIC_BASE_URL}/assets/logo-black.svg`;
