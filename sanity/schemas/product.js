@@ -55,6 +55,32 @@ export default {
             validation: Rule => Rule.required().error('Product category is required'),
         },
         {
+            name: 'options',
+            title: 'Options',
+            type: 'array',
+            of: [
+                {
+                    type: 'object',
+                    fields: [
+                        {
+                            name: 'optionType',
+                            title: 'Option Type',
+                            type: 'reference',
+                            to: [{ type: 'productOption' }],
+                            validation: Rule => Rule.required().error('Option type is required'),
+                        },
+                        {
+                            name: 'value',
+                            title: 'Value',
+                            type: 'string',
+                            validation: Rule => Rule.required().error('Option value is required'),
+                        },
+                    ],
+                },
+            ],
+            description: 'Select specific options and their values for this product (e.g., Framed: Yes, Size: Medium).',
+        },
+        {
             name: 'details',
             title: 'Details',
             type: 'array',
@@ -74,56 +100,47 @@ export default {
         },
         {
             name: 'additionalInfo',
-            title:
-                'Additional Information',
-            type:
-                'object',
-            fields:
-                [
-                    {
-                        name: 'needToKnow',
-                        title: 'Need to Know',
-                        type: 'array',
-                        of: [{type: 'block'}],
-                    },
-                    {
-                        name: 'shippingAndReturns',
-                        title: 'Shipping & Returns',
-                        type: 'array',
-                        of: [{type: 'block'}],
-                    },
-                    {
-                        name: 'faq',
-                        title: 'Frequently Asked Questions',
-                        type: 'array',
-                        of: [
-                            {
-                                type: 'object',
-                                fields: [
-                                    {name: 'question', title: 'Question', type: 'string'},
-                                    {name: 'answer', title: 'Answer', type: 'text'},
-                                ],
-                            }
-                        ],
-                    },
-                ],
-        }
-        ,
+            title: 'Additional Information',
+            type: 'object',
+            fields: [
+                {
+                    name: 'needToKnow',
+                    title: 'Need to Know',
+                    type: 'array',
+                    of: [{type: 'block'}],
+                },
+                {
+                    name: 'shippingAndReturns',
+                    title: 'Shipping & Returns',
+                    type: 'array',
+                    of: [{type: 'block'}],
+                },
+                {
+                    name: 'faq',
+                    title: 'Frequently Asked Questions',
+                    type: 'array',
+                    of: [
+                        {
+                            type: 'object',
+                            fields: [
+                                {name: 'question', title: 'Question', type: 'string'},
+                                {name: 'answer', title: 'Answer', type: 'text'},
+                            ],
+                        }
+                    ],
+                },
+            ],
+        },
         {
             name: 'recommendedArtworks',
-            title:
-                'Recommended Artworks',
-            type:
-                'array',
-            of:
-                [
-                    {
-                        type: 'reference',
-                        to: [{type: 'product'}],
-                    },
-                ],
-        }
-        ,
+            title: 'Recommended Artworks',
+            type: 'array',
+            of: [
+                {
+                    type: 'reference',
+                    to: [{type: 'product'}],
+                },
+            ],
+        },
     ],
-}
-;
+};

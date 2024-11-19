@@ -10,10 +10,46 @@ export default {
             validation: Rule => Rule.required().error('Title is required'),
         },
         {
+            name: 'slug',
+            title: 'Slug',
+            type: 'slug',
+            options: {
+                source: 'title',
+            },
+        },
+        {
+            name: "options",
+            title: "Options",
+            type: "array",
+            of: [{type: 'string'}],
+        },
+        {
             name: 'description',
             title: 'Description',
             type: 'text',
             description: 'Optional description of the product category.',
+        },
+        {
+            name: "image",
+            title: "Background Image",
+            type: "image",
+        },
+        {
+            name: "header",
+            title: "Header",
+            type: 'array',
+            of: [{type: 'block'}],
+        },
+        {
+            name: "subText",
+            title: "Description",
+            type: 'array',
+            of: [{type: 'block'}],
+        },
+        {
+            name: "seo",
+            title: "SEO",
+            type: "seo",
         },
     ],
 };

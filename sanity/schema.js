@@ -1,3 +1,4 @@
+import productOption from "./schemas/productOption"
 import seo from "./schemas/seo"
 import productDetails from "./schemas/productDetails"
 import productCategory from "./schemas/productCategory"
@@ -10,6 +11,7 @@ import homepage from "./schemas/homepage"
 
 export const schema = {
     types: [
+        productOption,
         seo,
         productDetails,
         productCategory,

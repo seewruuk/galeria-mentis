@@ -7,24 +7,36 @@ import Image from "next/image";
 import Link from "next/link";
 import Button from "@/components/Button";
 import {CartContext} from "@/context/CartContext";
+import {getProductCategories} from "@/sanity/getSanity/getProductCategories";
+
+
+const categories = await getProductCategories();
+
+const catLinks = categories.map((category) => {
+    return {
+        name: category.title,
+        link: `/categories/${category.slug}`,
+    };
+});
+
+const darkNavLinks = categories.map((category) => {
+    return `/categories/${category.slug}`;
+});
+
+
 
 const links = [
     {name: "Home", link: '/'},
     {
         name: "Art works",
-        link: "/artworks",
-        links: [
-            {name: "Paints", link: '/artwork?type=paints'},
-            {name: "Paintings", link: '/artwork?type=paintings'},
-            {name: "Sculptures", link: '/artwork?type=sculptures'},
-            {name: "Drawings", link: '/artwork?type=drawings'},
-            {name: "Photography", link: '/artwork?type=photography'},
-        ],
+        link: "#",
+        links: catLinks,
     },
     {name: "Artists", link: '/artists'},
     {name: "Blog", link: '/blog'},
     {name: "Contact", link: '/contact'},
 ];
+
 
 export default function Navbar() {
     const [mounted, setMounted] = useState(false);
@@ -49,8 +61,8 @@ export default function Navbar() {
     }
 }
 
-const DesktopMenu = ({ pathname, totalQty }) => {
-    const blackNavbarPages = ["/", '/artists']; // Podstrony z białym
+const DesktopMenu = ({pathname, totalQty}) => {
+    const blackNavbarPages = ["/", '/artists', ...darkNavLinks]; // Podstrony z białym
     const isBlackTheme = blackNavbarPages.includes(pathname);
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ? process.env.NEXT_PUBLIC_BASE_URL : "https://galeria-mentis.vercel.app";
@@ -111,7 +123,7 @@ const DesktopMenu = ({ pathname, totalQty }) => {
                         <Link href={"/"}>
                             <Image
                                 src={
-                                scrolled ? `${process.env.NEXT_PUBLIC_BASE_URL}/assets/logo-white.svg` : logoSrc
+                                    scrolled ? `${process.env.NEXT_PUBLIC_BASE_URL}/assets/logo-white.svg` : logoSrc
                                 }
                                 alt={"Galeria Mentis Logo"}
                                 width={220}
@@ -131,7 +143,8 @@ const DesktopMenu = ({ pathname, totalQty }) => {
                                             onMouseLeave={handleMouseLeave}
                                         >
                                             <Link href={link.link}>
-                                                <span className={`hover:text-primary transition-all ${scrolled ? "text-white" : navbarStyle}`}>{link.name}</span>
+                                                <span
+                                                    className={`hover:text-primary transition-all ${scrolled ? "text-white" : navbarStyle}`}>{link.name}</span>
                                             </Link>
 
                                             <ul
@@ -179,7 +192,7 @@ const DesktopMenu = ({ pathname, totalQty }) => {
                             title={"Whishlist"}
                             onClick={"/whishlist"}
                             style={
-                            scrolled ? "black" : isBlackTheme ? "black" : "white"
+                                scrolled ? "black" : isBlackTheme ? "black" : "white"
                             }
                         />
 
