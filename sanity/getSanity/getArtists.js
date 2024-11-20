@@ -20,7 +20,8 @@ export async function getArtists() {
         artworks[]->{
         name,
         productCategory->{
-            title
+            title,
+            "slug": slug.current,
         },
         "slug": slug.current,
         "images": images[].asset->url,

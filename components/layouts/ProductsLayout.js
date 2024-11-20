@@ -11,6 +11,7 @@ import Layout from "@/components/Layout";
 import Pagination from "@/components/Pagination";
 import ProductFilters from "@/components/ProductFilters";
 import ProductsList from "@/components/ProductsList";
+import PageTransition from "@/components/PageTransition";
 
 function ProductsRootLayout({category}) {
     const {data: products, loading: loadingProducts} = useSanity(getProductsByCategory, category);
@@ -99,7 +100,7 @@ function ProductsRootLayout({category}) {
     }
 
     return (
-        <>
+        <PageTransition>
             <Banner
                 backgroundImage={categoryDetails?.image}
                 hugeText={categoryDetails?.title}
@@ -147,7 +148,7 @@ function ProductsRootLayout({category}) {
                     </div>
                 </div>
             </Layout>
-        </>
+        </PageTransition>
     );
 }
 

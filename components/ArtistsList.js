@@ -22,7 +22,9 @@ export default function ArtistsList({ artists }) {
                                 artist={artwork.artist.name}
                                 artistsLink={artwork.artist.slug}
                                 price={artwork.price}
+                                slug={artwork.slug}
                                 category={artwork.productCategory.title}
+                                categoryLink={artwork.productCategory.slug}
                             />
                         ))}
                     </div>

@@ -27,7 +27,9 @@ export default function RootLayout({children}) {
                 href="https://use.typekit.net/icu4qan.css"
             />
         </head>
+
         <body className={`${merriweather.variable} antialiased font-serif relative overflow-x-hidden`}>
+       
         <DisplayContextProvider>
             <CartContextProvider>
                 <Navbar/>

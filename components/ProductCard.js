@@ -9,6 +9,7 @@ export default function ProductCard({
                                         artistsLink,
                                         price,
                                         category,
+                                        categoryLink,
                                         slug,
                                         index
                                     }) {
@@ -30,13 +31,14 @@ export default function ProductCard({
                 />
             </motion.a>
 
-            <div
+            <Link
+                href={"/categories/" + categoryLink}
                 className={"py-[5px] px-[15px] bg-primary text-primary-light text-[12px] hover:bg-black hover:text-white transition-all cursor-pointer"}
             >
                 {
                     category
                 }
-            </div>
+            </Link>
 
             <div className={"flex flex-col gap-[3px]"}>
                 <Link

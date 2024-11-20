@@ -10,6 +10,7 @@ import { getPaintingStyles } from "@/sanity/getSanity/getPaintingStyles";
 import Pagination from "@/components/Pagination";
 import ArtistFilters from "@/components/ArtistFilters";
 import ArtistsList from "@/components/ArtistsList";
+import PageTransition from "@/components/PageTransition";
 
 function ArtistsRootLayout() {
     const { data: artists, loading: loadingArtists } = useSanity(getArtists);
@@ -67,7 +68,7 @@ function ArtistsRootLayout() {
     if (loadingArtists || loadingArtisticStyles || loadingPaintingStyles || !mounted) return <Loading />;
 
     return (
-        <>
+        <PageTransition>
             <Banner
                 backgroundImage={
                     "https://images.pexels.com/photos/1839919/pexels-photo-1839919.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
@@ -101,8 +102,12 @@ function ArtistsRootLayout() {
                     currentPage={currentPage}
                     setCurrentPage={setCurrentPage}
                 />
+
+                {/*<pre>*/}
+                {/*    {JSON.stringify(artists, null, 2)}*/}
+                {/*</pre>*/}
             </Layout>
-        </>
+        </PageTransition>
     );
 }
 

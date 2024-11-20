@@ -12,6 +12,7 @@ import ProductCard from "@/components/ProductCard";
 import ArtistCard from "@/components/ArtistCard";
 import {retry} from "next/dist/compiled/@next/font/dist/google/retry";
 import {motion} from "framer-motion";
+import PageTransition from "@/components/PageTransition";
 
 export default function HomeLayout() {
 
@@ -26,7 +27,7 @@ export default function HomeLayout() {
     if (loading || !mounted || !homePageData) return <Loading/>
 
     return (
-        <>
+        <PageTransition>
             {
                 homePageData && (
                     <Hero data={homePageData.heroSection}/>
@@ -190,6 +191,6 @@ export default function HomeLayout() {
             {/*</Layout>*/}
 
 
-        </>
+        </PageTransition>
     )
 }
