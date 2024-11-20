@@ -15,7 +15,7 @@ export default function Gallery({images, artist, category, price, title, product
 
     return (
         <>
-            <section className={"pt-[130px] flex gap-4 relative h-[700px]"}>
+            <section className={"pt-[180px] flex gap-4 relative h-[750px]"}>
                 <div className={'w-[120px] flex flex-col gap-4 overflow-scroll'}>
                     {
                         images.map((image, index) => (

@@ -7,41 +7,44 @@ import Layout from "@/components/Layout";
 import useSanity from "@/hooks/useSanity";
 import {getProduct} from "@/sanity/getSanity/getProduct";
 import Loading from "@/components/Loading";
+import PageTransition from "@/components/PageTransition";
 
 export default function ProductLayout({slug}) {
 
     const {data: product, loading, error} = useSanity(getProduct, slug);
 
-    if(loading) return <Loading />
+    if (loading) return <Loading/>
 
     return (
-        <Layout>
+        <PageTransition>
 
-            <Gallery
-                images={product.images.slice(1)}
-                artist={product.artist}
-                price={product.price}
-                category={product.productCategory}
-                title={product.name}
-                product={product}
-            />
+            <Layout>
 
-
-
-            {/*<ProductDetails/>*/}
-
-            {/*<Discover/>*/}
-
-            {/*<RecommendedProducts/>*/}
+                <Gallery
+                    images={product.images.slice(1)}
+                    artist={product.artist}
+                    price={product.price}
+                    category={product.productCategory}
+                    title={product.name}
+                    product={product}
+                />
 
 
-            {/*<div>*/}
-            {/*    <pre>*/}
-            {/*        {JSON.stringify(product, null, 2)}*/}
-            {/*    </pre>*/}
-            {/*</div>*/}
+                {/*<ProductDetails/>*/}
 
-        </Layout>
+                {/*<Discover/>*/}
+
+                {/*<RecommendedProducts/>*/}
+
+
+                {/*<div>*/}
+                {/*    <pre>*/}
+                {/*        {JSON.stringify(product, null, 2)}*/}
+                {/*    </pre>*/}
+                {/*</div>*/}
+
+            </Layout>
+        </PageTransition>
 
     )
 }
