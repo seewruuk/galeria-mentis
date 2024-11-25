@@ -1,5 +1,53 @@
-export default function Discover() {
+import SectionHeader from "@/components/SectionHeader";
+import Link from "next/link";
+import ArtistsList from "@/components/ArtistsList";
+import ArtistCard from "@/components/ArtistCard";
+import ProductCard from "@/components/ProductCard";
+import Image from "next/image";
+
+export default function Discover({artworks, artist}) {
     return (
-        <div>Discover more</div>
+        <>
+            <SectionHeader
+                title={`Discover more ${
+                    artist.name
+                } artwork's`}
+                buttonText={"Check profile"}
+                buttonLink={`/artists/${artist.slug}`}
+            />
+
+
+            <div className="flex gap-6 max-lg:w-full max-lg:flex-col">
+                <div className={"w-1/4 max-lg:w-full"}>
+                    <ArtistCard
+                        avatar={artist.avatar}
+                        artistLink={artist.slug}
+                        artistName={artist.name}
+                        location={artist.location}
+                        description={artist.description}
+                    />
+                </div>
+
+                <div
+                    className="col-span-2 grid grid-cols-1 gap-5 lg:grid-cols-3 w-3/4 max-lg:w-full max-lg:max-w-[350px] max-lg:mx-auto">
+                    {artworks.map((artwork, index) => (
+                        <ProductCard
+                            key={index}
+                            image={artwork.images[0]}
+                            title={artwork.name}
+                            artist={artwork.artist.name}
+                            artistsLink={artwork.artist.slug}
+                            price={artwork.price}
+                            slug={artwork.slug}
+                            category={artwork.productCategory.title}
+                            categoryLink={artwork.productCategory.slug}
+                        />
+                    ))}
+
+                </div>
+            </div>
+
+
+        </>
     )
 }

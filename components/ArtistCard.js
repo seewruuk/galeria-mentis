@@ -20,7 +20,9 @@ export default function ArtistCard({avatar, artistLink, artistName, location, in
                 </Link>
                 <div
                     className={"text-[14px] text-primary transition-all"}>
-                    {location.city} {location.country}
+                    {location?.city && location?.country
+                        ? `${location.city}, ${location.country}`
+                        : "Location unavailable"}
                 </div>
                 <p className={"text-[15px] leading-[170%] text-gray"}>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec

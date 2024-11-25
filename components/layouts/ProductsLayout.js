@@ -21,11 +21,11 @@ function ProductsRootLayout({category}) {
     const [mounted, setMounted] = useState(false);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [filters, setFilters] = useState({});
-    const [sortOption, setSortOption] = useState("price-asc");
+    const [sortOption, setSortOption] = useState("newest");
     const [searchQuery, setSearchQuery] = useState("");
     const [priceRange, setPriceRange] = useState(10000);
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 2;
+    const itemsPerPage = 9;
 
     useEffect(() => {
         setMounted(true);

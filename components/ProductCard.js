@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import {motion} from "framer-motion";
+import {formatPrice} from "@/lib/formatPrice";
 
 export default function ProductCard({
                                         image,
@@ -14,7 +15,6 @@ export default function ProductCard({
                                         index
                                     }) {
 
-    const currency = process.env.NEXT_PUBLIC_CURRENCY;
 
     return (
         <div className={"flex gap-[8px] flex-col items-start"} index={index}>
@@ -42,7 +42,11 @@ export default function ProductCard({
 
             <div className={"flex flex-col gap-[3px]"}>
                 <Link
-                    href={"/"}>
+                    href={
+                        "/products/" + slug
+                    }
+                    className={"hover:underline"}
+                >
                     {title}
                 </Link>
                 <Link
@@ -51,8 +55,7 @@ export default function ProductCard({
                     {artist}
                 </Link>
                 <div>
-                    <span>{currency}</span>
-                    <span>{price}</span>
+                    <span>{formatPrice(price)}</span>
                 </div>
             </div>
         </div>

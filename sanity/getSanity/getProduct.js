@@ -12,12 +12,22 @@ export async function getProduct(slug) {
         artist->{
             name,
             "slug": slug.current,
+            "id": _id
         },
         price,
-        productCategory->{
+        productCategory->{ 
             title,
             "slug": slug.current,
         },
+        additionalInfo,
+        details[]{
+            content,
+            productDetails->{
+                name
+            }
+        }
+        
+       
         
         }[0]`
         , {slug}

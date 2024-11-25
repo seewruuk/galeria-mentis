@@ -8,9 +8,11 @@ import Link from "next/link";
 import Button from "@/components/Button";
 import {CartContext} from "@/context/CartContext";
 import {getProductCategories} from "@/sanity/getSanity/getProductCategories";
+import {getArtists} from "@/sanity/getSanity/getArtists";
 
 
 const categories = await getProductCategories();
+const artists = await getArtists();
 
 const catLinks = categories.map((category) => {
     return {
@@ -21,6 +23,10 @@ const catLinks = categories.map((category) => {
 
 const darkNavLinks = categories.map((category) => {
     return `/categories/${category.slug}`;
+});
+
+const artistsLinks = artists.map((artist) => {
+    return `/artists/${artist.slug}`;
 });
 
 
@@ -61,7 +67,7 @@ export default function Navbar() {
 }
 
 const DesktopMenu = ({pathname, totalQty}) => {
-    const blackNavbarPages = ["/", '/artists', ...darkNavLinks]; // Podstrony z białym
+    const blackNavbarPages = ["/", '/artists', ...darkNavLinks, ...artistsLinks]; // Podstrony z białym
     const isBlackTheme = blackNavbarPages.includes(pathname);
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ? process.env.NEXT_PUBLIC_BASE_URL : "https://galeria-mentis.vercel.app";
@@ -79,7 +85,7 @@ const DesktopMenu = ({pathname, totalQty}) => {
     // Funkcja obsługująca zmianę stanu na podstawie scrolla
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > 100) {
+            if (window.scrollY > 0) {
                 setScrolled(true);
             } else {
                 setScrolled(false);
