@@ -2,7 +2,7 @@ import Layout from "@/components/Layout";
 
 export default function Banner({ backgroundImage, hugeText, customStyle, children }) {
     return (
-        <div className="min-h-[600px] w-screen relative isolate overflow-hidden text-white overflow-hidden">
+        <div className="min-h-[600px] w-screen relative isolate overflow-hidden text-white">
             {/* Tło */}
             <div
                 className="absolute w-full h-full -z-10"

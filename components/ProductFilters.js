@@ -28,7 +28,7 @@ export default function ProductFilters({
     };
 
     return (
-        <div className="w-1/4 p-4">
+        <div className="w-1/4 p-4 max-lg:w-full">
             <form
                 className="w-full rounded-md border border-gray-300 flex gap-3 items-center px-[15px] py-[10px]"
             >

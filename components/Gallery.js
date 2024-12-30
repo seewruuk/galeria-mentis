@@ -6,12 +6,14 @@ import {formatPrice} from "@/lib/formatPrice";
 import Button from "@/components/Button";
 import {motion, AnimatePresence} from "framer-motion";
 import {CartContext} from "@/context/CartContext";
+import {WishlistContext} from "@/context/WishlistContext";
 
 
 export default function Gallery({images, artist, category, price, title, product}) {
 
     const [selectedImageIndex, setSelectedImageIndex] = useState(0)
     const {addToCart} = useContext(CartContext)
+    const {addItem} = useContext(WishlistContext)
 
 
 
@@ -101,7 +103,7 @@ export default function Gallery({images, artist, category, price, title, product
                                         type={"button"}
                                         style={"black"}
                                         title={"Add to wishlist"}
-                                        onClick={() => console.log("Add to wishlist")}
+                                        onClick={() => addItem(product)}
                                     />
                                 </div>
                             </div>

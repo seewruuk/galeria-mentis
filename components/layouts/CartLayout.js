@@ -8,6 +8,7 @@ import Link from "next/link";
 import {formatPrice} from "@/lib/formatPrice";
 import Image from "next/image";
 import PageTransition from "@/components/PageTransition";
+import Layout from "@/components/Layout";
 
 
 const deliveryMethods = [
@@ -15,74 +16,79 @@ const deliveryMethods = [
     { id: 2, title: 'Express', turnaround: '2–5 business days', price: '$16.00' },
 ];
 
-const contactInformationFields = [
-    { id: 'email-address', label: 'Email address', type: 'email', autoComplete: 'email', colSpan: 'sm:col-span-2' },
-];
-
-const inputFields = [
-    { id: 'first-name', label: 'First name', type: 'text', autoComplete: 'given-name', colSpan: '' },
-    { id: 'last-name', label: 'Last name', type: 'text', autoComplete: 'family-name', colSpan: '' },
-    { id: 'address', label: 'Address', type: 'text', autoComplete: 'street-address', colSpan: 'sm:col-span-2' },
-    { id: 'apartment', label: 'Apartment, suite, etc.', type: 'text', autoComplete: '', colSpan: 'sm:col-span-2' },
-    { id: 'city', label: 'City', type: 'text', autoComplete: 'address-level2', colSpan: '' },
-    { id: 'country', label: 'Country', type: 'text', autoComplete: 'country-name', colSpan: '' },
-    { id: 'region', label: 'State / Province', type: 'text', autoComplete: 'address-level1', colSpan: '' },
-    { id: 'postal-code', label: 'Postal code', type: 'text', autoComplete: 'postal-code', colSpan: '' },
-    { id: 'phone', label: 'Phone', type: 'text', autoComplete: 'tel', colSpan: 'sm:col-span-2' },
-];
 
 const commonInputStyles =
-    'block w-full rounded-md border-2 border-stroke shadow-sm focus:border-primary focus:ring-0 focus:outline-none sm:text-sm bg-[#F8F8F8] px-[15px] py-[10px]';
+    'block w-full rounded-md border-2 border-stroke shadow-sm focus:border-primary focus:ring-0 focus:outline-none sm:text-sm bg-[#F8F8F8] px-[15px] py-[10px] disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-500 disabled:border-gray-300';
 
 export default function CartLayout() {
+
     const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(deliveryMethods[0]);
-
-    const { cartItems = [] , removeItem} = useContext(CartContext);
-
-    // Ensure client-side rendering for dynamic data
+    const { cartItems = [] , removeItem, totalPrice, subtotal, shippingPrice, form, setForm, handleBuyEvent} = useContext(CartContext);
     const [mounted, setMounted] = useState(false);
     useEffect(() => {
         setMounted(true);
     }, []);
 
-    if (!mounted) return null; // Prevent SSR mismatches
+    if (!mounted) return null;
 
     return (
         <PageTransition>
-            <div className="pt-[120px]">
-                <div className="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
+            <div className="pt-[200px]">
+                <Layout>
                     <h2 className="sr-only">Checkout</h2>
 
-                    <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
+                    <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16"
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            handleBuyEvent();
+                        }}
+                    >
                         {/* Left Column */}
                         <div>
                             {/* Contact Information */}
                             <h2 className="text-lg font-medium text-gray-900">Contact information</h2>
                             <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-                                {contactInformationFields.map((field) => (
-                                    <div key={field.id} className={field.colSpan}>
-                                        <label htmlFor={field.id} className="block text-sm font-medium text-gray-700">
-                                            {field.label}
-                                        </label>
-                                        <div className="mt-1">
-                                            <input
+                                {form.map((field, index) => {
 
-                                                id={field.id}
-                                                name={field.id}
-                                                type={field.type}
-                                                autoComplete={field.autoComplete}
-                                                className={commonInputStyles}
-                                            />
+                                    if(field.id !== 'email-address') return  null;
+
+                                    return (
+                                        <div key={field.id} className={field.colSpan}>
+                                            <label htmlFor={field.id} className="block text-sm font-medium text-gray-700">
+                                                {field.label}
+                                            </label>
+                                            <div className="mt-1">
+                                                <input
+                                                    disabled={field.disabled}
+                                                    id={field.id}
+                                                    name={field.id}
+                                                    type={field.type}
+                                                    autoComplete={field.autoComplete}
+                                                    value={form[index].value}
+                                                    className={commonInputStyles}
+                                                    onChange={(e) => {
+                                                        const value = e.target.value;
+                                                        setForm(prevState => {
+                                                            const updatedForm = [...prevState];
+                                                            updatedForm[index] = {
+                                                                ...updatedForm[index],
+                                                                value: value,
+                                                            };
+                                                            return updatedForm;
+                                                        });
+                                                    }}
+                                                />
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    )
+                                })}
                             </div>
 
                             {/* Shipping Information */}
                             <div className="mt-10 border-t border-gray-200 pt-10">
                                 <h2 className="text-lg font-medium text-gray-900">Shipping information</h2>
                                 <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-                                    {inputFields.map((field) => (
+                                    {form.slice(1).map((field, index) => (
                                         <div key={field.id} className={field.colSpan}>
                                             <label htmlFor={field.id}
                                                    className="block text-sm font-medium text-gray-700">
@@ -92,9 +98,21 @@ export default function CartLayout() {
                                                 <input
                                                     id={field.id}
                                                     name={field.id}
-                                                    type={field.type}
                                                     autoComplete={field.autoComplete}
                                                     className={commonInputStyles}
+                                                    value={form[index + 1].value}
+                                                    onChange={(e) => {
+                                                        const value = e.target.value;
+                                                        setForm(prevState => {
+                                                            const updatedForm = [...prevState];
+                                                            updatedForm[index + 1] = {
+                                                                ...updatedForm[index + 1],
+                                                                value: value,
+                                                            };
+                                                            return updatedForm;
+                                                        });
+                                                    }}
+                                                    disabled={field.disabled}
                                                 />
                                             </div>
                                         </div>
@@ -134,11 +152,11 @@ export default function CartLayout() {
                             </div>
                         </div>
 
-                        {/* Order Summary */}
                         <div className="mt-10 lg:mt-0">
                             <h2 className="text-lg font-medium text-gray-900">Order summary</h2>
                             <div className="mt-4 rounded-lg border border-gray-200 bg-white shadow-sm">
                                 <ul role="list" className="divide-y divide-gray-200">
+
                                     {cartItems && cartItems.map((product, index) => (
                                         <li key={product._id} className="flex px-4 py-6 sm:px-6 items-center">
                                             <div className="shrink-0 border relative h-[120px] w-[100px]">
@@ -155,8 +173,14 @@ export default function CartLayout() {
                                                                 {product.name}
                                                             </Link>
                                                         </h4>
-                                                        <p className="mt-1 text-sm text-gray-500">{product.category}</p>
-                                                        <p className="mt-1 text-sm text-gray-500">{product.size}</p>
+
+                                                        <Link href={`/categories/${product.category.slug}`}
+                                                              className="mt-1 text-sm text-gray-500">
+                                                            {product.category.title}
+                                                        </Link>
+
+
+                                                        {/*<p className="mt-1 text-sm text-gray-500">{product.size}</p>*/}
                                                     </div>
                                                     <div className="ml-4 flow-root shrink-0">
                                                         <button
@@ -190,11 +214,72 @@ export default function CartLayout() {
                                             </li>
                                         )
                                     }
+
                                 </ul>
                             </div>
+
+                            {
+                                cartItems.length !== 0 && (
+                                    <section
+                                        aria-labelledby="summary-heading"
+                                        className="mt-16 rounded-lg py-6 lg:col-span-5 lg:mt-0"
+                                    >
+                                        <h2 id="summary-heading" className="text-lg font-medium text-gray-900">
+                                            Order summary
+                                        </h2>
+
+                                        <dl className="mt-6 space-y-4">
+                                            <div className="flex items-center justify-between">
+                                                <dt className="text-sm text-gray-600">Subtotal</dt>
+                                                <dd className="text-sm font-medium text-gray-900">{formatPrice(subtotal)}</dd>
+                                            </div>
+                                            <div
+                                                className="flex items-center justify-between border-t border-gray-200 pt-4">
+                                                <dt className="flex items-center text-sm text-gray-600">
+                                                    <span>Shipping estimate</span>
+                                                    <a href="#" className="ml-2 shrink-0 text-gray-400 hover:text-gray-500">
+                                                <span
+                                                    className="sr-only">Learn more about how shipping is calculated</span>
+                                                        {/*<QuestionMarkCircleIcon aria-hidden="true" className="size-5"/>*/}
+                                                    </a>
+                                                </dt>
+                                                <dd className="text-sm font-medium text-gray-900">{formatPrice(shippingPrice)}</dd>
+                                            </div>
+                                            <div
+                                                className="flex items-center justify-between border-t border-gray-200 pt-4">
+                                                <dt className="flex text-sm text-gray-600">
+                                                    <span>Tax estimate</span>
+                                                    <a href="#" className="ml-2 shrink-0 text-gray-400 hover:text-gray-500">
+                                                        <span
+                                                            className="sr-only">Learn more about how tax is calculated</span>
+                                                        {/*<QuestionMarkCircleIcon aria-hidden="true" className="size-5"/>*/}
+                                                    </a>
+                                                </dt>
+                                                <dd className="text-sm font-medium text-gray-900">{formatPrice(0)}</dd>
+                                            </div>
+                                            <div
+                                                className="flex items-center justify-between border-t border-gray-200 pt-4">
+                                                <dt className="text-base font-medium text-gray-900">Order total</dt>
+                                                <dd className="text-base font-medium text-gray-900">{formatPrice(totalPrice)}</dd>
+                                            </div>
+                                        </dl>
+
+                                        <div className="mt-6">
+                                            <button
+                                                type="submit"
+                                                className="w-full rounded-md border border-transparent bg-primary px-4 py-3 text-base font-medium text-white hover:bg-black transition-all"
+                                            >
+                                                Checkout
+                                            </button>
+                                        </div>
+                                    </section>
+                                )
+                            }
+
                         </div>
+
                     </form>
-                </div>
+                </Layout>
             </div>
         </PageTransition>
     );

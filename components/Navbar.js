@@ -9,10 +9,14 @@ import Button from "@/components/Button";
 import {CartContext} from "@/context/CartContext";
 import {getProductCategories} from "@/sanity/getSanity/getProductCategories";
 import {getArtists} from "@/sanity/getSanity/getArtists";
+import {MobileMenu} from "@/components/MobileMenu";
+import {getBlogPosts} from "@/sanity/getSanity/getBlogPosts";
 
 
 const categories = await getProductCategories();
 const artists = await getArtists();
+const posts = await getBlogPosts();
+
 
 const catLinks = categories.map((category) => {
     return {
@@ -20,6 +24,13 @@ const catLinks = categories.map((category) => {
         link: `/categories/${category.slug}`,
     };
 });
+
+const blogLinks = posts.map((post) => {
+    return `/blog/${post.slug}`;
+
+});
+
+console.log("blogLinks", blogLinks)
 
 const darkNavLinks = categories.map((category) => {
     return `/categories/${category.slug}`;
@@ -30,7 +41,7 @@ const artistsLinks = artists.map((artist) => {
 });
 
 
-const links = [
+export const links = [
     {name: "Home", link: '/'},
     {
         name: "Art works",
@@ -67,7 +78,7 @@ export default function Navbar() {
 }
 
 const DesktopMenu = ({pathname, totalQty}) => {
-    const blackNavbarPages = ["/", '/artists', ...darkNavLinks, ...artistsLinks]; // Podstrony z białym
+    const blackNavbarPages = ["/", '/artists', ...darkNavLinks, ...artistsLinks, ...blogLinks]; // Podstrony z białym
     const isBlackTheme = blackNavbarPages.includes(pathname);
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ? process.env.NEXT_PUBLIC_BASE_URL : "https://galeria-mentis.vercel.app";
@@ -199,8 +210,8 @@ const DesktopMenu = ({pathname, totalQty}) => {
 
                         <Button
                             type={"link"}
-                            title={"Whishlist"}
-                            onClick={"/whishlist"}
+                            title={"Wishlist"}
+                            onClick={"/wishlist"}
                             style={
                                 scrolled ? "black" : isBlackTheme ? "black" : "white"
                             }
@@ -219,7 +230,3 @@ const DesktopMenu = ({pathname, totalQty}) => {
     );
 };
 
-
-const MobileMenu = () => {
-    return <div>Mobile Menu</div>;
-};

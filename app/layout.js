@@ -3,6 +3,9 @@ import {Merriweather} from "next/font/google";
 import CartContextProvider from "@/context/CartContext";
 import DisplayContextProvider from "@/context/DisplayContext";
 import Navbar from "@/components/Navbar";
+import {Toaster} from "react-hot-toast";
+import AuthContextProvider from "@/context/AuthContext";
+import WishlistContextProvider from "@/context/WishlistContext";
 
 
 // Import czcionki Merriweather z Google Fonts
@@ -29,11 +32,18 @@ export default function RootLayout({children}) {
         </head>
 
         <body className={`${merriweather.variable} antialiased font-serif relative overflow-x-hidden`}>
-       
+
         <DisplayContextProvider>
             <CartContextProvider>
-                <Navbar/>
-                {children}
+                <WishlistContextProvider>
+                    <AuthContextProvider>
+
+                        <Navbar/>
+                        <Toaster/>
+
+                        {children}
+                    </AuthContextProvider>
+                </WishlistContextProvider>
             </CartContextProvider>
         </DisplayContextProvider>
 

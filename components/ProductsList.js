@@ -18,7 +18,7 @@ export default function ProductsList({ products, sortOption, setSortOption }) {
             </div>
 
             {/* Products Grid */}
-            <div className="grid grid-cols-3 gap-5">
+            <div className="grid grid-cols-3 gap-5 max-lg:grid-cols-1">
                 {products.map((product) => (
                     <ProductCard
                         key={product.slug.current}

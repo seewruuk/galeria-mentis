@@ -122,7 +122,7 @@ function ProductsRootLayout({category}) {
                     />
 
                     {/* Products List */}
-                    <div className="w-3/4">
+                    <div className="w-3/4 max-lg:w-full">
                         {paginatedProducts.length > 0 ? (
                             <>
                                 <ProductsList
