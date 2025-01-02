@@ -6,15 +6,15 @@ import Stripe from 'stripe';
 export async function POST(req, res) {
     const body = await req.json();
     const {data} = await body;
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL.toString();
 
     try {
 
         const orderId = data.object.client_reference_id
-        const payment_status = data.object.payment_status
         const stripeSessionId = data.object.id;
 
 
-        const checkPaymentStatusRequest = await fetch(`https://galeria-mentis.vercel.app/api/checkPaymentStatus`, {
+        const checkPaymentStatusRequest = await fetch(`${baseUrl}/api/checkPaymentStatus`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -28,7 +28,7 @@ export async function POST(req, res) {
             return NextResponse.json({status: 500, message: "Payment status not checked"});
         }
 
-        const updateOrder = await fetch(`https://galeria-mentis.vercel.app/api/updateOrder`, {
+        const updateOrder = await fetch(`${baseUrl}/api/updateOrder`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

@@ -8,6 +8,7 @@ export async function POST(req, res) {
         const {cartItems, orderNumber} = await body;
         const secretKey = process.env.STRIPE_SECRET_KEY.toString();
         const stripe = new Stripe(secretKey);
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL.toString();
 
 
         const transformedItems = cartItems.map(item => ({
@@ -29,10 +30,8 @@ export async function POST(req, res) {
             payment_method_types: ['card'],
             mode: 'payment',
             line_items: transformedItems,
-            success_url: `https://www.google.pl/`,
-            // success_url: `http://localhost:3000/success?session_id={CHECKOUT_SESSION_ID}`,
-            // cancel_url: `http://localhost:3000/cancel`,
-            cancel_url: `https://www.google.pl/`,
+            success_url: `${baseUrl}/success?orderId=${orderNumber}`,
+            cancel_url: `${baseUrl}/cancel?orderId=${orderNumber}`,
         });
         return NextResponse.json({status: 200, url: session.url, sessionId: session.id, session: session});
     } catch (e) {
