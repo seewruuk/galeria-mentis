@@ -16,11 +16,17 @@ export async function POST(req, res) {
     let event;
 
     try {
+        // Odczytanie bufora w sposób kompatybilny z Next.js
         const buf = await buffer(req);
-        event = stripe.webhooks.constructEvent(buf, sig, process.env.STRIPE_WEBHOOK_SECRET);
+        const rawBody = buf.toString(); // Konwertuj na string dla Stripe
+        event = stripe.webhooks.constructEvent(rawBody, sig, process.env.STRIPE_WEBHOOK_SECRET);
     } catch (err) {
+        console.error(`Error verifying webhook: ${err.message}`);
         return NextResponse.json({ status: 'error', message: `Webhook Error: ${err.message}` });
     }
+
+    // Logowanie poprawnie zbudowanego zdarzenia
+    console.log('Webhook event:', event);
 
     if (event.type === 'checkout.session.completed') {
         const session = event.data.object;
@@ -47,6 +53,7 @@ export async function POST(req, res) {
                 return NextResponse.json({ status: 500, message: "Order status not updated" });
             }
         } catch (updateError) {
+            console.error("Error updating order:", updateError);
             return NextResponse.json({ status: 500, message: "Order status not updated" });
         }
     }
