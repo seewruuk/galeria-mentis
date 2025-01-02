@@ -11,10 +11,21 @@ export async function POST(req, res) {
 
         const orderId = data.object.client_reference_id
         const payment_status = data.object.payment_status
+        const stripeSessionId = data.object.id;
 
 
-        if(payment_status !== "paid"){
-            return NextResponse.json({status: 200, message: "Payment not completed"});
+        const checkPaymentStatusRequest = await fetch(`https://galeria-mentis.vercel.app/api/checkPaymentStatus`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({sessionId: stripeSessionId}),
+        })
+
+
+        const checkPaymentStatus = await checkPaymentStatusRequest.json();
+        if(checkPaymentStatus.payment_status !== "paid"){
+            return NextResponse.json({status: 500, message: "Payment status not checked"});
         }
 
         const updateOrder = await fetch(`https://galeria-mentis.vercel.app/api/updateOrder`, {
