@@ -1,3 +1,16 @@
+import {NextResponse} from "next/server";
+import { buffer } from 'micro';
+import Stripe from 'stripe';
+
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+export const config = {
+    api: {
+        bodyParser: false,
+    },
+};
+
 export async function POST(req, res) {
     const sig = req.headers['stripe-signature'];
     let event;
