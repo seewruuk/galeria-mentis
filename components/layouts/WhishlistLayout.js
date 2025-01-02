@@ -7,6 +7,7 @@ import {formatPrice} from "@/lib/formatPrice";
 import {useContext, useEffect, useState} from "react";
 import {WishlistContext} from "@/context/WishlistContext";
 import PageTransition from "@/components/PageTransition";
+import Footer from "@/components/Footer";
 
 export default function WhishlistLayout() {
 
@@ -80,6 +81,8 @@ export default function WhishlistLayout() {
                     </div>
                 </Layout>
             </section>
+
+            <Footer />
         </PageTransition>
 
     )

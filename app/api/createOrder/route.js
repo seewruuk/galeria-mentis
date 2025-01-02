@@ -40,6 +40,7 @@ export async function POST(req, res) {
                     deliveryMethod: item.deliveryMethod,
                 },
 
+
                 totalPrice: item.totalPrice,
                 products: item.products.map((item, index) => {
                         return {
@@ -53,6 +54,7 @@ export async function POST(req, res) {
                         }
                     }
                 ),
+                stripeSessionId: item.stripeSessionId,
                 // invoice: item.invoice,
             }
         }]

@@ -8,6 +8,7 @@ import Layout from "@/components/Layout";
 import { PortableText } from "@portabletext/react";
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
+import Footer from "@/components/Footer";
 
 export default function SingleBlogPostLayout({ slug }) {
     const { data, error } = useSanity(getSingleBlogPost, slug);
@@ -63,10 +64,9 @@ export default function SingleBlogPostLayout({ slug }) {
                     />
                 </section>
 
-                <pre>{JSON.stringify(data.body, null, 2)}</pre>
             </Layout>
 
-
+            <Footer />
         </PageTransition>
     );
 }

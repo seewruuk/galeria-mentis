@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import {Toaster} from "react-hot-toast";
 import AuthContextProvider from "@/context/AuthContext";
 import WishlistContextProvider from "@/context/WishlistContext";
+import Footer from "@/components/Footer";
 
 
 // Import czcionki Merriweather z Google Fonts
@@ -42,6 +43,7 @@ export default function RootLayout({children}) {
                         <Toaster/>
 
                         {children}
+
                     </AuthContextProvider>
                 </WishlistContextProvider>
             </CartContextProvider>

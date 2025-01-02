@@ -11,6 +11,7 @@ import Pagination from "@/components/Pagination";
 import ArtistFilters from "@/components/ArtistFilters";
 import ArtistsList from "@/components/ArtistsList";
 import PageTransition from "@/components/PageTransition";
+import Footer from "@/components/Footer";
 
 function ArtistsRootLayout() {
     const { data: artists, loading: loadingArtists } = useSanity(getArtists);
@@ -107,6 +108,8 @@ function ArtistsRootLayout() {
                 {/*    {JSON.stringify(artists, null, 2)}*/}
                 {/*</pre>*/}
             </Layout>
+
+            <Footer />
         </PageTransition>
     );
 }

@@ -12,7 +12,7 @@ export default function Page() {
 
 
     return (
-        <div>
+        <div className={"h-screen w-screen grid place-items-center"}>
 
             <Link href={"/dashboard/orders"} className={"text-center"}>Orders</Link>
 

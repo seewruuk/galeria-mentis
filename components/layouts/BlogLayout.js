@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 import Link from "next/link";
 import PageTransition from "@/components/PageTransition";
 import Layout from "@/components/Layout";
+import Footer from "@/components/Footer";
 
 export default function BlogLayout() {
 
@@ -72,6 +73,8 @@ export default function BlogLayout() {
                     </div>
                 </div>
             </Layout>
+
+            <Footer />
 
         </PageTransition>
 

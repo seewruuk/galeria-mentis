@@ -230,5 +230,10 @@ export default {
             name: "totalPrice",
             type: "string",
         },
+        {
+            title: "Stripe Session ID",
+            name: "stripeSessionId",
+            type: "string",
+        }
     ]
 }

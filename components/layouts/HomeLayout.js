@@ -13,6 +13,7 @@ import ArtistCard from "@/components/ArtistCard";
 import {retry} from "next/dist/compiled/@next/font/dist/google/retry";
 import {motion} from "framer-motion";
 import PageTransition from "@/components/PageTransition";
+import Footer from "@/components/Footer";
 
 export default function HomeLayout() {
 
@@ -184,11 +185,7 @@ export default function HomeLayout() {
                 )
             }
 
-            {/*<Layout>*/}
-            {/*    <pre>*/}
-            {/*        {JSON.stringify(homePageData.benefitsSection, null, 2)}*/}
-            {/*    </pre>*/}
-            {/*</Layout>*/}
+            <Footer />
 
 
         </PageTransition>

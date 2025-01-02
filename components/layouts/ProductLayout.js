@@ -11,6 +11,7 @@ import { getArtistArtworks } from "@/sanity/getSanity/getArtistArtworks";
 import { getArtist } from "@/sanity/getSanity/getArtist";
 import { useEffect, useState } from "react";
 import RecommendedProducts from "@/components/RecommendedProducts";
+import Footer from "@/components/Footer";
 
 export default function ProductLayout({ slug }) {
     const { data: product, loading, error } = useSanity(getProduct, slug);
@@ -28,7 +29,7 @@ export default function ProductLayout({ slug }) {
                     ]);
                     setArtworks(artworksData);
                     setArtist(artistData);
-                    setIsDataReady(true); // Ustaw dane jako gotowe
+                    setIsDataReady(true);
                 } catch (err) {
                     console.error("Error fetching data:", err);
                 }
@@ -40,10 +41,8 @@ export default function ProductLayout({ slug }) {
         }
     }, [product]);
 
-    // Renderowanie stanu ładowania
     if (loading || !isDataReady) return <Loading />;
 
-    // Renderowanie głównego layoutu
     return (
         <PageTransition>
             <Layout>
@@ -69,6 +68,8 @@ export default function ProductLayout({ slug }) {
                     {JSON.stringify(product._id, null, 2)}
                 </pre>
             </Layout>
+
+            <Footer />
         </PageTransition>
     );
 }

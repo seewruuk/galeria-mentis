@@ -9,6 +9,7 @@ import {formatPrice} from "@/lib/formatPrice";
 import Image from "next/image";
 import PageTransition from "@/components/PageTransition";
 import Layout from "@/components/Layout";
+import Footer from "@/components/Footer";
 
 
 const deliveryMethods = [
@@ -167,17 +168,22 @@ export default function CartLayout() {
                                             <div className="ml-6 flex flex-1 flex-col">
                                                 <div className="flex">
                                                     <div className="min-w-0 flex-1">
+
                                                         <h4 className="text-sm">
                                                             <Link href={`/products/${product.slug}`}
-                                                                  className="font-medium text-gray-700 hover:text-gray-800">
+                                                                  className="font-medium text-gray-700 hover:text-gray-800 hover:underline">
                                                                 {product.name}
                                                             </Link>
                                                         </h4>
 
                                                         <Link href={`/categories/${product.category.slug}`}
-                                                              className="mt-1 text-sm text-gray-500">
+                                                              className="mt-1 text-sm text-gray-500 hover:underline">
                                                             {product.category.title}
                                                         </Link>
+
+                                                        <p className={"mt-1 text-sm text-gray-500"}>
+                                                            Quantity: {product.qty}
+                                                        </p>
 
 
                                                         {/*<p className="mt-1 text-sm text-gray-500">{product.size}</p>*/}
@@ -281,6 +287,8 @@ export default function CartLayout() {
                     </form>
                 </Layout>
             </div>
+
+            <Footer />
         </PageTransition>
     );
 }

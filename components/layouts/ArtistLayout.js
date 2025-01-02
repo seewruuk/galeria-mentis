@@ -11,6 +11,7 @@ import { PortableText } from "@portabletext/react";
 import ProductCard from "@/components/ProductCard";
 import { getArtistArtworks } from "@/sanity/getSanity/getArtistArtworks";
 import Pagination from "@/components/Pagination";
+import Footer from "@/components/Footer";
 
 export default function ArtistLayout({ slug }) {
     const { data: artist, loading: artistLoading } = useSanity(getArtist, slug);
@@ -156,6 +157,8 @@ export default function ArtistLayout({ slug }) {
                     setCurrentPage={setCurrentPage}
                 />
             </Layout>
+
+            <Footer />
         </PageTransition>
     );
 }

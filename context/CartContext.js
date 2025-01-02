@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 import generateOrderNumber from "@/lib/generateOrderNumber";
 import createOrder from "@/lib/createOrder";
+import {useRouter} from "next/navigation";
 
 
 export const CartContext = createContext({});
@@ -19,6 +20,7 @@ export default function CartContextProvider({children}) {
     const shippingPrice = 5.00;
     const taxPrice = 0.00;
     let totalPrice = subtotal + shippingPrice + taxPrice;
+    const router = useRouter();
 
     const [preventChange, setPreventChange] = useState(false)
 
@@ -130,41 +132,26 @@ export default function CartContextProvider({children}) {
 
         const orderNumber = generateOrderNumber(`${form[1].value}${form[2].value}`, form[9].value);
 
-        const response = await createOrder({
-            orderNumber: orderNumber,
-            form: form,
-            fullDate: new Date().toLocaleString('en-GB', { timeZone: 'UTC' }),
-            deliveryMethod: "standard",
-            totalPrice: totalPrice.toFixed(2),
-            products: cartItems,
 
-            // invoice: invoiceForm && invoiceForm.status ? {
-            //     status: invoiceForm.status,
-            //     companyType: invoiceForm.companyType,
-            //     companyData: {
-            //         companyName: invoiceInputs.some(input => input.name === "companyName") ? invoiceInputs.find(input => input.name === "companyName").value : invoiceInputs.find(input => input.name === "name").value,
-            //         nip: invoiceInputs.some(input => input.name === "nip") ? invoiceInputs.find(input => input.name === "nip").value : invoiceInputs.find(input => input.name === "lastname").value,
-            //         phone: invoiceInputs.find(input => input.name === "phone").value,
-            //         address: invoiceInputs.find(input => input.name === "address").value,
-            //         companyPostal: invoiceInputs.find(input => input.name === "postalCode").value,
-            //         companyCity: invoiceInputs.find(input => input.name === "city").value,
-            //     }
-            // } : {
-            //     status: false,
-            //     companyType: "",
-            //     companyData: {
-            //         companyName: "",
-            //         nip: "",
-            //         phone: "",
-            //         address: "",
-            //         companyPostal: "",
-            //         companyCity: ""
-            //     }
-            // },
+
+        const stripeResponse = await fetch("/api/createStripeSession", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                cartItems: cartItems,
+                orderNumber: orderNumber
+            })
         });
 
-        if (response.status === 200) {
+        const stripeResult = await stripeResponse.json();
 
+
+        if (stripeResult.status === 200) {
+
+            const stripeRedirectUrl = stripeResult.url
+            const stripeSessionId = stripeResult.sessionId
             // const sendEmail = await fetch("/api/sendEmailToCustomer", {
             //     method: "POST",
             //     headers: {
@@ -174,14 +161,54 @@ export default function CartContextProvider({children}) {
             //         order: await getOrder(orderNumber)
             //     })
             // });
-
+            //
             // const emailResult = await sendEmail.json();
-
+            //
             // if (emailResult.status !== 200) {
             //     toast.error("Błąd podczas wysyłania wiadomości");
             // }
 
-            toast.success("Order placed successfully.");
+
+            const response = await createOrder({
+                orderNumber: orderNumber,
+                form: form,
+                fullDate: new Date().toLocaleString('en-GB', { timeZone: 'UTC' }),
+                deliveryMethod: "standard",
+                totalPrice: totalPrice.toFixed(2),
+                products: cartItems,
+                stripeSessionId: stripeSessionId,
+
+                // invoice: invoiceForm && invoiceForm.status ? {
+                //     status: invoiceForm.status,
+                //     companyType: invoiceForm.companyType,
+                //     companyData: {
+                //         companyName: invoiceInputs.some(input => input.name === "companyName") ? invoiceInputs.find(input => input.name === "companyName").value : invoiceInputs.find(input => input.name === "name").value,
+                //         nip: invoiceInputs.some(input => input.name === "nip") ? invoiceInputs.find(input => input.name === "nip").value : invoiceInputs.find(input => input.name === "lastname").value,
+                //         phone: invoiceInputs.find(input => input.name === "phone").value,
+                //         address: invoiceInputs.find(input => input.name === "address").value,
+                //         companyPostal: invoiceInputs.find(input => input.name === "postalCode").value,
+                //         companyCity: invoiceInputs.find(input => input.name === "city").value,
+                //     }
+                // } : {
+                //     status: false,
+                //     companyType: "",
+                //     companyData: {
+                //         companyName: "",
+                //         nip: "",
+                //         phone: "",
+                //         address: "",
+                //         companyPostal: "",
+                //         companyCity: ""
+                //     }
+                // },
+            });
+
+            if(response.status === 200){
+                router.push(stripeRedirectUrl);
+            }else{
+                toast.error("There was an error processing your order. Please try again later.");
+            }
+
         } else {
             toast.error("There was an error processing your order. Please try again later.");
         }
@@ -217,6 +244,7 @@ export default function CartContextProvider({children}) {
             ]);
             toast.success("Successfully added product to cart.");
         }
+        console.log("cartItems", cartItems)
     };
 
     const increaseQty = (id) => {

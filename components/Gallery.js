@@ -7,6 +7,8 @@ import Button from "@/components/Button";
 import {motion, AnimatePresence} from "framer-motion";
 import {CartContext} from "@/context/CartContext";
 import {WishlistContext} from "@/context/WishlistContext";
+import {useRouter} from "next/navigation";
+
 
 
 export default function Gallery({images, artist, category, price, title, product}) {
@@ -14,7 +16,7 @@ export default function Gallery({images, artist, category, price, title, product
     const [selectedImageIndex, setSelectedImageIndex] = useState(0)
     const {addToCart} = useContext(CartContext)
     const {addItem} = useContext(WishlistContext)
-
+    const router = useRouter();
 
 
     return (
@@ -96,7 +98,10 @@ export default function Gallery({images, artist, category, price, title, product
                                         type={"button"}
                                         style={"black"}
                                         title={"Buy Now"}
-                                        onClick={() => console.log("Buy Now")}
+                                        onClick={() => {
+                                            addToCart(product)
+                                            router.push("/cart")
+                                        }}
                                     />
 
                                     <Button
