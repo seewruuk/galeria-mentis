@@ -19,7 +19,7 @@ export async function POST(req, res) {
         const buf = await buffer(req);
         event = stripe.webhooks.constructEvent(buf, sig, process.env.STRIPE_WEBHOOK_SECRET);
     } catch (err) {
-        return res.status(400).json({ status: 'error', message: `Webhook Error: ${err.message}` });
+        return NextResponse.json({ status: 'error', message: `Webhook Error: ${err.message}` });
     }
 
     if (event.type === 'checkout.session.completed') {
@@ -42,14 +42,14 @@ export async function POST(req, res) {
 
             const sanityData = await updateOrder.json();
             if (sanityData.status === "ok") {
-                return res.status(200).json({ status: 200, message: "Sanity order status updated" });
+                return NextResponse.json({ status: 200, message: "Order status updated" });
             } else {
-                return res.status(500).json({ status: 500, message: "Sanity order status not updated" });
+                return NextResponse.json({ status: 500, message: "Order status not updated" });
             }
         } catch (updateError) {
-            return res.status(500).json({ status: 'error', message: `Update Order Error: ${updateError.message}` });
+            return NextResponse.json({ status: 500, message: "Order status not updated" });
         }
     }
 
-    return res.status(200).json({ status: 'ok' });
+    return NextResponse.json({ status: 200, message: "Webhook received" });
 }
