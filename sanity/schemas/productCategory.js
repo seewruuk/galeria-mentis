@@ -40,12 +40,7 @@ export default {
             type: 'array',
             of: [{type: 'block'}],
         },
-        {
-            name: "subText",
-            title: "Description",
-            type: 'array',
-            of: [{type: 'block'}],
-        },
+
         {
             name: "seo",
             title: "SEO",

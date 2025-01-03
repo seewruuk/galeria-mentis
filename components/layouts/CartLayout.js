@@ -1,8 +1,8 @@
 'use client';
 
 import {useContext, useEffect, useState} from 'react';
-import { RadioGroup } from '@headlessui/react';
-import { CheckCircleIcon, TrashIcon } from '@heroicons/react/20/solid';
+import {RadioGroup} from '@headlessui/react';
+import {CheckCircleIcon, TrashIcon} from '@heroicons/react/20/solid';
 import {CartContext} from "@/context/CartContext";
 import Link from "next/link";
 import {formatPrice} from "@/lib/formatPrice";
@@ -11,10 +11,12 @@ import PageTransition from "@/components/PageTransition";
 import Layout from "@/components/Layout";
 import Footer from "@/components/Footer";
 
+import {MdOutlineAdd, MdOutlineRemove} from "react-icons/md";
+
 
 const deliveryMethods = [
-    { id: 1, title: 'Standard', turnaround: '4–10 business days', price: '$5.00' },
-    { id: 2, title: 'Express', turnaround: '2–5 business days', price: '$16.00' },
+    {id: 1, title: 'Standard', turnaround: '4–10 business days', price: '$5.00'},
+    {id: 2, title: 'Express', turnaround: '2–5 business days', price: '$16.00'},
 ];
 
 
@@ -24,7 +26,19 @@ const commonInputStyles =
 export default function CartLayout() {
 
     const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(deliveryMethods[0]);
-    const { cartItems = [] , removeItem, totalPrice, subtotal, shippingPrice, form, setForm, handleBuyEvent} = useContext(CartContext);
+    const {
+        cartItems = [],
+        removeItem,
+        totalPrice,
+        preventChange,
+        subtotal,
+        shippingPrice,
+        form,
+        setForm,
+        handleBuyEvent,
+        increaseQty,
+        decreaseQty
+    } = useContext(CartContext);
     const [mounted, setMounted] = useState(false);
     useEffect(() => {
         setMounted(true);
@@ -39,10 +53,10 @@ export default function CartLayout() {
                     <h2 className="sr-only">Checkout</h2>
 
                     <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16"
-                        onSubmit={(e) => {
-                            e.preventDefault();
-                            handleBuyEvent();
-                        }}
+                          onSubmit={(e) => {
+                              e.preventDefault();
+                              handleBuyEvent();
+                          }}
                     >
                         {/* Left Column */}
                         <div>
@@ -51,11 +65,12 @@ export default function CartLayout() {
                             <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
                                 {form.map((field, index) => {
 
-                                    if(field.id !== 'email-address') return  null;
+                                    if (field.id !== 'email-address') return null;
 
                                     return (
                                         <div key={field.id} className={field.colSpan}>
-                                            <label htmlFor={field.id} className="block text-sm font-medium text-gray-700">
+                                            <label htmlFor={field.id}
+                                                   className="block text-sm font-medium text-gray-700">
                                                 {field.label}
                                             </label>
                                             <div className="mt-1">
@@ -198,9 +213,35 @@ export default function CartLayout() {
                                                         </button>
                                                     </div>
                                                 </div>
-                                                <div className="flex flex-1 items-end justify-between pt-2">
+
+                                                <div className="flex flex-1 items-center justify-between pt-2 max-lg:flex-col max-lg:items-start max-lg:justify-start max-lg:gap-4">
                                                     <p className="mt-1 text-sm font-medium text-gray-900">{formatPrice(product.price)}</p>
+
+                                                    <div
+                                                        className={"bg-gray/10 min-w-[60px] flex gap-5 items-center justify-center p-2"}>
+                                                        <button
+                                                            disabled={preventChange}
+                                                            onClick={() => decreaseQty(product._id)}
+                                                            type={"button"}
+                                                            className={"disabled:text-gray-500 text-black hover:text-primary transition-all"}
+                                                        >
+                                                            <MdOutlineRemove/>
+                                                        </button>
+
+                                                        <p className={"flex-grow text-center"}>{product.qty}</p>
+
+                                                        <button
+                                                            disabled={preventChange}
+                                                            type={"button"}
+                                                            className={"disabled:text-gray-500 text-black hover:text-primary transition-all"}
+                                                            onClick={() => increaseQty(product._id)}
+                                                        >
+                                                            <MdOutlineAdd/>
+                                                        </button>
+                                                    </div>
                                                 </div>
+
+
                                             </div>
                                         </li>
                                     ))}
@@ -288,7 +329,7 @@ export default function CartLayout() {
                 </Layout>
             </div>
 
-            <Footer />
+            <Footer/>
         </PageTransition>
     );
 }

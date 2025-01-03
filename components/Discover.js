@@ -28,23 +28,38 @@ export default function Discover({artworks, artist}) {
                     />
                 </div>
 
-                <div
-                    className="col-span-2 grid grid-cols-1 gap-5 lg:grid-cols-3 w-3/4 max-lg:w-full max-lg:max-w-[350px] max-lg:mx-auto">
-                    {artworks.map((artwork, index) => (
-                        <ProductCard
-                            key={index}
-                            image={artwork.images[0]}
-                            title={artwork.name}
-                            artist={artwork.artist.name}
-                            artistsLink={artwork.artist.slug}
-                            price={artwork.price}
-                            slug={artwork.slug}
-                            category={artwork.productCategory.title}
-                            categoryLink={artwork.productCategory.slug}
-                        />
-                    ))}
+                {
+                    artworks.length > 0 && (
+                        <div
+                            className="col-span-2 grid grid-cols-1 gap-5 lg:grid-cols-3 w-3/4 max-lg:w-full max-lg:max-w-[350px] max-lg:mx-auto">
+                            {artworks.map((artwork, index) => (
+                                <ProductCard
+                                    key={index}
+                                    image={artwork.images[0]}
+                                    title={artwork.name}
+                                    artist={artwork.artist.name}
+                                    artistsLink={artwork.artist.slug}
+                                    price={artwork.price}
+                                    slug={artwork.slug}
+                                    category={artwork.productCategory.title}
+                                    categoryLink={artwork.productCategory.slug}
+                                />
+                            ))}
 
-                </div>
+                        </div>
+                    )
+                }
+
+                {
+                    artworks.length === 0 && (
+                        <div className={"flex-grow flex flex-col gap-4 items-center justify-center text-center max-lg:min-h-[300px]"}>
+                            <p className={"text-[12px] animate-pulse"}>
+                                There is no more artworks from this artist.
+                            </p>
+                        </div>
+                    )
+                }
+
             </div>
 
 

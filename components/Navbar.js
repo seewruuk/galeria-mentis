@@ -45,12 +45,12 @@ export const links = [
     {name: "Home", link: '/'},
     {
         name: "Art works",
-        link: "#",
+        link: "/categories/prints",
         links: catLinks,
     },
     {name: "Artists", link: '/artists'},
     {name: "Blog", link: '/blog'},
-    {name: "Contact", link: '/contact'},
+    {name: "Contact", link: '#contact'},
 ];
 
 

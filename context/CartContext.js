@@ -244,7 +244,6 @@ export default function CartContextProvider({children}) {
             ]);
             toast.success("Successfully added product to cart.");
         }
-        console.log("cartItems", cartItems)
     };
 
     const increaseQty = (id) => {
@@ -256,7 +255,7 @@ export default function CartContextProvider({children}) {
         });
 
         setCartItems(newCartItems);
-        toast.success("Successfully increased the amount of product in the shopping cart.");
+        // toast.success("The quantity of the product has been increased.");
     };
 
 
@@ -268,6 +267,7 @@ export default function CartContextProvider({children}) {
             return item;
         });
         setCartItems(newCartItems);
+        // toast.success("The quantity of the product has been decreased.");
     };
 
 

@@ -8,10 +8,10 @@ import {motion, AnimatePresence} from "framer-motion";
 import {CartContext} from "@/context/CartContext";
 import {WishlistContext} from "@/context/WishlistContext";
 import {useRouter} from "next/navigation";
+import { AiOutlineFullscreen } from "react-icons/ai";
 
 
-
-export default function Gallery({images, artist, category, price, title, product}) {
+export default function Gallery({images, artist, category, price, title, product, setOpenGallery, openGallery}) {
 
     const [selectedImageIndex, setSelectedImageIndex] = useState(0)
     const {addToCart} = useContext(CartContext)
@@ -21,7 +21,7 @@ export default function Gallery({images, artist, category, price, title, product
 
     return (
         <>
-            <section className={"pt-[180px] flex gap-4 relative h-[750px] max-lg:flex-col max-lg:pt-[30px] max-lg:h-full"}>
+            <section className={"pt-[180px] flex gap-4 relative h-[750px] max-lg:flex-col max-lg:pt-[100px] max-lg:h-full"}>
                 <div className={'w-[120px] flex flex-col gap-4 overflow-scroll max-lg:order-2 max-lg:w-full min-lg:min-h-[300px] max-lg:flex-row'}>
                     {
                         images.map((image, index) => (
@@ -65,7 +65,18 @@ export default function Gallery({images, artist, category, price, title, product
                     <div className={"transition-all bg-black/80 w-full h-full text-white flex flex-col"}>
                         <div className={"p-10 flex flex-col h-full max-lg:p-5"}>
                             <div className={"flex justify-end"}>
-                                <div>Show Image</div>
+
+                                <button
+                                    className={"bg-white/20 aspect-square grid place-items-center p-3 hover:bg-primary transition-all"}
+                                    onClick={() => setOpenGallery({
+                                        ...openGallery,
+                                        status: true,
+                                    })}
+                                    aria-label={"Open gallery"}
+                                >
+                                    <AiOutlineFullscreen  size={24}/>
+                                </button>
+
                             </div>
                             <div className={"flex-grow flex flex-col items-start justify-end gap-2"}>
                                 <Link href={"/categories/" + category.slug}

@@ -25,7 +25,7 @@ export default function WhishlistLayout() {
     return (
         <PageTransition>
 
-            <section className={"pt-[200px]"}>
+            <section className={"pt-[200px] min-h-screen"}>
                 <Layout>
                     <div className="mt-10 lg:mt-0">
                         <h2 className="text-lg font-medium text-gray-900">Your Wishlist ({itemsQty})</h2>

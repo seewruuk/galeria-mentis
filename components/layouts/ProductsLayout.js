@@ -13,6 +13,9 @@ import ProductFilters from "@/components/ProductFilters";
 import ProductsList from "@/components/ProductsList";
 import PageTransition from "@/components/PageTransition";
 import Footer from "@/components/Footer";
+import Image from "next/image";
+import {urlFor} from "@/sanity/lib/image";
+import {PortableText} from "@portabletext/react";
 
 function ProductsRootLayout({category}) {
     const {data: products, loading: loadingProducts} = useSanity(getProductsByCategory, category);
@@ -27,6 +30,19 @@ function ProductsRootLayout({category}) {
     const [priceRange, setPriceRange] = useState(10000);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 9;
+
+    const ptComponents = {
+        block: {
+            normal: ({children}) => (
+
+                <p className={"mt-[12px] uppercase tracking-[1px]"}>{children}</p>
+
+            ),
+            h1: ({children}) => (
+                <h3 className={"leading-[170%] text-[32px]"}>{children}</h3>
+            ),
+        },
+    };
 
     useEffect(() => {
         setMounted(true);
@@ -74,10 +90,8 @@ function ProductsRootLayout({category}) {
             }
         }
 
-        // Apply price range filter
         filtered = filtered.filter((product) => product.price <= priceRange);
 
-        // Apply sorting
         if (sortOption === "price-asc") {
             filtered.sort((a, b) => a.price - b.price);
         } else if (sortOption === "price-desc") {
@@ -106,7 +120,7 @@ function ProductsRootLayout({category}) {
                 backgroundImage={categoryDetails?.image}
                 hugeText={categoryDetails?.title}
             >
-                Content
+                <PortableText value={categoryDetails?.header} components={ptComponents}/>
             </Banner>
 
             <Layout>
@@ -148,7 +162,9 @@ function ProductsRootLayout({category}) {
 
                     </div>
                 </div>
+
             </Layout>
+
 
             <Footer/>
         </PageTransition>

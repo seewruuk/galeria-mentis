@@ -117,7 +117,7 @@ export default function OrdersLayout() {
 
             <section className={"pt-[200px]"}>
                 <Layout>
-                    <div className="h-full">
+                    <div className="min-h-screen">
                         <div className={"flex gap-2 pb-[32px] items-start border-b-2 border-gray/20 justify-between"}>
                             <div>
                                 <h2 className={"text-3xl"}>Hello, <span className={"font-medium"}>{userData.name}</span>
@@ -158,7 +158,7 @@ export default function OrdersLayout() {
                                 }}
                                 className="rounded-md border-gray-300 shadow-sm"
                             >
-                                <option value="">Wszystkie statusy</option>
+                                <option value="">All</option>
                                 {statusOptions.map((status) => (
                                     <option key={status} value={status}>
                                         {orderLabel(status)}
@@ -174,7 +174,7 @@ export default function OrdersLayout() {
                                 }
                                 )
                             </p>
-                            {/* Możesz dodać tutaj dodatkowe filtry, np. daty czy kategorie */}
+
                         </div>
 
                         <div className="flex justify-between gap-2 mb-4 mt-4">
@@ -209,7 +209,7 @@ export default function OrdersLayout() {
                                 >
                                     {itemsPerPageOptions.map(option => (
                                         <option key={option} value={option}>
-                                            {option} zamówień na stronę
+                                            {option} per page
                                         </option>
                                     ))}
                                 </select>
@@ -218,7 +218,7 @@ export default function OrdersLayout() {
                                     type="button"
                                     className="rounded-full bg-blue-500 px-2.5 py-1 text-sm font-semibold text-white shadow-sm"
                                 >
-                                    {selectedOrders.length === filteredOrders.length ? "Odznacz wszystkie" : "Zaznacz wszystkie"}
+                                    {selectedOrders.length === filteredOrders.length ? "Deselect all" : "Select all"}
                                 </button>
                             </div>
                         </div>

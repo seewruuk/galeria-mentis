@@ -12,12 +12,30 @@ import { getArtist } from "@/sanity/getSanity/getArtist";
 import { useEffect, useState } from "react";
 import RecommendedProducts from "@/components/RecommendedProducts";
 import Footer from "@/components/Footer";
+import {AnimatePresence} from "framer-motion";
+import FullScreenImages from "@/components/FullScreenImages";
 
 export default function ProductLayout({ slug }) {
     const { data: product, loading, error } = useSanity(getProduct, slug);
     const [artworks, setArtworks] = useState([]);
     const [artist, setArtist] = useState(null);
     const [isDataReady, setIsDataReady] = useState(false);
+
+    const [openGallery, setOpenGallery] = useState({
+        status: false,
+        images: [],
+        selectedIndex: 0,
+    });
+
+
+    useEffect(() => {
+        if (product) {
+            setOpenGallery({
+                ...openGallery,
+                images: product.images,
+            });
+        }
+    }, [product]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -45,6 +63,19 @@ export default function ProductLayout({ slug }) {
 
     return (
         <PageTransition>
+
+
+            <AnimatePresence>
+                {openGallery.status && (
+                    <FullScreenImages
+                        openGallery={openGallery}
+                        images={openGallery.images}
+                        selectedIndex={openGallery.selectedIndex}
+                        setOpenGallery={setOpenGallery}
+                    />
+                )}
+            </AnimatePresence>
+
             <Layout>
                 <Gallery
                     images={product.images.slice(1)}
@@ -53,6 +84,8 @@ export default function ProductLayout({ slug }) {
                     category={product.productCategory}
                     title={product.name}
                     product={product}
+                    setOpenGallery={setOpenGallery}
+                    openGallery={openGallery}
                 />
 
                 <ProductDetails
@@ -62,11 +95,9 @@ export default function ProductLayout({ slug }) {
 
                 <Discover artworks={artworks.slice(0,3)} artist={artist} />
 
+
                 {/*<RecommendedProducts />*/}
 
-                <pre>
-                    {JSON.stringify(product._id, null, 2)}
-                </pre>
             </Layout>
 
             <Footer />
