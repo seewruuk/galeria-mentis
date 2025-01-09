@@ -26,24 +26,24 @@ export default function OrderLayout({params}) {
 
     const resendEmail = async (order) => {
 
-        // setMessageSend(true);
-        //
-        // const emailResponse = await fetch("/api/sendEmailToCustomer", {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //     },
-        //     body: JSON.stringify({order}),
-        // });
-        //
-        // const emailResult = await emailResponse.json();
-        // if (emailResult.status !== 200) {
-        //     toast.error("Error sending message");
-        //     setMessageSend(false);
-        // } else {
-        //     toast.success("Message sent successfully");
-        //     setMessageSend(false);
-        // }
+        setMessageSend(true);
+
+        const emailResponse = await fetch("/api/sendEmailToCustomer", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({order}),
+        });
+
+        const emailResult = await emailResponse.json();
+        if (emailResult.status !== 200) {
+            toast.error("Error sending message");
+            setMessageSend(false);
+        } else {
+            toast.success("Message sent successfully");
+            setMessageSend(false);
+        }
     }
 
     if (!order || loading) return null;
@@ -172,6 +172,10 @@ export default function OrderLayout({params}) {
                                             <div>
                                                 <h4 className="font-medium text-gray-900">
                                                     <p>{item.name}</p>
+
+                                                    <span className={"mt-2 text-gray text-[12px]"}>
+                                                        Author: {item.author}
+                                                    </span>
                                                 </h4>
                                             </div>
                                             <div className="mt-6 flex">
@@ -184,6 +188,7 @@ export default function OrderLayout({params}) {
                                                         <dt className="font-medium text-gray-900">Price:</dt>
                                                         <dd className="ml-2 text-gray-700">{formatPrice(item.price)}</dd>
                                                     </div>
+
                                                 </dl>
                                             </div>
                                         </div>

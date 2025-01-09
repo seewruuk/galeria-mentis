@@ -31,8 +31,6 @@ export default function CartLayout() {
         removeItem,
         totalPrice,
         preventChange,
-        subtotal,
-        shippingPrice,
         form,
         setForm,
         handleBuyEvent,
@@ -135,37 +133,6 @@ export default function CartLayout() {
                                     ))}
                                 </div>
                             </div>
-
-                            {/* Delivery Method */}
-                            <div className="mt-10 border-t border-gray-200 pt-10">
-                                <fieldset>
-                                    <legend className="text-lg font-medium text-gray-900">Delivery method</legend>
-                                    <RadioGroup
-                                        value={selectedDeliveryMethod}
-                                        onChange={setSelectedDeliveryMethod}
-                                        className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4"
-                                    >
-                                        {deliveryMethods.map((method) => (
-                                            <div
-                                                key={method.id}
-                                                className="relative flex cursor-pointer rounded-lg border border-gray-300 bg-white p-4 shadow-sm focus:outline-none"
-                                                onClick={() => setSelectedDeliveryMethod(method)}
-                                            >
-                      <span className="flex flex-1">
-                        <span className="flex flex-col">
-                          <span className="block text-sm font-medium text-gray-900">{method.title}</span>
-                          <span className="mt-1 text-sm text-gray-500">{method.turnaround}</span>
-                          <span className="mt-6 text-sm font-medium text-gray-900">{method.price}</span>
-                        </span>
-                      </span>
-                                                {selectedDeliveryMethod.id === method.id && (
-                                                    <CheckCircleIcon className="w-5 h-5 text-indigo-600"/>
-                                                )}
-                                            </div>
-                                        ))}
-                                    </RadioGroup>
-                                </fieldset>
-                            </div>
                         </div>
 
                         <div className="mt-10 lg:mt-0">
@@ -214,7 +181,8 @@ export default function CartLayout() {
                                                     </div>
                                                 </div>
 
-                                                <div className="flex flex-1 items-center justify-between pt-2 max-lg:flex-col max-lg:items-start max-lg:justify-start max-lg:gap-4">
+                                                <div
+                                                    className="flex flex-1 items-center justify-between pt-2 max-lg:flex-col max-lg:items-start max-lg:justify-start max-lg:gap-4">
                                                     <p className="mt-1 text-sm font-medium text-gray-900">{formatPrice(product.price)}</p>
 
                                                     <div
@@ -276,38 +244,10 @@ export default function CartLayout() {
                                         </h2>
 
                                         <dl className="mt-6 space-y-4">
+
                                             <div className="flex items-center justify-between">
-                                                <dt className="text-sm text-gray-600">Subtotal</dt>
-                                                <dd className="text-sm font-medium text-gray-900">{formatPrice(subtotal)}</dd>
-                                            </div>
-                                            <div
-                                                className="flex items-center justify-between border-t border-gray-200 pt-4">
-                                                <dt className="flex items-center text-sm text-gray-600">
-                                                    <span>Shipping estimate</span>
-                                                    <a href="#" className="ml-2 shrink-0 text-gray-400 hover:text-gray-500">
-                                                <span
-                                                    className="sr-only">Learn more about how shipping is calculated</span>
-                                                        {/*<QuestionMarkCircleIcon aria-hidden="true" className="size-5"/>*/}
-                                                    </a>
-                                                </dt>
-                                                <dd className="text-sm font-medium text-gray-900">{formatPrice(shippingPrice)}</dd>
-                                            </div>
-                                            <div
-                                                className="flex items-center justify-between border-t border-gray-200 pt-4">
-                                                <dt className="flex text-sm text-gray-600">
-                                                    <span>Tax estimate</span>
-                                                    <a href="#" className="ml-2 shrink-0 text-gray-400 hover:text-gray-500">
-                                                        <span
-                                                            className="sr-only">Learn more about how tax is calculated</span>
-                                                        {/*<QuestionMarkCircleIcon aria-hidden="true" className="size-5"/>*/}
-                                                    </a>
-                                                </dt>
-                                                <dd className="text-sm font-medium text-gray-900">{formatPrice(0)}</dd>
-                                            </div>
-                                            <div
-                                                className="flex items-center justify-between border-t border-gray-200 pt-4">
-                                                <dt className="text-base font-medium text-gray-900">Order total</dt>
-                                                <dd className="text-base font-medium text-gray-900">{formatPrice(totalPrice)}</dd>
+                                                <dt className="text-sm text-gray-600">Total Price</dt>
+                                                <dd className="text-sm font-medium text-gray-900">{formatPrice(totalPrice)}</dd>
                                             </div>
                                         </dl>
 

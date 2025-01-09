@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import generateOrderNumber from "@/lib/generateOrderNumber";
 import createOrder from "@/lib/createOrder";
 import {useRouter} from "next/navigation";
+import {getOrder} from "@/sanity/getSanity/getOrder";
 
 
 export const CartContext = createContext({});
@@ -17,9 +18,10 @@ export default function CartContextProvider({children}) {
     );
     const [totalQty, setTotalQty] = useState(0);
     const [subtotal, setSubtotal] = useState(0);
-    const shippingPrice = 5.00;
-    const taxPrice = 0.00;
-    let totalPrice = subtotal + shippingPrice + taxPrice;
+    // const shippingPrice = 5.00;
+    // const taxPrice = 0.00;
+    // let totalPrice = subtotal + shippingPrice + taxPrice;
+    let totalPrice = subtotal;
     const router = useRouter();
 
     const [preventChange, setPreventChange] = useState(false)
@@ -127,11 +129,10 @@ export default function CartContextProvider({children}) {
 
     const handleBuyEvent = async () => {
         toast.loading("Processing order...");
-        const disableFormState = form.map(input => ({ ...input, disabled: true }));
+        const disableFormState = form.map(input => ({...input, disabled: true}));
         setForm(disableFormState);
 
         const orderNumber = generateOrderNumber(`${form[1].value}${form[2].value}`, form[9].value);
-
 
 
         const stripeResponse = await fetch("/api/createStripeSession", {
@@ -152,32 +153,16 @@ export default function CartContextProvider({children}) {
 
             const stripeRedirectUrl = stripeResult.url
             const stripeSessionId = stripeResult.sessionId
-            // const sendEmail = await fetch("/api/sendEmailToCustomer", {
-            //     method: "POST",
-            //     headers: {
-            //         "Content-Type": "application/json"
-            //     },
-            //     body: JSON.stringify({
-            //         order: await getOrder(orderNumber)
-            //     })
-            // });
-            //
-            // const emailResult = await sendEmail.json();
-            //
-            // if (emailResult.status !== 200) {
-            //     toast.error("Błąd podczas wysyłania wiadomości");
-            // }
 
 
             const response = await createOrder({
                 orderNumber: orderNumber,
                 form: form,
-                fullDate: new Date().toLocaleString('en-GB', { timeZone: 'UTC' }),
+                fullDate: new Date().toLocaleString('en-GB', {timeZone: 'UTC'}),
                 deliveryMethod: "standard",
                 totalPrice: totalPrice.toFixed(2),
                 products: cartItems,
                 stripeSessionId: stripeSessionId,
-
                 // invoice: invoiceForm && invoiceForm.status ? {
                 //     status: invoiceForm.status,
                 //     companyType: invoiceForm.companyType,
@@ -203,12 +188,28 @@ export default function CartContextProvider({children}) {
                 // },
             });
 
-            if(response.status === 200){
-                router.push(stripeRedirectUrl);
-            }else{
+            if (response.status === 200) {
+
+                const sendEmail = await fetch("/api/sendEmailToCustomer", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        order: await getOrder(orderNumber)
+                    })
+                });
+
+                const emailResult = await sendEmail.json();
+
+                if (emailResult.status !== 200) {
+                    toast.error("There was an error sending the email. Please contact us to confirm your order.");
+                } else {
+                    router.push(stripeRedirectUrl);
+                }
+            } else {
                 toast.error("There was an error processing your order. Please try again later.");
             }
-
         } else {
             toast.error("There was an error processing your order. Please try again later.");
         }
@@ -285,7 +286,6 @@ export default function CartContextProvider({children}) {
             setTotalQty,
             totalPrice,
             subtotal,
-            shippingPrice,
             form,
             setForm,
 

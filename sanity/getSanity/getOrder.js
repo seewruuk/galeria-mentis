@@ -6,19 +6,21 @@ export async function getOrder(id) {
         groq`*[_type == "order" && _id == "${id}"]{
             _id,
             orderDate,
+            orderStatus,
             orderNumber,
             personData,
             orderInfo,
             products[]{
                 name,
+                author,
+                authorSlug,
+                slug,
                 price,
                 qty,
-                category,
-                slug,                
+                category,             
             },
+            // invoice,
             totalPrice,
-            orderStatus,
-            invoice,
         }[0]`
     )
 }

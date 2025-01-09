@@ -126,6 +126,16 @@ export default {
                             type: "string",
                         },
                         {
+                            title: "Author",
+                            name: "author",
+                            type: "string",
+                        },
+                        {
+                            title: "Author Slug",
+                            name: "authorSlug",
+                            type: "string",
+                        },
+                        {
                             title: "slug",
                             name: "slug",
                             type: "string",
