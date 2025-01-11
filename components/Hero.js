@@ -124,7 +124,7 @@ export default function Hero({data}) {
                                 {/*<span className="font-bold">{data[selectedIndex]?.artist || "John Doe"}</span>*/}
                                 {/*{" | "}*/}
                                 {/*<span>{data[selectedIndex]?.subtitle || "Out of touch"}</span>*/}
-                                <span>Lorem ipsum</span>
+                                <span></span>
                             </div>
 
                             {/* Wskaźniki */}

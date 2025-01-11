@@ -18,9 +18,6 @@ export default function CartContextProvider({children}) {
     );
     const [totalQty, setTotalQty] = useState(0);
     const [subtotal, setSubtotal] = useState(0);
-    // const shippingPrice = 5.00;
-    // const taxPrice = 0.00;
-    // let totalPrice = subtotal + shippingPrice + taxPrice;
     let totalPrice = subtotal;
     const router = useRouter();
 
@@ -128,9 +125,26 @@ export default function CartContextProvider({children}) {
 
 
     const handleBuyEvent = async () => {
-        toast.loading("Processing order...");
+
+        const isFormValid = form.every(input => input.value !== "");
+        if (!isFormValid) {
+            toast.error("Please fill in all fields in the form.");
+            setForm(
+                form.map(input => {
+                    if (input.value === "") {
+                        return {...input, error: true};
+                    }
+                    return input;
+                })
+            );
+            setPreventChange(true);
+            return;
+        }
+
         const disableFormState = form.map(input => ({...input, disabled: true}));
+        toast.loading("Processing order...");
         setForm(disableFormState);
+        setPreventChange(true);
 
         const orderNumber = generateOrderNumber(`${form[1].value}${form[2].value}`, form[9].value);
 
@@ -239,6 +253,7 @@ export default function CartContextProvider({children}) {
                     discount: null, // Zniżki nie stosujemy na początku
                     discountValue: null, // Wartość zniżki
                     category: item.productCategory,
+                    artist: item.artist,
                     image: item.images[0],
                     qty: 1,
                 }
@@ -288,6 +303,8 @@ export default function CartContextProvider({children}) {
             subtotal,
             form,
             setForm,
+            preventChange,
+
 
             handleBuyEvent,
             addToCart,

@@ -6,7 +6,7 @@ export default function page() {
         <Suspense fallback={<div>Loading...</div>}>
             <SuccessCancelLayout
                 header={"Thank you for your purchase!"}
-                subtitle={"Your order is confirmed and will be shipped soon. When we receive payment, we'll send you an email with the details."}
+                subtitle={"Your order is confirmed and will be shipped soon. When we receive payment, we'll send you an email with the details. Remember to check your spam folder if you don't see it in your inbox."}
             />
         </Suspense>
     );

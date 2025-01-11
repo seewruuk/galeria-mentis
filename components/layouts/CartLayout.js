@@ -44,6 +44,8 @@ export default function CartLayout() {
 
     if (!mounted) return null;
 
+
+
     return (
         <PageTransition>
             <div className="pt-[200px]">
@@ -174,7 +176,8 @@ export default function CartLayout() {
                                                         <button
                                                             onClick={() => removeItem(product._id)}
                                                             type="button"
-                                                            className="-m-2.5 flex items-center justify-center bg-white p-2.5 text-gray-400 hover:text-gray-500"
+                                                            disabled={preventChange}
+                                                            className="-m-2.5 flex items-center justify-center bg-white p-2.5 text-gray-400 hover:text-gray-500 disabled:cursor-not-allowed disabled:text-gray-300 disabled:hover:text-gray-300 transition-all"
                                                         >
                                                             <TrashIcon aria-hidden="true" className="w-5 h-5"/>
                                                         </button>
@@ -199,6 +202,7 @@ export default function CartLayout() {
                                                         <p className={"flex-grow text-center"}>{product.qty}</p>
 
                                                         <button
+
                                                             disabled={preventChange}
                                                             type={"button"}
                                                             className={"disabled:text-gray-500 text-black hover:text-primary transition-all"}
@@ -268,6 +272,7 @@ export default function CartLayout() {
                     </form>
                 </Layout>
             </div>
+
 
             <Footer/>
         </PageTransition>

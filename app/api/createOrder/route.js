@@ -47,6 +47,8 @@ export async function POST(req, res) {
                             _key: uuidv4(),
                             name: item.name,
                             slug: item.slug,
+                            author: item.artist.name,
+                            authorSlug: item.artist.slug,
                             price: item.price,
                             qty: item.qty,
                             category: item.category.title,

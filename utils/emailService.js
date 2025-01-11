@@ -28,7 +28,7 @@ export function generateOrderEmailHtml({
                                          <tr>
                                               <td style="font-size: 14px; color: #666666;">
                                                 <a 
-                                                href=${process.env.NEXT_PUBLIC_BASE_URL + "/artist/" + item.authorSlug} 
+                                                href=${process.env.NEXT_PUBLIC_BASE_URL + "/artists/" + item.authorSlug} 
                                                 style="text-decoration: none; color: #333333; target="_blank">
                                                 Artist: ${item.author}
                                                 </a>
