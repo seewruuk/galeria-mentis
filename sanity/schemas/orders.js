@@ -220,6 +220,12 @@ export default {
                             name: "companyCity",
                             type: "string",
                         },
+                        {
+                            title: "Country",
+                            name: "companyCountry",
+                            type: "string",
+                        },
+
                     ]
                 },
             ]
@@ -244,6 +250,11 @@ export default {
             title: "Stripe Session ID",
             name: "stripeSessionId",
             type: "string",
+        },
+        {
+            title: "Newsletter",
+            name: "newsletter",
+            type: "boolean",
         }
     ]
 }

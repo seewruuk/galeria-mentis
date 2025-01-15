@@ -7,11 +7,8 @@ import Loading from "@/components/Loading";
 import Layout from "@/components/Layout";
 import SectionHeader from "@/components/SectionHeader";
 import Image from "next/image";
-import ProductCart from "@/components/ProductCard";
 import ProductCard from "@/components/ProductCard";
 import ArtistCard from "@/components/ArtistCard";
-import {retry} from "next/dist/compiled/@next/font/dist/google/retry";
-import {motion} from "framer-motion";
 import PageTransition from "@/components/PageTransition";
 import Footer from "@/components/Footer";
 
@@ -160,7 +157,7 @@ export default function HomeLayout() {
                                         homePageData.benefitsSection.map((item, index) => {
                                             return (
                                                 <div key={item + index}
-                                                    className={"flex-1 flex items-center flex-col text-center text-[16px] gap-[32px]"}
+                                                     className={"flex-1 flex items-center flex-col text-center text-[16px] gap-[32px]"}
                                                 >
                                                     {/*Icon*/}
                                                     <div>
@@ -185,7 +182,7 @@ export default function HomeLayout() {
                 )
             }
 
-            <Footer />
+            <Footer/>
 
 
         </PageTransition>

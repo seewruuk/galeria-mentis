@@ -1,20 +1,23 @@
 "use client";
 
 import useSanity from "@/hooks/useSanity";
-import { getArtist } from "@/sanity/getSanity/getArtist";
-import { useEffect, useState } from "react";
+import {getArtist} from "@/sanity/getSanity/getArtist";
+import {useEffect, useState} from "react";
 import PageTransition from "@/components/PageTransition";
 import Layout from "@/components/Layout";
 import Banner from "@/components/Banner";
 import Loading from "@/components/Loading";
-import { PortableText } from "@portabletext/react";
+import {PortableText} from "@portabletext/react";
 import ProductCard from "@/components/ProductCard";
-import { getArtistArtworks } from "@/sanity/getSanity/getArtistArtworks";
+import {getArtistArtworks} from "@/sanity/getSanity/getArtistArtworks";
 import Pagination from "@/components/Pagination";
 import Footer from "@/components/Footer";
+import Image from "next/image";
+import {motion} from "framer-motion";
 
-export default function ArtistLayout({ slug }) {
-    const { data: artist, loading: artistLoading } = useSanity(getArtist, slug);
+
+export default function ArtistLayout({slug}) {
+    const {data: artist, loading: artistLoading} = useSanity(getArtist, slug);
     const [artworks, setArtworks] = useState([]);
     const [filteredArtworks, setFilteredArtworks] = useState([]);
     const [artworksLoading, setArtworksLoading] = useState(false);
@@ -70,11 +73,11 @@ export default function ArtistLayout({ slug }) {
         currentPage * itemsPerPage
     );
 
-    if (artistLoading || artworksLoading) return <Loading />;
+    if (artistLoading || artworksLoading) return <Loading/>;
 
     const ptComponents = {
         block: {
-            normal: ({ children }) => (
+            normal: ({children}) => (
                 <div>
                     <p>{children}</p>
                 </div>
@@ -85,6 +88,13 @@ export default function ArtistLayout({ slug }) {
     return (
         <PageTransition>
             <Banner backgroundImage={artist?.bannerImage} hugeText="Artist">
+                <motion.div
+                    initial={{scale: 0}}
+                    animate={{scale: 1}}
+                    transition={{duration: 0.5, ease: [0.48, 0.15, 0.25, 0.96]}}
+                    className={"h-[190px] w-[190px] rounded-full aspect-square border-[6px] border-primary mb-[32px] relative overflow-hidden"}>
+                    <Image src={artist?.avatar} alt={`${artist?.name} avatar`} layout="fill" objectFit="cover"/>
+                </motion.div>
                 <h2 className={"text-[42px]"}>{artist?.name}</h2>
                 <p className="text-primary text-[21px]">
                     {artist?.location?.city}, {artist?.location?.country}
@@ -103,7 +113,7 @@ export default function ArtistLayout({ slug }) {
                                     "max-lg:w-[100%] w-3/4 leading-[180%] text-gray group-hover:text-black transition-all"
                                 }
                             >
-                                <PortableText value={item.content} components={ptComponents} />
+                                <PortableText value={item.content} components={ptComponents}/>
                             </div>
                         </div>
                     ))}
@@ -132,7 +142,6 @@ export default function ArtistLayout({ slug }) {
                 </div>
 
 
-
                 <div className="grid grid-cols-1 gap-5 max-lg:mx-auto md:grid-cols-2 lg:grid-cols-4">
                     {paginatedArtworks.map((item, index) => (
                         <ProductCard
@@ -158,7 +167,7 @@ export default function ArtistLayout({ slug }) {
                 />
             </Layout>
 
-            <Footer />
+            <Footer/>
         </PageTransition>
     );
 }

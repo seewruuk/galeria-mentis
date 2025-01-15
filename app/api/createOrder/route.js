@@ -57,7 +57,8 @@ export async function POST(req, res) {
                     }
                 ),
                 stripeSessionId: item.stripeSessionId,
-                // invoice: item.invoice,
+                invoice: item.invoice,
+                newsletter: item.newsletter,
             }
         }]
 

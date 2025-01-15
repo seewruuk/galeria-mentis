@@ -6,6 +6,7 @@ import generateOrderNumber from "@/lib/generateOrderNumber";
 import createOrder from "@/lib/createOrder";
 import {useRouter} from "next/navigation";
 import {getOrder} from "@/sanity/getSanity/getOrder";
+import Link from "next/link";
 
 
 export const CartContext = createContext({});
@@ -22,6 +23,8 @@ export default function CartContextProvider({children}) {
     const router = useRouter();
 
     const [preventChange, setPreventChange] = useState(false)
+    const [summaryButtonDisabled, setSummaryButtonDisabled] = useState(true);
+
 
     const [form, setForm] = useState([
         {
@@ -32,6 +35,7 @@ export default function CartContextProvider({children}) {
             colSpan: 'sm:col-span-2',
             value: '',
             disabled: preventChange,
+            required: true
         },
         {
             id: 'first-name',
@@ -41,6 +45,8 @@ export default function CartContextProvider({children}) {
             colSpan: '',
             value: '',
             disabled: preventChange,
+            required: true
+
         },
         {
             id: 'last-name',
@@ -50,6 +56,8 @@ export default function CartContextProvider({children}) {
             colSpan: '',
             value: '',
             disabled: preventChange,
+            required: true
+
         },
         {
             id: 'address',
@@ -59,15 +67,18 @@ export default function CartContextProvider({children}) {
             colSpan: 'sm:col-span-2',
             value: '',
             disabled: preventChange,
+            required: true
+
         },
         {
             id: 'apartment',
-            label: 'Apartment, suite, etc.',
+            label: 'Street Address line 2',
             type: 'text',
             autoComplete: '',
             colSpan: 'sm:col-span-2',
             value: '',
             disabled: preventChange,
+            required: false
         },
         {
             id: 'city',
@@ -77,6 +88,8 @@ export default function CartContextProvider({children}) {
             colSpan: '',
             value: '',
             disabled: preventChange,
+            required: true
+
         },
         {
             id: 'country',
@@ -86,6 +99,8 @@ export default function CartContextProvider({children}) {
             colSpan: '',
             value: '',
             disabled: preventChange,
+            required: true
+
         },
         {
             id: 'region',
@@ -95,6 +110,8 @@ export default function CartContextProvider({children}) {
             colSpan: '',
             value: '',
             disabled: preventChange,
+            required: true
+
         },
         {
             id: 'postal-code',
@@ -104,6 +121,8 @@ export default function CartContextProvider({children}) {
             colSpan: '',
             value: '',
             disabled: preventChange,
+            required: true
+
         },
         {
             id: 'phone',
@@ -113,8 +132,202 @@ export default function CartContextProvider({children}) {
             colSpan: 'sm:col-span-2',
             value: '',
             disabled: preventChange,
+            required: true
+
         },
     ]);
+
+    const individualInvoiceFields = [
+        {
+            placeholder: "First Name",
+            type: "text",
+            name: "name",
+            value: "",
+            required: true,
+        },
+        {
+            placeholder: "Last Name",
+            type: "text",
+            name: "lastname",
+            value: "",
+            required: true,
+        },
+        {
+            placeholder: "Phone",
+            type: "text",
+            name: "phone",
+            value: "",
+            required: true,
+        },
+        {
+            placeholder: "Address",
+            type: "text",
+            name: "address",
+            value: "",
+            required: true,
+
+        },
+        {
+            placeholder: "Postal Code",
+            type: "text",
+            name: "postalCode",
+            value: "",
+            required: true,
+        },
+        {
+            placeholder: "City",
+            type: "text",
+            name: "city",
+            value: "",
+            required: true,
+        },
+        {
+            placeholder: "Country",
+            type: "text",
+            name: "country",
+            value: "",
+            required: true,
+        },
+    ];
+
+    const companyInvoiceFields = [
+        {
+            placeholder: "Company Name",
+            type: "text",
+            name: "companyName",
+            value: "",
+            required: true,
+        },
+        {
+            placeholder: "NIP",
+            type: "text",
+            name: "nip",
+            value: "",
+            required: true,
+        },
+        {
+            placeholder: "Phone",
+            type: "text",
+            name: "phone",
+            value: "",
+            required: true,
+        },
+        {
+            placeholder: "Company Address",
+            type: "text",
+            name: "address",
+            value: "",
+            required: true,
+        },
+        {
+            placeholder: "Postal Code",
+            type: "text",
+            name: "postalCode",
+            value: "",
+            required: true,
+        },
+        {
+            placeholder: "City",
+            type: "text",
+            name: "city",
+            value: "",
+            required: true,
+        },
+        {
+            placeholder: "Country",
+            type: "text",
+            name: "country",
+            value: "",
+            required: true,
+        },
+    ];
+
+    const [invoiceForm, setInvoiceForm] = useState({
+        status: false,
+        companyType: "individual",
+    });
+    const [invoiceInputs, setInvoiceInputs] = useState([]);
+
+    useEffect(() => {
+        if (invoiceForm.status) {
+            if (invoiceForm.companyType === "individual") {
+                setInvoiceInputs([...individualInvoiceFields]);
+            } else {
+                setInvoiceInputs([...companyInvoiceFields]);
+            }
+        } else {
+            setInvoiceInputs([]);
+        }
+    }, [invoiceForm.status, invoiceForm.companyType]);
+
+    const [termsAccepted, setTermsAccepted] = useState([
+        {
+            name: "all",
+            label: "Select All",
+            value: false
+        },
+        {
+            name: "terms",
+            label: (
+                <>
+                    *I accept the  <Link
+                    href={"/terms-and-conditions.pdf"}
+                    target={"_blank"}
+                    className={"underline"}>
+                    Terms and Conditions
+                </Link> of the store.
+                </>
+            ),
+            value: false,
+            required: true
+        },
+        {
+            name: "privacy",
+            label: (
+                <>
+                    *I accept the <Link
+                    href={"/privacy-policy.pdf"}
+                    target={"_blank"}
+                    className={"underline"}>
+                    Privacy Policy
+                </Link>.
+                </>
+            ),
+            value: false,
+            required: true
+        },
+        {
+            name: "newsletter",
+            label: (
+                <>
+                    I agree to receive promotional offers and updates via email.
+                    <br />
+                    You can unsubscribe at any time.
+                </>
+            ),
+            value: false
+        },
+    ]);
+    const [termsDisabled, setTermsDisabled] = useState(false)
+
+    useEffect(() => {
+        const requiredInputs = form.filter(input => input.required);
+        const isFormValid = requiredInputs.every(input => input.value !== "");
+
+        const filledInputs = requiredInputs.filter(input => input.value.length > 0);
+
+        // Sprawdzamy, czy wszystkie pola faktury są wypełnione i poprawne, gdy status faktury jest aktywny
+        const areInvoiceInputsValid = invoiceForm.status
+            ? invoiceInputs.every(input => input.value !== "")
+            : true;
+
+        if (requiredInputs.length === filledInputs.length && isFormValid && termsAccepted[1].value && termsAccepted[2].value && areInvoiceInputsValid) {
+            setSummaryButtonDisabled(false);
+        } else {
+            setSummaryButtonDisabled(true);
+        }
+    }, [form, termsAccepted, invoiceForm.status, invoiceInputs]);
+
 
 
     useEffect(() => {
@@ -126,8 +339,8 @@ export default function CartContextProvider({children}) {
 
     const handleBuyEvent = async () => {
 
-        const isFormValid = form.every(input => input.value !== "");
-        if (!isFormValid) {
+        const isRequiredFilled = form.every(input => input.required ? input.value !== "" : true);
+        if (!isRequiredFilled) {
             toast.error("Please fill in all fields in the form.");
             setForm(
                 form.map(input => {
@@ -143,8 +356,11 @@ export default function CartContextProvider({children}) {
 
         const disableFormState = form.map(input => ({...input, disabled: true}));
         toast.loading("Processing order...");
+
+        setTermsDisabled(true);
         setForm(disableFormState);
         setPreventChange(true);
+        setSummaryButtonDisabled(true);
 
         const orderNumber = generateOrderNumber(`${form[1].value}${form[2].value}`, form[9].value);
 
@@ -177,29 +393,32 @@ export default function CartContextProvider({children}) {
                 totalPrice: totalPrice.toFixed(2),
                 products: cartItems,
                 stripeSessionId: stripeSessionId,
-                // invoice: invoiceForm && invoiceForm.status ? {
-                //     status: invoiceForm.status,
-                //     companyType: invoiceForm.companyType,
-                //     companyData: {
-                //         companyName: invoiceInputs.some(input => input.name === "companyName") ? invoiceInputs.find(input => input.name === "companyName").value : invoiceInputs.find(input => input.name === "name").value,
-                //         nip: invoiceInputs.some(input => input.name === "nip") ? invoiceInputs.find(input => input.name === "nip").value : invoiceInputs.find(input => input.name === "lastname").value,
-                //         phone: invoiceInputs.find(input => input.name === "phone").value,
-                //         address: invoiceInputs.find(input => input.name === "address").value,
-                //         companyPostal: invoiceInputs.find(input => input.name === "postalCode").value,
-                //         companyCity: invoiceInputs.find(input => input.name === "city").value,
-                //     }
-                // } : {
-                //     status: false,
-                //     companyType: "",
-                //     companyData: {
-                //         companyName: "",
-                //         nip: "",
-                //         phone: "",
-                //         address: "",
-                //         companyPostal: "",
-                //         companyCity: ""
-                //     }
-                // },
+                invoice: invoiceForm && invoiceForm.status ? {
+                    status: invoiceForm.status,
+                    companyType: invoiceForm.companyType,
+                    companyData: {
+                        companyName: invoiceInputs.some(input => input.name === "companyName") ? invoiceInputs.find(input => input.name === "companyName").value : invoiceInputs.find(input => input.name === "name").value,
+                        nip: invoiceInputs.some(input => input.name === "nip") ? invoiceInputs.find(input => input.name === "nip").value : invoiceInputs.find(input => input.name === "lastname").value,
+                        phone: invoiceInputs.find(input => input.name === "phone").value,
+                        address: invoiceInputs.find(input => input.name === "address").value,
+                        companyPostal: invoiceInputs.find(input => input.name === "postalCode").value,
+                        companyCity: invoiceInputs.find(input => input.name === "city").value,
+                        companyCountry: invoiceInputs.find(input => input.name === "country").value,
+                    }
+                } : {
+                    status: false,
+                    companyType: "",
+                    companyData: {
+                        companyName: "",
+                        nip: "",
+                        phone: "",
+                        address: "",
+                        companyPostal: "",
+                        companyCity: "",
+                        companyCountry: ""
+                    }
+                },
+                newsletter: termsAccepted[3].value
             });
 
             if (response.status === 200) {
@@ -292,6 +511,25 @@ export default function CartContextProvider({children}) {
         setCartItems(newCartItems);
     };
 
+    const handleAcceptAll = (checked) => {
+        setTermsAccepted(
+            termsAccepted.map(term => ({...term, value: checked}))
+        );
+    };
+
+    const handleCheckboxChange = (name, checked) => {
+        if (name === "all") {
+            handleAcceptAll(checked);
+        } else {
+            setTermsAccepted(
+                termsAccepted.map((term) =>
+                    term.name === name ? { ...term, value: checked } : term
+                )
+            );
+        }
+    };
+
+
 
     return (
         <CartContext.Provider value={{
@@ -304,8 +542,22 @@ export default function CartContextProvider({children}) {
             form,
             setForm,
             preventChange,
+            termsAccepted,
+            setTermsAccepted,
+            termsDisabled,
+            setTermsDisabled,
+            invoiceForm,
+            setInvoiceForm,
+            invoiceInputs,
+            setInvoiceInputs,
+            individualInvoiceFields,
+            companyInvoiceFields,
+            summaryButtonDisabled,
 
 
+
+            handleAcceptAll,
+            handleCheckboxChange,
             handleBuyEvent,
             addToCart,
             increaseQty,
