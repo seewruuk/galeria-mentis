@@ -171,7 +171,9 @@ export default function OrderLayout({params}) {
                                         <div className="flex flex-auto flex-col justify-center">
                                             <div>
                                                 <h4 className="font-medium text-gray-900">
-                                                    <p>{item.name}</p>
+                                                    <p className={""}>
+                                                        <Link className={"hover:underline"} href={process.env.NEXT_PUBLIC_BASE_URL + "/products/" + item.slug}>{item.name}</Link>
+                                                    </p>
 
                                                     <span className={"mt-2 text-gray text-[12px]"}>
                                                         Author: {item.author}
@@ -198,6 +200,7 @@ export default function OrderLayout({params}) {
                                 <div className="sm:ml-40 sm:pl-6">
                                     <h4 className="sr-only">Buyer information</h4>
                                     <dl className="grid grid-cols-2 gap-x-6 py-10 text-sm">
+
                                         <div>
                                             <dt className="font-medium text-gray-900">Buyer details</dt>
                                             <dd className="mt-2 text-gray-700">
@@ -216,15 +219,61 @@ export default function OrderLayout({params}) {
                                                 </address>
                                             </dd>
                                         </div>
-                                        <div>
-                                            <dt className="font-medium text-gray-900">Delivery</dt>
-                                            <dd className="mt-2 text-gray-700">
-                                                <p>{
-                                                    order.orderInfo.deliveryMethod
-                                                }</p>
 
-                                            </dd>
-                                        </div>
+
+                                        {
+                                            order.invoice?.status ? (
+                                                <div>
+                                                    <dt className="font-medium text-gray-900">
+                                                        Invoice details
+                                                    </dt>
+                                                    <dd className="mt-2 text-gray-700">
+                                                        <address className="not-italic">
+                                                            <span className="block font-semibold">
+                                                                {
+                                                                    order.invoice.companyType === "company" ? "Company" : "Individual"
+                                                                }
+                                                            </span>
+                                                            <span className="block">{
+                                                                order.invoice.companyType === "company" ? order.invoice.companyData.companyName : order.invoice.companyData.companyName + " " + order.invoice.companyData.nip
+                                                            }</span>
+
+                                                            {
+                                                                order.invoice.companyType === "company" ? (
+                                                                    <span className="block">
+                                                                        NIP: {order.invoice.companyData.nip}
+                                                                    </span>
+                                                                ) : null
+                                                            }
+
+
+                                                            <span
+                                                                className="block">Phone: {order.invoice.companyData.phone}</span>
+                                                            <span
+                                                                className="block">
+                                                                Address: {order.invoice.companyData.address}
+                                                            </span>
+                                                            <span
+                                                                className="block">
+                                                                Postal Code: {order.invoice.companyData.companyPostal}
+                                                            </span>
+                                                            <span
+                                                                className="block">
+                                                                City: {order.invoice.companyData.companyCity}
+                                                            </span>
+                                                            <span
+                                                                className="block">
+                                                                Country: {order.invoice.companyData.companyCountry}
+                                                            </span>
+
+
+                                                        </address>
+                                                    </dd>
+                                                </div>
+                                            ) : null
+                                        }
+
+
                                     </dl>
 
                                     <h4 className="sr-only">Payment</h4>
@@ -236,17 +285,27 @@ export default function OrderLayout({params}) {
                                             </dd>
                                         </div>
 
-                                        {
-                                            order.discountCode && (
-                                                <div>
-                                                    <dt className="font-medium text-gray-900">Discount code</dt>
-                                                    <dd className="mt-2 text-gray-700">
-                                                        <p>Code:</p>
-                                                        <p className={"font-semibold"}>{order.discountCode}</p>
-                                                    </dd>
-                                                </div>
-                                            )
-                                        }
+                                        <div>
+                                            <dt className="font-medium text-gray-900">Delivery</dt>
+                                            <dd className="mt-2 text-gray-700">
+                                                <p>{
+                                                    order.orderInfo.deliveryMethod
+                                                }</p>
+
+                                            </dd>
+                                        </div>
+
+                                        {/*{*/}
+                                        {/*    order.discountCode && (*/}
+                                        {/*        <div>*/}
+                                        {/*            <dt className="font-medium text-gray-900">Discount code</dt>*/}
+                                        {/*            <dd className="mt-2 text-gray-700">*/}
+                                        {/*                <p>Code:</p>*/}
+                                        {/*                <p className={"font-semibold"}>{order.discountCode}</p>*/}
+                                        {/*            </dd>*/}
+                                        {/*        </div>*/}
+                                        {/*    )*/}
+                                        {/*}*/}
                                     </dl>
 
                                     <h3 className="sr-only">Summary</h3>

@@ -19,7 +19,7 @@ export async function getOrder(id) {
                 qty,
                 category,             
             },
-            // invoice,
+            invoice,
             totalPrice,
         }[0]`
     )
