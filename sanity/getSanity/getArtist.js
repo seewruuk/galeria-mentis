@@ -12,6 +12,7 @@ export async function getArtist(slug) {
             description,
             "bannerImage": bannerImage.asset->url,
             bio,
+            seo,
             
         }[0]`,
         {slug}

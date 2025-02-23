@@ -78,7 +78,7 @@ export default function ProductLayout({ slug }) {
 
             <Layout>
                 <Gallery
-                    images={product.images.slice(1)}
+                    images={product.images}
                     artist={product.artist}
                     price={product.price}
                     category={product.productCategory}
@@ -92,6 +92,7 @@ export default function ProductLayout({ slug }) {
                     additionalInfo={product.additionalInfo}
                     productDetails={product.details}
                 />
+
 
                 <Discover artworks={artworks.slice(0,3)} artist={artist} />
 

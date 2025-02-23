@@ -29,21 +29,21 @@ const ArtworkDetails = ({productDetails}) => {
                     key={"Artwork Details"}
         >
             {
-                productDetails.map((item, index) => {
+                productDetails ? productDetails.map((item, index) => {
                     return (
                         <div
                             key={item + index}
                             className={"flex justify-between py-[8px] border-b border-primary-light items-center"}
                         >
                             <p className={"text-primary"}>
-                                {item.productDetails.name}
+                                {item.productDetailsName}
                             </p>
                             <p className={"text-gray"}>
                                 {item.content}
                             </p>
                         </div>
                     )
-                })
+                }) : <p>No details available</p>
             }
 
         </motion.div>

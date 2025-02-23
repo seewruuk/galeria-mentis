@@ -154,7 +154,8 @@ export default function ArtistLayout({slug}) {
                             category={item.productCategory.title}
                             categoryLink={item.productCategory.slug}
                             slug={item.slug}
-                            image={item.images[0]}
+                            image={item.thumbnail ? item.thumbnail : item.images[0]}
+
                         />
                     ))}
                 </div>

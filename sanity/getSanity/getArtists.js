@@ -5,6 +5,7 @@ import {client} from "../lib/client";
 export async function getArtists() {
     return client.fetch(
         groq`*[_type == "artist"]{
+        _id,
         _createdAt,
         "avatar": avatar.asset->url,
         name,
@@ -17,20 +18,8 @@ export async function getArtists() {
         paintingStyle[]->{
         title,
         },
-        artworks[]->{
-        name,
-        productCategory->{
-            title,
-            "slug": slug.current,
-        },
-        "slug": slug.current,
-        "images": images[].asset->url,
-        artist->{
-            name,
-            "slug": slug.current,
-        },
-        price,
-        }
+        price
         }`
+
     )
 }

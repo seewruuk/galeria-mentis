@@ -5,3 +5,13 @@ export default function Page(){
         <BlogLayout />
     )
 }
+
+
+export async function generateMetadata({ params }) {
+
+
+    return {
+        title: "Blog",
+        description: "Blog",
+    };
+}

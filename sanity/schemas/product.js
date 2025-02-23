@@ -1,6 +1,6 @@
 export default {
     name: 'product',
-    title: 'Product',
+    title: 'Art works',
     type: 'document',
     fields: [
         {
@@ -19,6 +19,11 @@ export default {
             },
         },
         {
+            name: "thumbnail",
+            title: "Thumbnail",
+            type: "image",
+        },
+        {
             name: "images",
             title: "Images",
             type: "array",
@@ -35,7 +40,7 @@ export default {
             name: 'artist',
             title: 'Artist',
             type: 'reference',
-            to: [{type: 'artist'}],
+            to: [{ type: 'artist' }],
             validation: Rule => Rule.required().error('Artist reference is required'),
         },
         {
@@ -51,34 +56,8 @@ export default {
             name: 'productCategory',
             title: 'Product Category',
             type: 'reference',
-            to: [{type: 'productCategory'}],
+            to: [{ type: 'productCategory' }],
             validation: Rule => Rule.required().error('Product category is required'),
-        },
-        {
-            name: 'options',
-            title: 'Options',
-            type: 'array',
-            of: [
-                {
-                    type: 'object',
-                    fields: [
-                        {
-                            name: 'optionType',
-                            title: 'Option Type',
-                            type: 'reference',
-                            to: [{ type: 'productOption' }],
-                            validation: Rule => Rule.required().error('Option type is required'),
-                        },
-                        {
-                            name: 'value',
-                            title: 'Value',
-                            type: 'string',
-                            validation: Rule => Rule.required().error('Option value is required'),
-                        },
-                    ],
-                },
-            ],
-            description: 'Select specific options and their values for this product (e.g., Framed: Yes, Size: Medium).',
         },
         {
             name: 'details',
@@ -91,9 +70,9 @@ export default {
                         {
                             type: 'reference',
                             name: 'productDetails',
-                            to: [{ type: 'productDetails' }],
+                            to: [{ type: 'product-details' }], // poprawiona referencja
                         },
-                        {name: 'content', title: 'Content', type: 'string'},
+                        { name: 'content', title: 'Content', type: 'string' },
                     ],
                 },
             ],
@@ -107,13 +86,13 @@ export default {
                     name: 'needToKnow',
                     title: 'Need to Know',
                     type: 'array',
-                    of: [{type: 'block'}],
+                    of: [{ type: 'block' }],
                 },
                 {
                     name: 'shippingAndReturns',
                     title: 'Shipping & Returns',
                     type: 'array',
-                    of: [{type: 'block'}],
+                    of: [{ type: 'block' }],
                 },
                 {
                     name: 'faq',
@@ -123,8 +102,8 @@ export default {
                         {
                             type: 'object',
                             fields: [
-                                {name: 'question', title: 'Question', type: 'string'},
-                                {name: 'answer', title: 'Answer', type: 'text'},
+                                { name: 'question', title: 'Question', type: 'string' },
+                                { name: 'answer', title: 'Answer', type: 'text' },
                             ],
                         }
                     ],
@@ -138,9 +117,14 @@ export default {
             of: [
                 {
                     type: 'reference',
-                    to: [{type: 'product'}],
+                    to: [{ type: 'product' }],
                 },
             ],
         },
+        {
+            title: "SEO",
+            name: "seo",
+            type: "seo",
+        }
     ],
 };

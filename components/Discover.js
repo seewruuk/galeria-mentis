@@ -35,7 +35,7 @@ export default function Discover({artworks, artist}) {
                             {artworks.map((artwork, index) => (
                                 <ProductCard
                                     key={index}
-                                    image={artwork.images[0]}
+                                    image={artwork.thumbnail ? artwork.thumbnail : artwork.images[0]}
                                     title={artwork.name}
                                     artist={artwork.artist.name}
                                     artistsLink={artwork.artist.slug}

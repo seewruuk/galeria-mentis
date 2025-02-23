@@ -473,7 +473,7 @@ export default function CartContextProvider({children}) {
                     discountValue: null, // Wartość zniżki
                     category: item.productCategory,
                     artist: item.artist,
-                    image: item.images[0],
+                    image: item.thumbnail ? item.thumbnail : item.images[0],
                     qty: 1,
                 }
             ]);

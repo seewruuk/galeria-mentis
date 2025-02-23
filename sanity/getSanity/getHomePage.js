@@ -10,6 +10,7 @@ export async function getHomePage() {
          "backgroundImage": backgroundImage.asset->url,
          },
          featuredProducts[]->{
+         "thumbnail": thumbnail.asset->url,
          "images": images[].asset->url,
             name,
             "slug" : slug.current,
@@ -22,33 +23,20 @@ export async function getHomePage() {
                 name,
             },
          },
-         highlightedArtists[]{
-           artist->{
-            name,
-            "slug" : slug.current,
-            "avatar": avatar.asset->url,
-            location,
-           },
-           works[]->{
-            "images": images[].asset->url,
-            name,
-            "slug" : slug.current,
-            productCategory->{
-                title,
-            },
-            price,
-            artist->{
-            "slug" : slug.current,
+         highlightedArtists[]->{
+         "slug" : slug.current,
+         _id,
                 name,
-            },
-           }
-           
+                "avatar": avatar.asset->url,
+                location,
+                description,
          },
          benefitsSection[]{
             ...,
             "icon": icon.asset->url,
          },
          "benefitsSection_backgroundImage": benefitsSection_backgroundImage.asset->url,
+         seo,
          
 
           

@@ -8,6 +8,7 @@ export async function getProduct(slug) {
         _id,
         name,
         "slug": slug.current,
+        "thumbnail": thumbnail.asset->url,
         "images": images[].asset->url,
         artist->{
             name,
@@ -21,11 +22,10 @@ export async function getProduct(slug) {
         },
         additionalInfo,
         details[]{
-            content,
-            productDetails->{
-                name
-            }
-        }
+        "productDetailsName": productDetails->name,
+        content
+      },
+        seo,
         
        
         

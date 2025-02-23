@@ -1,11 +1,12 @@
-import ProductCard from "@/components/ProductCard";
+"use client"
 import ArtistCard from "@/components/ArtistCard";
+import ArtistArtworks from "@/components/ArtistArtworks";
 
-export default function ArtistsList({ artists }) {
+export default function ArtistsList({ artists, artworksLimit = 3 }) {
     return (
-        <div className="w-3/4 flex flex-col gap-6 max-lg:w-full">
+        <div className="flex flex-col gap-6 w-full">
             {artists.map((artist) => (
-                <div key={artist.slug} className="grid grid-cols-3 gap-5 items-start max-lg:grid-cols-1">
+                <div key={artist.slug} className="flex gap-5 max-lg:flex-col max-lg:items-center">
                     <ArtistCard
                         avatar={artist.avatar}
                         artistLink={artist.slug}
@@ -13,23 +14,12 @@ export default function ArtistsList({ artists }) {
                         location={artist.location}
                         description={artist.description}
                     />
-                    <div className="col-span-2 grid grid-cols-1 gap-5 lg:grid-cols-2">
-                        {artist.artworks.map((artwork, index) => (
-                            <ProductCard
-                                key={index}
-                                image={artwork.images[0]}
-                                title={artwork.name}
-                                artist={artwork.artist.name}
-                                artistsLink={artwork.artist.slug}
-                                price={artwork.price}
-                                slug={artwork.slug}
-                                category={artwork.productCategory.title}
-                                categoryLink={artwork.productCategory.slug}
-                            />
-                        ))}
+                    <div className="lg:flex-grow w-full">
+                        <ArtistArtworks artistId={artist._id} limit={artworksLimit} />
                     </div>
                 </div>
             ))}
+
         </div>
     );
 }

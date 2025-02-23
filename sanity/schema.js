@@ -1,6 +1,6 @@
 import productOption from "./schemas/productOption"
 import seo from "./schemas/seo"
-import productDetails from "./schemas/productDetails"
+// import productDetails from "./schemas/productDetails"
 import productCategory from "./schemas/productCategory"
 import product from "./schemas/product"
 import artisticStyle from "./schemas/artisticStyle"
@@ -10,6 +10,8 @@ import homepage from "./schemas/homepage"
 import orders from "./schemas/orders"
 import user from "./schemas/user"
 import blog from "./schemas/blog"
+import productDetails from "./schemas/product-details"
+import productDetailsOption from "./schemas/product-details-option"
 
 
 export const schema = {
@@ -18,9 +20,10 @@ export const schema = {
         user,
         blog,
 
-        productOption,
+        // productOption,
         seo,
         productDetails,
+        productDetailsOption,
         productCategory,
         product,
         artisticStyle,

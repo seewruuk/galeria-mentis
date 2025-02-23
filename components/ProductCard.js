@@ -17,7 +17,7 @@ export default function ProductCard({
 
 
     return (
-        <div className={"flex gap-[8px] flex-col items-start"} index={index}>
+        <div className={"flex gap-[8px] flex-col items-start max-w-[350px]"} index={index}>
             <motion.a
                 className={"w-full h-[420px] border-[3px] border-white relative transition-all hover:border-primary"}
                 href={"/products/" + slug}

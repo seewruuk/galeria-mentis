@@ -7,6 +7,7 @@ export async function getArtistArtworks(id, prodId) {
             _id,
             name,
             "slug": slug.current,
+            "thumbnail": thumbnail.asset->url,
             "images": images[].asset->url,
             artist->{
                 name,

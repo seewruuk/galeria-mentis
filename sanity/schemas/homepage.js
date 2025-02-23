@@ -54,27 +54,8 @@ export default {
             type: 'array',
             of: [
                 {
-                    type: 'object',
-                    fields: [
-                        {
-                            name: 'artist',
-                            title: 'Artist',
-                            type: 'reference',
-                            to: [{type: 'artist'}],
-                        },
-                        {
-                            name: 'works',
-                            title: 'Highlighted Works',
-                            type: 'array',
-                            of: [
-                                {
-                                    type: 'reference',
-                                    to: [{type: 'product'}],
-                                },
-                            ],
-                            validation: Rule => Rule.max(3).warning('You can only select up to 3 works per artist'),
-                        },
-                    ],
+                    type: 'reference',
+                    to: [{type: 'artist'}],
                 },
             ],
         },

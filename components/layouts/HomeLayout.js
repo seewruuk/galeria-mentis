@@ -11,6 +11,8 @@ import ProductCard from "@/components/ProductCard";
 import ArtistCard from "@/components/ArtistCard";
 import PageTransition from "@/components/PageTransition";
 import Footer from "@/components/Footer";
+import ArtistArtworks from "@/components/ArtistArtworks";
+import ArtistsList from "@/components/ArtistsList";
 
 export default function HomeLayout() {
 
@@ -48,7 +50,7 @@ export default function HomeLayout() {
                                     homePageData.featuredProducts.map((item, index) => (
                                         <ProductCard
                                             key={index}
-                                            image={item.images[0]}
+                                            image={item.thumbnail ? item.thumbnail : item.images[0]}
                                             title={item.name}
                                             category={item.productCategory.title}
                                             artist={item.artist.name}
@@ -78,46 +80,9 @@ export default function HomeLayout() {
 
                             />
 
-                            <div className={"flex flex-col gap-5"}>
 
-                                {
-                                    homePageData.highlightedArtists.map((item, index) => {
-                                        return (
-                                            <div className={"flex gap-6 max-lg:flex-col"} key={item + index}>
-                                                <div className={"w-1/4 max-lg:w-full"}>
-                                                    <ArtistCard
-                                                        artistLink={item.artist.slug}
-                                                        avatar={item.artist.avatar}
-                                                        artistName={item.artist.name}
-                                                        location={item.artist.location}
-                                                    />
-                                                </div>
-                                                <div className={"flex-grow"}>
-                                                    <div
-                                                        className={"grid grid-cols-1 gap-6 max-w-[300px] mx-auto md:grid-cols-2 md:max-w-[650px] lg:max-w-none lg:grid-cols-3"}>
-                                                        {
-                                                            item.works.map((work, index) => {
-                                                                return (
-                                                                    <ProductCard
-                                                                        key={index}
-                                                                        image={work.images[0]}
-                                                                        title={work.name}
-                                                                        category={work.productCategory.title}
-                                                                        artist={work.artist.name}
-                                                                        price={work.price}
-                                                                        slug={work.slug}
-                                                                        artistsLink={work.artist.slug}
-                                                                    />
-                                                                )
-                                                            })
-                                                        }
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )
-                                    })
-                                }
-                            </div>
+                                <ArtistsList artists={homePageData.highlightedArtists} artworksLimit={3}/>
+
 
 
                         </section>

@@ -22,7 +22,7 @@ export default function ProductsList({ products, sortOption, setSortOption }) {
                 {products.map((product) => (
                     <ProductCard
                         key={product.slug.current}
-                        image={product.images[0]}
+                        image={product.thumbnail ? product.thumbnail : product.images[0]}
                         title={product.name}
                         price={product.price}
                         artist={product.artistName}

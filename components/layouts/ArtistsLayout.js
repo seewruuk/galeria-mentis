@@ -93,7 +93,7 @@ function ArtistsRootLayout() {
                         setSelectedPaintingStyles={setSelectedPaintingStyles}
                     />
 
-                    <ArtistsList artists={paginatedArtists} />
+                    <ArtistsList artists={paginatedArtists} artworksLimit={2}/>
 
                 </div>
 

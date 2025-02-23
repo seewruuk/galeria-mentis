@@ -28,7 +28,6 @@ export default function WishlistContextProvider({children}) {
     const addItem = (item) => {
         const exist = items.find(x => x._id === item._id);
 
-        console.log("exist", exist)
 
         if (exist) {
             toast.error("Product already in wishlist.");
@@ -43,7 +42,7 @@ export default function WishlistContextProvider({children}) {
                     discount: null, // Zniżki nie stosujemy na początku
                     discountValue: null, // Wartość zniżki
                     category: item.productCategory,
-                    image: item.images[0],
+                    image: item.thumbnail ? item.thumbnail : item.images[0],
                     qty: 1,
                 }
             ]);

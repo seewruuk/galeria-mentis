@@ -1,10 +1,10 @@
 "use client";
 
 import useSanity from "@/hooks/useSanity";
-import {getProductsByCategory} from "@/sanity/getSanity/getProductsByCategory";
-import {getProductCategory} from "@/sanity/getSanity/getProductCategory";
-import {getProductOptions} from "@/sanity/getSanity/getProductOptions";
-import {Suspense, useEffect, useState} from "react";
+import { getProductsByCategory } from "@/sanity/getSanity/getProductsByCategory";
+import { getProductCategory } from "@/sanity/getSanity/getProductCategory";
+import { getProductOptions } from "@/sanity/getSanity/getProductOptions";
+import { Suspense, useEffect, useState } from "react";
 import Loading from "@/components/Loading";
 import Banner from "@/components/Banner";
 import Layout from "@/components/Layout";
@@ -13,14 +13,13 @@ import ProductFilters from "@/components/ProductFilters";
 import ProductsList from "@/components/ProductsList";
 import PageTransition from "@/components/PageTransition";
 import Footer from "@/components/Footer";
-import Image from "next/image";
-import {urlFor} from "@/sanity/lib/image";
-import {PortableText} from "@portabletext/react";
+import { PortableText } from "@portabletext/react";
 
-function ProductsRootLayout({category}) {
-    const {data: products, loading: loadingProducts} = useSanity(getProductsByCategory, category);
-    const {data: categoryDetails, loading: loadingCategoryDetails} = useSanity(getProductCategory, category);
-    const {data: productOptions, loading: loadingProductOptions} = useSanity(getProductOptions);
+function ProductsRootLayout({ category }) {
+    const { data: products, loading: loadingProducts } = useSanity(getProductsByCategory, category);
+    const { data: categoryDetails, loading: loadingCategoryDetails } = useSanity(getProductCategory, category);
+    // productOptions reprezentuje teraz dokumenty z "product-details"
+    const { data: productOptions, loading: loadingProductOptions } = useSanity(getProductOptions);
 
     const [mounted, setMounted] = useState(false);
     const [filteredProducts, setFilteredProducts] = useState([]);
@@ -33,13 +32,11 @@ function ProductsRootLayout({category}) {
 
     const ptComponents = {
         block: {
-            normal: ({children}) => (
-
-                <p className={"mt-[12px] uppercase tracking-[1px]"}>{children}</p>
-
+            normal: ({ children }) => (
+                <p className="mt-[12px] uppercase tracking-[1px]">{children}</p>
             ),
-            h1: ({children}) => (
-                <h3 className={"leading-[170%] text-[32px]"}>{children}</h3>
+            h1: ({ children }) => (
+                <h3 className="leading-[170%] text-[32px]">{children}</h3>
             ),
         },
     };
@@ -50,6 +47,7 @@ function ProductsRootLayout({category}) {
         if (products && productOptions) {
             setFilteredProducts(products);
 
+            // Inicjalizacja filtrów na podstawie nazw pobranych opcji (product-details)
             const initialFilters = productOptions.reduce((acc, option) => {
                 acc[option.name] = [];
                 return acc;
@@ -69,29 +67,31 @@ function ProductsRootLayout({category}) {
 
         let filtered = [...products];
 
-        // Apply search query filter
+        // Filtracja po zapytaniu wyszukiwania
         if (searchQuery) {
             filtered = filtered.filter((product) =>
                 product.name.toLowerCase().includes(searchQuery.toLowerCase())
             );
         }
 
-        // Apply dynamic filters
+        // Filtracja na podstawie dynamicznych opcji (korzystamy z product.details)
         for (const filterName in filters) {
             const filterValues = filters[filterName];
             if (filterValues.length > 0) {
                 filtered = filtered.filter((product) =>
-                    product.options.some(
-                        (option) =>
-                            option.optionType.name === filterName &&
-                            filterValues.includes(option.value)
+                    product.details?.some(
+                        (detail) =>
+                            detail.productDetailsName === filterName &&
+                            filterValues.includes(detail.content)
                     )
                 );
             }
         }
 
+        // Filtracja po cenie
         filtered = filtered.filter((product) => product.price <= priceRange);
 
+        // Sortowanie
         if (sortOption === "price-asc") {
             filtered.sort((a, b) => a.price - b.price);
         } else if (sortOption === "price-desc") {
@@ -111,7 +111,7 @@ function ProductsRootLayout({category}) {
     );
 
     if (loadingProducts || loadingCategoryDetails || loadingProductOptions || !mounted) {
-        return <Loading/>;
+        return <Loading />;
     }
 
     return (
@@ -120,12 +120,12 @@ function ProductsRootLayout({category}) {
                 backgroundImage={categoryDetails?.image}
                 hugeText={categoryDetails?.title}
             >
-                <PortableText value={categoryDetails?.header} components={ptComponents}/>
+                <PortableText value={categoryDetails?.header} components={ptComponents} />
             </Banner>
 
             <Layout>
                 <div className="flex gap-5 py-[64px] max-lg:flex-col">
-                    {/* Filters */}
+                    {/* Filtry */}
                     <ProductFilters
                         productOptions={productOptions}
                         filters={filters}
@@ -136,7 +136,7 @@ function ProductsRootLayout({category}) {
                         setPriceRange={setPriceRange}
                     />
 
-                    {/* Products List */}
+                    {/* Lista produktów */}
                     <div className="w-3/4 max-lg:w-full">
                         {paginatedProducts.length > 0 ? (
                             <>
@@ -145,36 +145,31 @@ function ProductsRootLayout({category}) {
                                     sortOption={sortOption}
                                     setSortOption={setSortOption}
                                 />
-                                {/* Pagination */}
-
                                 <Pagination
                                     totalItems={filteredProducts.length}
                                     itemsPerPage={itemsPerPage}
                                     currentPage={currentPage}
                                     setCurrentPage={setCurrentPage}
                                 />
-
                             </>
                         ) : (
                             <p>No products found.</p>
                         )}
-
-
                     </div>
-                </div>
 
+
+                </div>
             </Layout>
 
-
-            <Footer/>
+            <Footer />
         </PageTransition>
     );
 }
 
-export default function ProductsLayout({category}) {
+export default function ProductsLayout({ category }) {
     return (
-        <Suspense fallback={<Loading/>}>
-            <ProductsRootLayout category={category}/>
+        <Suspense fallback={<Loading />}>
+            <ProductsRootLayout category={category} />
         </Suspense>
     );
 }
