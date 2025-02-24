@@ -11,7 +11,8 @@ export async function getSingleBlogPost(slug){
             slug,
             "mainImage": mainImage.asset->url,
             description,
-            body
+            body,
+            seo,
         }[0]`,
         {slug}
     );

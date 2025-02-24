@@ -8,7 +8,7 @@ export async function getProductsByCategory(slug) {
       name,
       slug,
       price,
-      "thumbnail": image.asset->url,
+      "thumbnail": thumbnail.asset->url,
       "images": images[].asset->url,
       "artistName": artist->name,
       "artistSlug": artist->slug.current,
