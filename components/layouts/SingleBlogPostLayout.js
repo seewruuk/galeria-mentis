@@ -26,12 +26,12 @@ export default function SingleBlogPostLayout({ slug }) {
                 </div>
             ),
             h1: ({ children }) => (
-                <h3 className={"font-semibold text-[21px] py-[25px]"}>{children}</h3>
+                <h3 className={"font-semibold text-[24px]"}>{children}</h3>
             ),
         },
         types: {
             image: ({ value }) => (
-                <div className="">
+                <div className="grid place-items-center">
                     <Image
                         src={urlFor(value.asset._ref).url()}
                         alt="Sanity image"
@@ -52,12 +52,12 @@ export default function SingleBlogPostLayout({ slug }) {
         <PageTransition>
             <Banner backgroundImage={data.mainImage}
                     hugeText={"Blog"}>
-                <h2 className={"text-[42px]"}>{data.title}</h2>
-                <p className={"max-w-[650px] text-[21px] mt-[24px]"}>{data.description}</p>
+                <h2 className={"text-[32px]"}>{data.title}</h2>
+                <p className={"max-w-[650px] text-[16px] mt-[24px]"}>{data.description}</p>
             </Banner>
 
             <Layout>
-                <section className={"pt-[120px] flex flex-col gap-[64px] items-center"}>
+                <section className={"pt-[120px] flex flex-col gap-[56px]"}>
                     <PortableText
                         value={data.body}
                         components={ptComponents}
