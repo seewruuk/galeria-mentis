@@ -30,7 +30,6 @@ const blogLinks = posts.map((post) => {
 
 });
 
-console.log("blogLinks", blogLinks)
 
 const darkNavLinks = categories.map((category) => {
     return `/categories/${category.slug}`;

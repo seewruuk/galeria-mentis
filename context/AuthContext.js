@@ -58,7 +58,6 @@ export default function AuthContextProvider({ children }) {
                 return;
             }
 
-            console.log("findUser", findUser)
 
             const passwordToVerify = findUser.userInfo.hashPassword;
 

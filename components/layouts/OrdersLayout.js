@@ -31,7 +31,6 @@ export default function OrdersLayout() {
             setLoading(true);
             try {
                 const {orders} = await getOrders();
-                console.log(orders)
                 setOrders(orders);
             } catch (err) {
                 console.error("Error fetching orders:", err);
