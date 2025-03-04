@@ -140,8 +140,6 @@ export default function HomeLayout() {
                                     }
                                 </div>
                             </div>
-
-
                         </div>
                     </section>
                 )
