@@ -16,6 +16,8 @@ export async function getProduct(slug) {
             "id": _id
         },
         price,
+        labels,
+        imageAspectRatio,
         productCategory->{ 
             title,
             "slug": slug.current,

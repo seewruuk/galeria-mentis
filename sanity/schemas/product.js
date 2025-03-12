@@ -37,6 +37,27 @@ export default {
             ],
         },
         {
+            name : "imageAspectRatio",
+            title : "Image Aspect Ratio",
+            type : "string",
+            options : {
+                list : [
+                    {
+                        title : "Landscape",
+                        value : "landscape",
+                    },
+                    {
+                        title : "Portrait",
+                        value : "portrait",
+                    },
+                    {
+                        title : "Square",
+                        value : "square",
+                    },
+                ],
+            },
+        },
+        {
             name: 'artist',
             title: 'Artist',
             type: 'reference',
@@ -51,6 +72,18 @@ export default {
                 Rule.required()
                     .positive()
                     .error('Price must be a positive number'),
+        },
+        {
+            name: "labels",
+            title: "Labels",
+            type: "array",
+            of: [
+                {
+                    type: "string",
+                    name: "label",
+                    title: "Label",
+                },
+            ],
         },
         {
             name: 'productCategory',

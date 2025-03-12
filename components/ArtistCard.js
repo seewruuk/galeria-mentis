@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function ArtistCard({avatar, artistLink, artistName, location, index, description}) {
 
     return (
-        <div className={"flex flex-col max-w-[350px]"} index={index}>
+        <div className={"flex flex-col w-[500px]"} index={index}>
 
             <Link href={"/artists/" + artistLink}
                   className={" relative h-[220px] mb-[28px] max-lg:aspect-square max-lg:w-[220px] max-lg:mx-auto"}>
@@ -25,9 +25,11 @@ export default function ArtistCard({avatar, artistLink, artistName, location, in
                         : "Location unavailable"}
                 </div>
                 <p className={"text-[15px] leading-[170%] text-gray"}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-                    malesuada lorem maximus mauris scelerisque, at rutrum nulla dictum.
-                    Ut ac ligula sapien. Suspendisse cursus
+                    {
+                        description.length > 100
+                            ? description.substring(0, 100) + "..."
+                            : description
+                    }
                 </p>
             </div>
 
