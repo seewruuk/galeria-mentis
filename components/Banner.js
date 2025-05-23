@@ -19,7 +19,7 @@ export default function Banner({ backgroundImage, hugeText, customStyle, childre
             {/* Content */}
             <div className="absolute top-0 left-0 w-full h-full z-20 bottom-0 right-0">
                 <Layout>
-                    <div className={"h-full flex justify-end flex-col max-lg:items-center pb-[64px]"}>
+                    <div className={"h-full flex justify-end flex-col items-center pb-[64px]"}>
                         {children}
                     </div>
                     {/* Tekst z ograniczoną szerokością */}

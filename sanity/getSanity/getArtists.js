@@ -15,9 +15,7 @@ export async function getArtists() {
         artisticStyle[]->{
         title,
         },
-        paintingStyle[]->{
-        title,
-        },
+        paintingStyle[]->{ title },
         price
         }`
 

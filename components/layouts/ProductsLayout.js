@@ -28,7 +28,7 @@ function ProductsRootLayout({ category }) {
     const [searchQuery, setSearchQuery] = useState("");
     const [priceRange, setPriceRange] = useState(10000);
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 9;
+    const itemsPerPage = 24;
 
     const ptComponents = {
         block: {

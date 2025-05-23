@@ -24,7 +24,7 @@ function ArtistsRootLayout() {
     const [selectedArtisticStyles, setSelectedArtisticStyles] = useState([]);
     const [selectedPaintingStyles, setSelectedPaintingStyles] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 3;
+    const itemsPerPage = 24;
 
     useEffect(() => {
         setMounted(true);
@@ -47,13 +47,13 @@ function ArtistsRootLayout() {
 
         if (selectedArtisticStyles.length > 0) {
             filtered = filtered.filter((artist) =>
-                artist.artisticStyle.some((style) => selectedArtisticStyles.includes(style.title))
+                artist?.artisticStyle?.some((style) => selectedArtisticStyles.includes(style.title))
             );
         }
 
         if (selectedPaintingStyles.length > 0) {
             filtered = filtered.filter((artist) =>
-                artist.paintingStyle.some((style) => selectedPaintingStyles.includes(style.title))
+                artist?.paintingStyle?.some((style) => selectedPaintingStyles.includes(style.title))
             );
         }
 
@@ -104,9 +104,6 @@ function ArtistsRootLayout() {
                     setCurrentPage={setCurrentPage}
                 />
 
-                {/*<pre>*/}
-                {/*    {JSON.stringify(artists, null, 2)}*/}
-                {/*</pre>*/}
             </Layout>
 
             <Footer />

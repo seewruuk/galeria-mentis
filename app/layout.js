@@ -9,7 +9,6 @@ import WishlistContextProvider from "@/context/WishlistContext";
 import Footer from "@/components/Footer";
 
 
-// Import czcionki Merriweather z Google Fonts
 const merriweather = Merriweather({
     subsets: ["latin"],
     weight: ["400", "700"],
@@ -25,7 +24,6 @@ export const metadata = {
 export default function RootLayout({children}) {
     return (
         <html lang="en">
-        {/* Import FreightBig z Adobe Fonts */}
         <head>
             <link
                 rel="stylesheet"

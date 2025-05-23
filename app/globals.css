@@ -9,6 +9,10 @@ html{
 *::-webkit-scrollbar {
   display: none;
 }
+*{
+  scroll-behavior: smooth;
+
+}
 
 :root {
   --background: #ffffff;
@@ -32,10 +36,6 @@ h1{
 /**{*/
 /*  letter-spacing: -0.2px;*/
 /*}*/
-
-
-
-
 
 
 

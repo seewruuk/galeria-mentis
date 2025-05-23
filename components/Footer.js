@@ -30,7 +30,7 @@ export default function Footer() {
     ]
 
     return (
-        <div className={"mt-[120px] bg-black"} id={"contact"}>
+        <section className={"mt-[120px] bg-black"} id={"contact"}>
             <Layout>
                 <section className={"py-[12px]"}>
                     <div className={"py-[90px] flex justify-between max-lg:flex-col max-lg:items-center max-lg:text-center"}>
@@ -109,6 +109,6 @@ export default function Footer() {
                     </div>
                 </section>
             </Layout>
-        </div>
+        </section>
     )
 }

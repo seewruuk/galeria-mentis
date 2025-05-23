@@ -1,7 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
-import {motion} from "framer-motion";
-import {formatPrice} from "@/lib/formatPrice";
+import { motion } from "framer-motion";
+import { formatPrice } from "@/lib/formatPrice";
+
+const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: custom => ({
+        opacity: 1,
+        y: 0,
+        transition: { delay: custom * 0.1, ease: "easeOut" }
+    })
+};
 
 export default function ProductCard({
                                         image,
@@ -14,50 +23,50 @@ export default function ProductCard({
                                         slug,
                                         index
                                     }) {
-
-
     return (
-        <div className={"flex gap-[8px] flex-col items-start max-w-[350px]"} index={index}>
+        <motion.div
+            className="flex gap-[8px] flex-col items-start max-w-[350px]"
+            custom={index}
+            variants={cardVariants}
+            initial="hidden"
+            animate="visible"
+        >
             <motion.a
-                className={"w-full h-[420px] border-[3px] border-white relative transition-all hover:border-primary"}
-                href={"/products/" + slug}
-
+                className="w-full h-[420px] border-[3px] border-white relative transition-all"
+                href={`/products/${slug}`}
+                whileHover={{ scale: 1.03, borderColor: '#fff' }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
             >
                 <Image
                     src={image}
-                    alt={`${title}`}
-                    layout={"fill"}
-                    objectFit={"cover"}
+                    alt={title}
+                    layout="fill"
+                    objectFit="cover"
                 />
             </motion.a>
 
             <Link
-                href={"/categories/" + categoryLink}
-                className={"py-[5px] px-[15px] bg-primary text-primary-light text-[12px] hover:bg-black hover:text-white transition-all cursor-pointer"}
+                href={`/categories/${categoryLink}`}
+                className="py-[5px] px-[15px] bg-primary text-primary-light text-[12px] hover:bg-black hover:text-white transition-all cursor-pointer"
             >
-                {
-                    category
-                }
+                {category}
             </Link>
 
-            <div className={"flex flex-col gap-[3px]"}>
-                <Link
-                    href={
-                        "/products/" + slug
-                    }
-                    className={"hover:underline"}
-                >
+            <div className="flex flex-col gap-[3px]">
+                <Link href={`/products/${slug}`} className="hover:underline">
                     {title}
                 </Link>
                 <Link
-                    href={"/artists/" + artistsLink}
-                    className={"text-[14px] text-primary hover:underline transition-all"}>
+                    href={`/artists/${artistsLink}`}
+                    className="text-[14px] text-primary hover:underline transition-all"
+                >
                     {artist}
                 </Link>
                 <div>
                     <span>{formatPrice(price)}</span>
                 </div>
             </div>
-        </div>
-    )
+        </motion.div>
+    );
 }

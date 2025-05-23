@@ -206,7 +206,9 @@ const DesktopMenu = ({pathname, totalQty}) => {
                                 );
                             })}
                         </ul>
+                    </div>
 
+                    <div className={"flex items-center gap-[24px]"}>
                         <Button
                             type={"link"}
                             title={"Wishlist"}
@@ -222,6 +224,7 @@ const DesktopMenu = ({pathname, totalQty}) => {
                             onClick={"/cart"}
                             style={"primary"}
                         />
+
                     </div>
                 </div>
             </Layout>
