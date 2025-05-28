@@ -130,7 +130,7 @@ const DesktopMenu = ({pathname, totalQty}) => {
         >
             <div className={"bg-[#000] text-center text-white py-2 text-[10px] font-medium"}>
             <span className={"animate-pulse"}>
-                This Website is a demo. Do not use it for commercial purposes.
+                This Website is a demo. Do not use it for commercial purposes. test
             </span>
             </div>
             <Layout>
