@@ -25,6 +25,36 @@ h1{
 }
 
 
+.columns-1 {
+  column-count: 1;
+  column-gap: 1.25rem; /* gap-5 */
+}
+@media (min-width: 768px) {
+  .md\:columns-2 {
+    column-count: 2;
+  }
+}
+@media (min-width: 1024px) {
+  .lg\:columns-3 {
+    column-count: 3;
+  }
+}
+
+.break-inside-avoid {
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.mb-5 {
+  margin-bottom: 1.25rem;
+}
+
+.gap-5 {
+  column-gap: 1.25rem;
+}
+
+
 
 
 /*input{*/

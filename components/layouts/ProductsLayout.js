@@ -1,3 +1,4 @@
+// /app/products/[category]/layout.jsx  (lub analogicznie ProductsLayout.jsx)
 "use client";
 
 import useSanity from "@/hooks/useSanity";
@@ -13,11 +14,11 @@ import ProductsList from "@/components/ProductsList";
 import PageTransition from "@/components/PageTransition";
 import Footer from "@/components/Footer";
 import { PortableText } from "@portabletext/react";
-import {AnimatePresence, motion} from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function ProductsLayout({ category }) {
     return (
-        <Suspense fallback={<Loading type={"full"}/>}>
+        <Suspense fallback={<Loading type={"full"} />}>
             <ProductsRootLayout category={category} />
         </Suspense>
     );
@@ -43,24 +44,22 @@ function ProductsRootLayout({ category }) {
     const [searchQuery, setSearchQuery] = useState("");
     const [priceRange, setPriceRange] = useState(10000);
 
-    // liczba elementów ładowanych za każdym razem
+    // liczba elementów w pierwszej partii
     const itemsPerLoad = 12;
+    // ile łącznie ma być widoczne (pierwsze 12 + kolejne wciśnięte “Load More”)
     const [visibleCount, setVisibleCount] = useState(itemsPerLoad);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-
     const ptComponents = {
         block: {
-            normal: ({ children }) => (
-                <p className="">{children}</p>
-            ),
+            normal: ({ children }) => <p className="">{children}</p>,
             h1: ({ children }) => (
                 <h1 className="leading-[170%] text-[32px]">{children}</h1>
             ),
         },
     };
 
-    // ustawiamy mounted i inicjalizujemy filtry
+    // Ustawiamy mounted i inicjalizujemy filtry
     useEffect(() => {
         setMounted(true);
 
@@ -74,17 +73,17 @@ function ProductsRootLayout({ category }) {
         }
     }, [products, productOptions]);
 
-    // filtruj i sortuj przy zmianie kryteriów
+    // Filtruj i sortuj przy zmianie kryteriów
     useEffect(() => {
         if (products) filterAndSortProducts();
     }, [filters, searchQuery, sortOption, priceRange]);
 
-    // reset widocznych elementów przy nowych filtrowaniach
+    // Reset “widocznych” elementów przy nowych filtrowaniach
     useEffect(() => {
         setVisibleCount(itemsPerLoad);
     }, [filteredProducts]);
 
-    // po aktualizacji visibleCount wyłącz loader
+    // Po aktualizacji visibleCount wyłączamy loader
     useEffect(() => {
         if (isLoadingMore) {
             setIsLoadingMore(false);
@@ -103,17 +102,27 @@ function ProductsRootLayout({ category }) {
             if (values.length) {
                 filtered = filtered.filter((prod) =>
                     prod.details?.some(
-                        (detail) => detail.productDetailsName === filterName && values.includes(detail.content)
+                        (detail) =>
+                            detail.productDetailsName === filterName &&
+                            values.includes(detail.content)
                     )
                 );
             }
         });
         filtered = filtered.filter((prod) => prod.price <= priceRange);
 
-        if (sortOption === "price-asc") filtered.sort((a, b) => a.price - b.price);
-        if (sortOption === "price-desc") filtered.sort((a, b) => b.price - a.price);
-        if (sortOption === "newest") filtered.sort((a, b) => new Date(b._createdAt) - new Date(a._createdAt));
-        if (sortOption === "oldest") filtered.sort((a, b) => new Date(a._createdAt) - new Date(b._createdAt));
+        if (sortOption === "price-asc")
+            filtered.sort((a, b) => a.price - b.price);
+        if (sortOption === "price-desc")
+            filtered.sort((a, b) => b.price - a.price);
+        if (sortOption === "newest")
+            filtered.sort(
+                (a, b) => new Date(b._createdAt) - new Date(a._createdAt)
+            );
+        if (sortOption === "oldest")
+            filtered.sort(
+                (a, b) => new Date(a._createdAt) - new Date(b._createdAt)
+            );
 
         setFilteredProducts(filtered);
     };
@@ -133,7 +142,10 @@ function ProductsRootLayout({ category }) {
                 backgroundImage={categoryDetails?.image}
                 hugeText={categoryDetails?.title}
             >
-                <PortableText value={categoryDetails?.header} components={ptComponents} />
+                <PortableText
+                    value={categoryDetails?.header}
+                    components={ptComponents}
+                />
             </Banner>
 
             <Layout>
@@ -150,56 +162,65 @@ function ProductsRootLayout({ category }) {
 
                     <div className="w-3/4 max-lg:w-full">
                         <AnimatePresence>
+                            {filteredProducts.length > 0 ? (
+                                <motion.div
+                                    key="products-list"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                >
+                                    {/*
+                    Teraz przekazujemy całą tablicę filteredProducts
+                    oraz visibleCount i itemsPerLoad
+                  */}
+                                    <ProductsList
+                                        allProducts={filteredProducts}
+                                        visibleCount={visibleCount}
+                                        itemsPerLoad={itemsPerLoad}
+                                        sortOption={sortOption}
+                                        setSortOption={setSortOption}
+                                        loading={isLoadingMore}
+                                    />
 
-                        {filteredProducts.length > 0 ? (
-                            <motion.div
-                                key="products-list"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-
-                            >
-                                <ProductsList
-                                    products={filteredProducts.slice(0, visibleCount)}
-                                    sortOption={sortOption}
-                                    setSortOption={setSortOption}
-                                    isLoadingMore={isLoadingMore}
-                                />
-
-                                <div className="flex justify-center mt-8">
-                                    {isLoadingMore ? (
-                                        <Loading type="small" />
-                                    ) : (
-                                        visibleCount < filteredProducts.length && (
-                                            <button
-                                                onClick={() => {
-                                                    setIsLoadingMore(true);
-                                                    setVisibleCount((prev) =>
-                                                        Math.min(prev + itemsPerLoad, filteredProducts.length)
-                                                    );
-                                                }}
-                                                className="px-6 py-2 border rounded-md bg-primary text-white hover:bg-primary-dark"
-                                            >
-                                                Load More
-                                            </button>
-                                        )
-                                    )}
-                                </div>
-                            </motion.div>
-                        ) : (
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                className="flex flex-col items-center justify-center h-[400px] text-center"
-                            >
-                                <h2 className="text-xl font-semibold mb-4">No products found</h2>
-                                <p className="text-gray-500">Try adjusting your filters or search criteria.</p>
-
-                            </motion.div>
-                        )}
+                                    <div className="flex justify-center mt-8">
+                                        {isLoadingMore ? (
+                                            <Loading type="small" />
+                                        ) : (
+                                            visibleCount < filteredProducts.length && (
+                                                <button
+                                                    onClick={() => {
+                                                        setIsLoadingMore(true);
+                                                        setVisibleCount((prev) =>
+                                                            Math.min(
+                                                                prev + itemsPerLoad,
+                                                                filteredProducts.length
+                                                            )
+                                                        );
+                                                    }}
+                                                    className="px-6 py-2 border rounded-md bg-primary text-white hover:bg-primary-dark"
+                                                >
+                                                    Load More
+                                                </button>
+                                            )
+                                        )}
+                                    </div>
+                                </motion.div>
+                            ) : (
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    className="flex flex-col items-center justify-center h-[400px] text-center"
+                                >
+                                    <h2 className="text-xl font-semibold mb-4">
+                                        No products found
+                                    </h2>
+                                    <p className="text-gray-500">
+                                        Try adjusting your filters or search criteria.
+                                    </p>
+                                </motion.div>
+                            )}
                         </AnimatePresence>
-
                     </div>
                 </div>
             </Layout>
