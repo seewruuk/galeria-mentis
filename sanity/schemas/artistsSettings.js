@@ -1,22 +1,14 @@
 export default {
-    name: 'productCategory',
-    title: 'Product Category',
+    name: 'artistsSettings',
+    title: 'Artists Settings',
     type: 'document',
     fields: [
         {
-            name: 'title',
-            title: 'Title',
-            type: 'string',
-            validation: Rule => Rule.required().error('Title is required'),
+            title: "title",
+            name: "title",
+            type: "string",
         },
-        {
-            name: 'slug',
-            title: 'Slug',
-            type: 'slug',
-            options: {
-                source: 'title',
-            },
-        },
+
         {
             name: "image",
             title: "Background Image",
@@ -28,11 +20,10 @@ export default {
             type: 'array',
             of: [{type: 'block'}],
         },
-
         {
             name: "seo",
             title: "SEO",
             type: "seo",
-        },
+        }
     ],
 };

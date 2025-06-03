@@ -95,7 +95,7 @@ export default function Hero({ data }) {
                             exit="exit"
                             variants={variants}
                             transition={{duration: 0.5}}
-                            className="flex-grow flex flex-col justify-center items-start max-lg:text-center max-lg:items-center mt-[50px]"
+                            className="flex-grow flex flex-col justify-end max-lg:pb-[90px] pb-[20px] items-start max-lg:text-center max-lg:items-center mt-[50px]"
                         >
                             <h1 className="font-freightBig text-white max-w-[550px] leading-[120%]">
                                 {currentSlide.title}

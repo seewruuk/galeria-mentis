@@ -19,6 +19,7 @@
     "framer-motion": "^11.11.17",
     "groq": "^3.64.1",
     "js-cookie": "^3.0.5",
+    "lucide-react": "^0.511.0",
     "micro": "^10.0.1",
     "next": "15.0.3",
     "next-sanity": "^9.8.15",
@@ -29,6 +30,7 @@
     "sanity": "^3.64.1",
     "stripe": "^17.5.0",
     "styled-components": "^6.1.13",
+    "swiper": "^11.2.8",
     "uuid": "^11.0.3"
   },
   "devDependencies": {

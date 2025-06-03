@@ -18,7 +18,7 @@ const itemVariants = {
 export default function ArtistsList({ artists, artworksLimit = 3 }) {
     return (
         <motion.div
-            className="w-full"
+            className="w-full relative"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -49,13 +49,14 @@ export default function ArtistsList({ artists, artworksLimit = 3 }) {
                     ))
                 ) : (
                     <motion.div
-                        initial="hidden"
-                        animate="visible"
-                        variants={itemVariants}
-                        className="flex flex-col items-center justify-center w-full h-full"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="flex flex-col items-center justify-center h-[400px] text-center size-full"
                     >
-                        <h2 className="text-2xl font-bold">No artists found</h2>
-                        <p className="text-gray-500">Try adjusting your filters.</p>
+                        <h2 className="text-xl font-semibold mb-4">No Artist found</h2>
+                        <p className="text-gray-500">Try adjusting your filters or search criteria.</p>
+
                     </motion.div>
                 )}
             </AnimatePresence>

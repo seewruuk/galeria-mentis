@@ -27,6 +27,8 @@ export default function ProductLayout({ slug }) {
         selectedIndex: 0,
     });
 
+    if(!product){console.log("nie ma produktu") }
+
 
     useEffect(() => {
         if (product) {

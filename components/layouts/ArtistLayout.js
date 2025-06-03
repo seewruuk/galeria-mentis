@@ -73,7 +73,7 @@ export default function ArtistLayout({slug}) {
         currentPage * itemsPerPage
     );
 
-    if (artistLoading || artworksLoading) return <Loading/>;
+    if (artistLoading || artworksLoading) return <Loading type={"full"}/>;
 
     const ptComponents = {
         block: {

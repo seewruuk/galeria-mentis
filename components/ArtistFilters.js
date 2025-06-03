@@ -24,14 +24,14 @@ export default function ArtistFilters({
             {/* Search Field */}
             <div className="mb-6">
                 <h3 className="text-lg font-medium mb-2">Search Artists</h3>
-                <form className="w-full rounded-md border border-gray-300 flex gap-3 items-center px-[15px] py-[10px]">
+                <form className="w-full rounded-md border border-gray-300 flex gap-3 items-center px-[15px] py-[10px] overflow-hidden">
                     <Image src={SearchIcon} alt="Search Icon" width={22} height={18} />
                     <input
                         type="text"
                         placeholder="Search by name"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="outline-none focus:outline-none"
+                        className="outline-none focus:outline-none bg-transparent"
                     />
                 </form>
             </div>

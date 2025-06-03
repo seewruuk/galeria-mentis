@@ -25,18 +25,19 @@ export default function ProductCard({
                                     }) {
     return (
         <motion.div
-            className="flex gap-[8px] flex-col items-start max-w-[350px]"
-            custom={index}
-            variants={cardVariants}
-            initial="hidden"
-            animate="visible"
+            className="flex gap-[8px] flex-col items-start max-w-[350px] mx-auto w-full"
+            // custom={index}
+            // variants={cardVariants}
+            // initial="hidden"
+            // animate="visible"
         >
             <motion.a
                 className="w-full h-[420px] border-[3px] border-white relative transition-all"
                 href={`/products/${slug}`}
-                whileHover={{ scale: 1.03, borderColor: '#fff' }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                whileHover={{ filter: "sepia(1)" }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+
             >
                 <Image
                     src={image}

@@ -2,7 +2,7 @@ import Layout from "@/components/Layout";
 
 export default function Banner({ backgroundImage, hugeText, customStyle, children }) {
     return (
-        <div className="min-h-[600px] w-screen relative isolate overflow-hidden text-white max-lg:text-center">
+        <div className="min-h-[500px] w-screen relative isolate overflow-hidden text-white max-lg:text-center">
             {/* Tło */}
             <div
                 className="absolute w-full h-full -z-10"
@@ -23,7 +23,7 @@ export default function Banner({ backgroundImage, hugeText, customStyle, childre
                         {children}
                     </div>
                     {/* Tekst z ograniczoną szerokością */}
-                    <span className="font-freightBig block absolute -bottom-[120px] right-0 text-[256px] text-ellipsis opacity-10">
+                    <span className="font-freightBig font-semibold block absolute -bottom-[120px] right-0 text-[256px] text-ellipsis opacity-10 tracking-[-5px]">
                         {hugeText}
                     </span>
                 </Layout>

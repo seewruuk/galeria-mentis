@@ -39,13 +39,26 @@ const artistsLinks = artists.map((artist) => {
     return `/artists/${artist.slug}`;
 });
 
+const index = catLinks.findIndex(item => item.name === "All Artworks");
+
+if( index > -1) {
+    const [temp] = catLinks.splice(index, 1);
+    catLinks.unshift(temp);
+}
+
 
 export const links = [
     {name: "Home", link: '/'},
     {
         name: "Art works",
         link: "/categories/prints",
-        links: catLinks,
+        links: [
+            // {
+            //     name: "All Artworks",
+            //     link: "/categories/all"
+            // },
+            ...catLinks
+        ]
     },
     {name: "Artists", link: '/artists'},
     {name: "Blog", link: '/blog'},
@@ -77,7 +90,7 @@ export default function Navbar() {
 }
 
 const DesktopMenu = ({pathname, totalQty}) => {
-    const blackNavbarPages = ["/", '/artists', ...darkNavLinks, ...artistsLinks, ...blogLinks]; // Podstrony z białym
+    const blackNavbarPages = ["/", '/artists', "/blog", ...darkNavLinks, ...artistsLinks, ...blogLinks]; // Podstrony z białym
     const isBlackTheme = blackNavbarPages.includes(pathname);
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ? process.env.NEXT_PUBLIC_BASE_URL : "https://galeria-mentis.vercel.app";

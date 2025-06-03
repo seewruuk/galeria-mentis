@@ -13,6 +13,8 @@ import PageTransition from "@/components/PageTransition";
 import Footer from "@/components/Footer";
 import ArtistArtworks from "@/components/ArtistArtworks";
 import ArtistsList from "@/components/ArtistsList";
+import FeaturedProductsCarousel from "@/components/FeaturedProductsCarousel";
+import ContactForm from "@/components/ContactForm";
 
 export default function HomeLayout() {
 
@@ -44,24 +46,14 @@ export default function HomeLayout() {
                                 buttonLink={"/products"}
 
                             />
-                            <div
-                                className={"grid grid-cols-1 gap-6 max-w-[300px] mx-auto md:grid-cols-2 md:max-w-[650px] lg:max-w-none lg:grid-cols-4"}>
-                                {
-                                    homePageData.featuredProducts.map((item, index) => (
-                                        <ProductCard
-                                            key={index}
-                                            image={item.thumbnail ? item.thumbnail : item.images[0]}
-                                            title={item.name}
-                                            category={item.productCategory.title}
-                                            artist={item.artist.name}
-                                            artistsLink={item.artist.slug}
-                                            price={item.price}
-                                            slug={item.slug}
-
-                                        />
-                                    ))
-                                }
-                            </div>
+                            <FeaturedProductsCarousel
+                                products={homePageData.featuredProducts}
+                                // opcjonalnie:
+                                // prevButtonClassName="your-custom-classes"
+                                // nextButtonClassName="your-custom-classes"
+                                // PrevIcon={YourPrevIconComponent}
+                                // NextIcon={YourNextIconComponent}
+                            />
 
                         </section>
                     )
@@ -144,6 +136,8 @@ export default function HomeLayout() {
                     </section>
                 )
             }
+
+
 
             <Footer/>
 

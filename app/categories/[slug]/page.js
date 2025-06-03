@@ -12,14 +12,11 @@ export default function Page({params}) {
 export async function generateMetadata({ params }) {
     const data = await getProductCategory(params.slug);
 
-    if (!data) return {
-        title: "404 not found",
-        description: "404 not found",
-    };
+
 
     return {
-        title: data.seo.metaTitle,
-        description: data.seo.metaDescription,
-        keywords: data.seo.keywords && data.seo.keywords.map((item) => item).join(", "),
+        title: data.seo && data.seo.metaTitle ? data.seo.metaTitle : "NO TITLE",
+        description: data.seo && data.seo.metaDescription ? data.seo.metaDescription : "NO DESCRIPTION",
+        keywords: data.seo && data.seo.keywords ? data.seo.keywords.map((item) => item).join(", ") : "NO KEYWORDS",
     };
 }

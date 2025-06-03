@@ -3,7 +3,7 @@ import { client } from "../lib/client";
 
 export async function getProductsByCategory(slug) {
     return client.fetch(
-        groq`*[_type == "product" && productCategory->slug.current == $slug]{
+        groq`*[_type == "product" ${slug === "all" ? "" : "&& productCategory->slug.current == $slug"}]{
       _createdAt,
       name,
       slug,

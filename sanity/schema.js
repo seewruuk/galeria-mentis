@@ -12,6 +12,8 @@ import user from "./schemas/user"
 import blog from "./schemas/blog"
 import productDetails from "./schemas/product-details"
 import productDetailsOption from "./schemas/product-details-option"
+import artistsSettings from "./schemas/artistsSettings"
+import blogSettings from "./schemas/blogSettings"
 
 
 export const schema = {
@@ -30,5 +32,7 @@ export const schema = {
         paintingStyle,
         artist,
         homepage,
+        artistsSettings,
+        blogSettings,
     ],
 }
