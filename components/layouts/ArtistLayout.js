@@ -92,7 +92,7 @@ export default function ArtistLayout({slug}) {
                     initial={{scale: 0}}
                     animate={{scale: 1}}
                     transition={{duration: 0.5, ease: [0.48, 0.15, 0.25, 0.96]}}
-                    className={"h-[190px] w-[190px] rounded-full aspect-square border-[6px] border-primary mb-[32px] relative overflow-hidden"}>
+                    className={"h-[190px] w-[190px] rounded-full aspect-square border-[6px] border-primary max-lg:mb-[21px] relative overflow-hidden"}>
                     <Image src={artist?.avatar} alt={`${artist?.name} avatar`} layout="fill" objectFit="cover"/>
                 </motion.div>
                 <h2 className={"text-[42px]"}>{artist?.name}</h2>
