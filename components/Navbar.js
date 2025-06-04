@@ -51,7 +51,7 @@ export const links = [
     {name: "Home", link: '/'},
     {
         name: "Art works",
-        link: "/categories/prints",
+        link: "/categories/all",
         links: [
             // {
             //     name: "All Artworks",
