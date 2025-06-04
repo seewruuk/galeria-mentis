@@ -43,7 +43,7 @@ export default function HomeLayout() {
                             <SectionHeader
                                 title={"Discover the latest works"}
                                 buttonText={"Show all"}
-                                buttonLink={"/products"}
+                                buttonLink={"/categories/all"}
 
                             />
                             <FeaturedProductsCarousel
