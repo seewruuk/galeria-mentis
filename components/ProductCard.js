@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { formatPrice } from "@/lib/formatPrice";
+import LazyImage from "@/components/LazyImage";
 
 export default function ProductCard({
                                         image,
@@ -26,11 +27,12 @@ export default function ProductCard({
             >
                 {/* Zamiast Next.js <Image layout="fill" />, używamy prostego <img>
             żeby wysokość auto dopasowywała się naturalnie do szerokości kolumny */}
-                <img
+                <LazyImage
                     src={image}
                     alt={title}
-                    className="w-full h-auto object-cover"
-                />
+                    className="w-full"
+
+                    />
             </motion.a>
 
             {/* Kategoria */}
