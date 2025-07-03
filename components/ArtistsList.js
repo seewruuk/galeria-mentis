@@ -33,7 +33,7 @@ export default function ArtistsList({ artists, artworksLimit = 3 }) {
                             animate="visible"
                             exit="exit"
                             variants={itemVariants}
-                            className="flex gap-5 mb-6 max-lg:flex-col max-lg:items-center"
+                            className="flex gap-5 my-20 lg:my-8 max-lg:flex-col max-lg:items-center"
                         >
                             <ArtistCard
                                 avatar={artist.avatar}

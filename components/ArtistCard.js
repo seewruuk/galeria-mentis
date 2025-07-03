@@ -4,13 +4,19 @@ import Link from "next/link";
 export default function ArtistCard({avatar, artistLink, artistName, location, index, description}) {
 
     return (
-        <div className={"flex flex-col lg:max-w-[300px]"} index={index}>
+        <div className={"flex flex-col lg:max-w-[300px] items-start max-lg:items-center"} index={index}>
 
 
         <Link href={"/artists/" + artistLink}
-                  className={" relative h-[220px] mb-[28px] max-lg:aspect-square max-lg:w-[220px] max-lg:mx-auto"}>
-                <Image src={`${avatar}`} alt={"Artist Avatar"} layout={"fill"} objectFit={"cover"}
-                       className={"max-lg:rounded-full max-lg:border-8 max-lg:border-gray/30 border-white border-[3px]  hover:border-primary transition-all"}/>
+                  className={"relative h-[220px] mb-[28px] aspect-square rounded-full overflow-hidden border-8 hover:border-primary transition-all"}>
+                <Image
+                    src={`${avatar}`}
+                    alt={"Artist Avatar"}
+                    layout={"fill"}
+                    objectFit={"cover"}
+                    objectPosition={"center"}
+                    className={""}
+                />
             </Link>
 
             <div className={"flex flex-col gap-2 max-lg:text-center"}>
@@ -36,7 +42,7 @@ export default function ArtistCard({avatar, artistLink, artistName, location, in
 
             <Link href={
                 "/artists/" + artistLink
-            } className={"text-primary hover:underline transition-all text-[14px] mt-[20px] max-lg:text-center"
+            } className={"transition-all text-[14px] mt-[20px] max-lg:text-white max-lg:bg-primary max-lg:w-full max-lg:text-center max-lg:py-4 max-lg:max-w-[350px] lg:text-primary"
             }>
                 View Profile
             </Link>

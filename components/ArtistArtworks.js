@@ -20,7 +20,7 @@ export default function ArtistArtworks({ artistId, limit = 3, excludeProdId = ""
     if (loading) return <div>Loading artworks...</div>;
 
     return (
-        <div className={`grid grid-cols-1 gap-6 max-w-[300px] mx-auto md:grid-cols-2 md:max-w-[650px] lg:max-w-none lg:grid-cols-${limit} `}>
+        <div className={`grid grid-cols-2 gap-6 max-w-[300px] mx-auto md:grid-cols-2 md:max-w-[650px] lg:max-w-none lg:grid-cols-${limit} `}>
             {artworks.map((artwork) => (
                 <ProductCard
                     key={artwork._id}

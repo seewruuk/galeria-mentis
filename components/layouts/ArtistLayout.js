@@ -105,7 +105,9 @@ export default function ArtistLayout({slug}) {
 
 
                 <div className={"flex flex-col gap-[60px] py-[60px] text-[18px]"}>
-                    {artist?.bio.map((item, index) => (
+                    {
+                        artist.bio &&
+                        artist?.bio.map((item, index) => (
                         <div key={item + index} className={"flex gap-4 group max-lg:flex-col"}>
                             <h3 className={"w-1/4 text-primary max-lg:w-[100%]"}>{item.header}</h3>
                             <div
@@ -143,21 +145,25 @@ export default function ArtistLayout({slug}) {
 
 
                 <div className="grid grid-cols-1 gap-5 max-lg:mx-auto md:grid-cols-2 lg:grid-cols-4">
-                    {paginatedArtworks.map((item, index) => (
-                        <ProductCard
-                            key={item._id}
-                            index={index}
-                            title={item.name}
-                            artist={item.artist.name}
-                            artistsLink={item.artist.slug}
-                            price={item.price}
-                            category={item.productCategory.title}
-                            categoryLink={item.productCategory.slug}
-                            slug={item.slug}
-                            image={item.thumbnail ? item.thumbnail : item.images[0]}
+                    {
+                        paginatedArtworks &&
+                        paginatedArtworks.map((item, index) => (
+                            <ProductCard
+                                key={item._id}
+                                index={index}
+                                title={item.name}
+                                artist={item.artist.name}
+                                artistsLink={item.artist.slug}
+                                price={item.price}
+                                category={item.productCategory.title}
+                                categoryLink={item.productCategory.slug}
+                                slug={item.slug}
+                                image={item.thumbnail ? item.thumbnail : item.images[0]}
 
-                        />
-                    ))}
+                            />
+                        ))
+
+                    }
                 </div>
 
                 <Pagination
