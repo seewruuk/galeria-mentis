@@ -5,10 +5,18 @@ import Link from "next/link";
 import Image from "next/image";
 import {links} from "@/components/Navbar";
 import ContactForm from "@/components/ContactForm";
+import {useState} from "react";
+import FormInput from "@/components/FormInput";
+import Button from "@/components/Button";
+import toast from "react-hot-toast";
+import {validateEmail} from "@/lib/validateEmail";
+import {saveToNewsletter} from "@/lib/saveToNewsletter";
 
 
 export default function Footer() {
 
+    const [userEmail, setUserEmail] = useState("");
+    const [isSending, setIsSending] = useState(false);
     const style = "bg-[#131313] aspect-square rounded-md w-10 h-10 grid place-items-center transition-all hover:bg-primary";
     const style2 = "w-5 h-5 relative"
     const footerLinkStyle = "text-[#666666] hover:text-white transition-all"
@@ -29,6 +37,31 @@ export default function Footer() {
             ]
         },
     ]
+
+    const handleNewsletterSubmit = async () => {
+        setIsSending(true);
+        if (!userEmail.trim()) {
+            toast.error("Enter your email address");
+            setIsSending(false);
+            return;
+        }
+        if(validateEmail(userEmail) === null) {
+            toast.error("Please enter a valid email address.");
+            setIsSending(false);
+            return;
+        }
+
+        const result = await saveToNewsletter(userEmail);
+        if (result.status === 200) {
+            toast.success(result.message);
+            setUserEmail("");
+            setIsSending(false);
+
+        } else {
+            toast.error(result.message);
+            setIsSending(false);
+        }
+    }
 
     return (
 
@@ -76,6 +109,22 @@ export default function Footer() {
                                             <Image src={icons.instagram} alt={"Instagram icon"} layout={"fill"}/>
                                         </div>
                                     </Link>
+                                </div>
+
+                                <div className={"flex gap-2 flex-col"}>
+                                    <FormInput
+                                        onChange={(e) => setUserEmail(e.target.value)}
+                                        value={userEmail}
+                                        type={"email"}
+                                        placeholder={"Enter your email"}
+                                    />
+                                    <Button
+                                        style={"primary"}
+                                        type={"button"}
+                                        disabled={isSending}
+                                        title={isSending ? "Sending..." : "Subscribe to newsletter"}
+                                        onClick={handleNewsletterSubmit}
+                                    />
                                 </div>
                             </div>
 
