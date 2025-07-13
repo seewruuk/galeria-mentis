@@ -2,6 +2,9 @@ import FormInput from "@/components/FormInput";
 import Button from "@/components/Button";
 
 export default function ContactForm() {
+
+    // test
+
     return (
         <section
             id={"contact"}
