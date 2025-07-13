@@ -29,10 +29,10 @@ export default function ContactForm() {
             return;
         }
 
-        const emailAccessToken = process.env.EMAILJS_PRIVATE_KEY || "qzXhywFh-Yx4-k-KkmM8N";
-        const emailServiceId = process.env.EMAILJS_SERVICE_ID || "service_3vl3ici";
-        const emailTemplateId = process.env.EMAILJS_TEMPLATE_ID || "template_772xy2q";
-        const emailUserId = process.env.EMAILJS_PUBLISH_KEY || "3EHJcCUf8rYArVWb0"
+        const emailAccessToken =  "qzXhywFh-Yx4-k-KkmM8N";
+        const emailServiceId = "service_3vl3ici";
+        const emailTemplateId = "template_772xy2q";
+        const emailUserId = "3EHJcCUf8rYArVWb0"
 
         const emailResponse = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
             method: "POST",
@@ -47,8 +47,8 @@ export default function ContactForm() {
                     message: formData.message,
                     customer_email: formData.email,
                 },
-                // accessToken: emailAccessToken,
-                accessToken: "",
+                accessToken: emailAccessToken,
+                // accessToken: "",
             }),
         });
 
