@@ -2,10 +2,10 @@
 "use client";
 
 import useSanity from "@/hooks/useSanity";
-import { getProductsByCategory } from "@/sanity/getSanity/getProductsByCategory";
-import { getProductCategory } from "@/sanity/getSanity/getProductCategory";
-import { getProductOptions } from "@/sanity/getSanity/getProductOptions";
-import { Suspense, useEffect, useState } from "react";
+import {getProductsByCategory} from "@/sanity/getSanity/getProductsByCategory";
+import {getProductCategory} from "@/sanity/getSanity/getProductCategory";
+import {getProductOptions} from "@/sanity/getSanity/getProductOptions";
+import {Suspense, useEffect, useState} from "react";
 import Loading from "@/components/Loading";
 import Banner from "@/components/Banner";
 import Layout from "@/components/Layout";
@@ -13,33 +13,40 @@ import ProductFilters from "@/components/ProductFilters";
 import ProductsList from "@/components/ProductsList";
 import PageTransition from "@/components/PageTransition";
 import Footer from "@/components/Footer";
-import { PortableText } from "@portabletext/react";
-import { AnimatePresence, motion } from "framer-motion";
+import {PortableText} from "@portabletext/react";
+import {AnimatePresence, motion} from "framer-motion";
+import {getProductCategories} from "@/sanity/getSanity/getProductCategories";
 
-export default function ProductsLayout({ category }) {
+export default function ProductsLayout({category}) {
     return (
-        <Suspense fallback={<Loading type={"full"} />}>
-            <ProductsRootLayout category={category} />
+        <Suspense fallback={<Loading type={"full"}/>}>
+            <ProductsRootLayout category={category}/>
         </Suspense>
     );
 }
 
-function ProductsRootLayout({ category }) {
-    const { data: products, loading: loadingProducts } = useSanity(
+function ProductsRootLayout({category}) {
+    const {data: products, loading: loadingProducts} = useSanity(
         getProductsByCategory,
         category
     );
-    const { data: categoryDetails, loading: loadingCategoryDetails } = useSanity(
+    const {data: categoryDetails, loading: loadingCategoryDetails} = useSanity(
         getProductCategory,
         category
     );
-    const { data: productOptions, loading: loadingProductOptions } = useSanity(
+    const {data: productOptions, loading: loadingProductOptions} = useSanity(
         getProductOptions
     );
+
+    const {data: productCategories, loading: loadingProductCategories} = useSanity(
+        getProductCategories
+    );
+
 
     const [mounted, setMounted] = useState(false);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [filters, setFilters] = useState({});
+    const [categoryFilters, setCategoryFilters] = useState({});
     const [sortOption, setSortOption] = useState("newest");
     const [searchQuery, setSearchQuery] = useState("");
     const [priceRange, setPriceRange] = useState(10000);
@@ -52,8 +59,8 @@ function ProductsRootLayout({ category }) {
 
     const ptComponents = {
         block: {
-            normal: ({ children }) => <p className="">{children}</p>,
-            h1: ({ children }) => (
+            normal: ({children}) => <p className="">{children}</p>,
+            h1: ({children}) => (
                 <h1 className="leading-[170%] text-[32px]">{children}</h1>
             ),
         },
@@ -69,14 +76,28 @@ function ProductsRootLayout({ category }) {
                 acc[option.name] = [];
                 return acc;
             }, {});
-            setFilters(initialFilters);
+            setFilters({
+                // "productCategories": [],
+                ...initialFilters
+            });
         }
-    }, [products, productOptions]);
+        if (productCategories) {
+            const initialCategoryFilters = productCategories.reduce((acc, category) => {
+                acc[category.slug] = false;
+                return acc;
+            }, {});
+            setCategoryFilters(initialCategoryFilters);
+        }
+    }, [products, productOptions, productCategories]);
 
     // Filtruj i sortuj przy zmianie kryteriów
     useEffect(() => {
         if (products) filterAndSortProducts();
-    }, [filters, searchQuery, sortOption, priceRange]);
+    }, [searchQuery,
+        filters,
+        priceRange,
+        sortOption,
+        categoryFilters,]);
 
     // Reset “widocznych” elementów przy nowych filtrowaniach
     useEffect(() => {
@@ -91,50 +112,74 @@ function ProductsRootLayout({ category }) {
     }, [visibleCount]);
 
     const filterAndSortProducts = () => {
-        let filtered = [...products];
+        if (!products) return;
 
+        let temp = [...products];
+
+        // 1) Search by name
         if (searchQuery) {
-            filtered = filtered.filter((prod) =>
+            temp = temp.filter((prod) =>
                 prod.name.toLowerCase().includes(searchQuery.toLowerCase())
             );
         }
+
+        // 2) Filter by productCategory checkboxes
+        const activeCats = Object.entries(categoryFilters)
+            .filter(([_, v]) => v)
+            .map(([key]) => key);
+        if (activeCats.length > 0 && !categoryFilters.all) {
+            temp = temp.filter((prod) =>
+                activeCats.includes(prod.productCategory?.slug?.current)
+            );
+        }
+
+        // 3) Other detail-based filters
         Object.entries(filters).forEach(([filterName, values]) => {
             if (values.length) {
-                filtered = filtered.filter((prod) =>
+                temp = temp.filter((prod) =>
                     prod.details?.some(
-                        (detail) =>
-                            detail.productDetailsName === filterName &&
-                            values.includes(detail.content)
+                        (d) =>
+                            d.productDetailsName === filterName &&
+                            values.includes(d.content)
                     )
                 );
             }
         });
-        filtered = filtered.filter((prod) => prod.price <= priceRange);
 
-        if (sortOption === "price-asc")
-            filtered.sort((a, b) => a.price - b.price);
-        if (sortOption === "price-desc")
-            filtered.sort((a, b) => b.price - a.price);
+        // 4) Price range
+        if (priceRange[0] > 0 || priceRange[1] < Infinity) {
+            temp = temp.filter(
+                (prod) =>
+                    prod.price >= priceRange[0] && prod.price <= priceRange[1]
+            );
+        }
+
+        // 5) Sorting
+        if (sortOption === "price-asc") temp.sort((a, b) => a.price - b.price);
+        if (sortOption === "price-desc") temp.sort((a, b) => b.price - a.price);
         if (sortOption === "newest")
-            filtered.sort(
+            temp.sort(
                 (a, b) => new Date(b._createdAt) - new Date(a._createdAt)
             );
         if (sortOption === "oldest")
-            filtered.sort(
+            temp.sort(
                 (a, b) => new Date(a._createdAt) - new Date(b._createdAt)
             );
 
-        setFilteredProducts(filtered);
+        setFilteredProducts(temp);
     };
+
 
     if (
         loadingProducts ||
         loadingCategoryDetails ||
         loadingProductOptions ||
+        loadingProductCategories ||
         !mounted
     ) {
-        return <Loading type="full" />;
+        return <Loading type="full"/>;
     }
+
 
     return (
         <PageTransition>
@@ -158,6 +203,11 @@ function ProductsRootLayout({ category }) {
                         setSearchQuery={setSearchQuery}
                         priceRange={priceRange}
                         setPriceRange={setPriceRange}
+                        productCategories={productCategories}
+                        filterAndSortProducts={filterAndSortProducts}
+                        categoryFilters={categoryFilters}
+                        setCategoryFilters={setCategoryFilters}
+                        category={category}
                     />
 
                     <div className="w-3/4 max-lg:w-full">
@@ -165,9 +215,9 @@ function ProductsRootLayout({ category }) {
                             {filteredProducts.length > 0 ? (
                                 <motion.div
                                     key="products-list"
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
+                                    initial={{opacity: 0}}
+                                    animate={{opacity: 1}}
+                                    exit={{opacity: 0}}
                                 >
                                     {/*
                     Teraz przekazujemy całą tablicę filteredProducts
@@ -184,7 +234,7 @@ function ProductsRootLayout({ category }) {
 
                                     <div className="flex justify-center mt-8">
                                         {isLoadingMore ? (
-                                            <Loading type="small" />
+                                            <Loading type="small"/>
                                         ) : (
                                             visibleCount < filteredProducts.length && (
                                                 <button
@@ -207,9 +257,9 @@ function ProductsRootLayout({ category }) {
                                 </motion.div>
                             ) : (
                                 <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
+                                    initial={{opacity: 0}}
+                                    animate={{opacity: 1}}
+                                    exit={{opacity: 0}}
                                     className="flex flex-col items-center justify-center h-[400px] text-center"
                                 >
                                     <h2 className="text-xl font-semibold mb-4">
@@ -225,7 +275,7 @@ function ProductsRootLayout({ category }) {
                 </div>
             </Layout>
 
-            <Footer />
+            <Footer/>
         </PageTransition>
     );
 }

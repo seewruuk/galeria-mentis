@@ -9,8 +9,16 @@ export default function ProductFilters({
                                            setSearchQuery,
                                            priceRange,
                                            setPriceRange,
+                                           productCategories,
+                                           filterAndSortProducts,
+                                           categoryFilters,
+                                           setCategoryFilters,
+                                           category
                                        }) {
     const handleFilterChange = (filterName, value) => {
+        if(filterName === "productCategory") {
+            filterAndSortProducts("productCategory")
+        }
         setFilters((prev) => {
             const currentValues = prev[filterName] || [];
             if (currentValues.includes(value)) {
@@ -25,7 +33,19 @@ export default function ProductFilters({
                 };
             }
         });
+
     };
+
+
+    const handleCategoryChange = (categorySlug) => {
+        setCategoryFilters
+        ((prev) => ({
+            ...prev,
+            [categorySlug]: !prev[categorySlug],
+        }));
+        filterAndSortProducts("productCategory");
+    }
+
 
     return (
         <div className="w-1/4 p-4 max-lg:w-full">
@@ -69,21 +89,21 @@ export default function ProductFilters({
                                     onChange={() => handleFilterChange(option.name, value)}
                                 />
                                 <span className="absolute text-[#AE8974] opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                  <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-3.5 w-3.5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      stroke="currentColor"
-                      strokeWidth="1"
-                  >
-                    <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                    ></path>
-                  </svg>
-                </span>
+                                  <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      className="h-3.5 w-3.5"
+                                      viewBox="0 0 20 20"
+                                      fill="currentColor"
+                                      stroke="currentColor"
+                                      strokeWidth="1"
+                                  >
+                                    <path
+                                        fillRule="evenodd"
+                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                        clipRule="evenodd"
+                                    ></path>
+                                  </svg>
+                                </span>
                             </label>
                             <span className="ml-2 text-sm">{value}</span>
                         </div>
@@ -91,6 +111,51 @@ export default function ProductFilters({
                 </div>
             ))}
 
+            {
+                category === "all" ? (
+                    <div className="mt-6">
+                        <h4 className="font-medium mb-2">Medium</h4>
+                        {
+                            productCategories?.map((item, index) => {
+
+                                    if(item.slug==="all") return ;
+
+                                    return (
+                                        <div key={index} className="flex items-center py-[8px]">
+                                            <label className="flex items-center cursor-pointer relative">
+                                                <input
+                                                    type="checkbox"
+                                                    className="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded-sm shadow bg-[#E7E0DC] checked:bg-[#E7E0DC]"
+                                                    checked={categoryFilters[item.slug] || false}
+                                                    onChange={() => handleCategoryChange(item.slug)}
+                                                />
+                                                <span className="absolute text-[#AE8974] opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                  <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      className="h-3.5 w-3.5"
+                                      viewBox="0 0 20 20"
+                                      fill="currentColor"
+                                      stroke="currentColor"
+                                      strokeWidth="1"
+                                  >
+                                    <path
+                                        fillRule="evenodd"
+                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                        clipRule="evenodd"
+                                    ></path>
+                                  </svg>
+                                </span>
+                                            </label>
+                                            <span className="ml-2 text-sm">{item.title}</span>
+                                        </div>
+
+                                    );
+                                }
+                            )
+                        }
+                    </div>
+                ) : null
+            }
         </div>
     );
 }
