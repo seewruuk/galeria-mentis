@@ -11,7 +11,7 @@ export default function Discover({artworks, artist}) {
             <SectionHeader
                 title={`Discover more from ${
                     artist.name
-                } artwork's`}
+                }`}
                 buttonText={"Check profile"}
                 buttonLink={`/artists/${artist.slug}`}
             />
