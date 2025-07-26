@@ -49,7 +49,7 @@ function ProductsRootLayout({category}) {
     const [categoryFilters, setCategoryFilters] = useState({});
     const [sortOption, setSortOption] = useState("newest");
     const [searchQuery, setSearchQuery] = useState("");
-    const [priceRange, setPriceRange] = useState(10000);
+    const [priceRange, setPriceRange] = useState(1500);
 
     // liczba elementów w pierwszej partii
     const itemsPerLoad = 12;
@@ -147,11 +147,11 @@ function ProductsRootLayout({category}) {
         });
 
         // 4) Price range
-        if (priceRange[0] > 0 || priceRange[1] < Infinity) {
-            temp = temp.filter(
-                (prod) =>
-                    prod.price >= priceRange[0] && prod.price <= priceRange[1]
-            );
+        if (priceRange > 0) {
+            temp = temp.filter((prod) => {
+                const price = prod.price || 0; // Używamy 0, jeśli cena nie jest dostępna
+                return price <= priceRange;
+            });
         }
 
         // 5) Sorting
@@ -180,12 +180,15 @@ function ProductsRootLayout({category}) {
         return <Loading type="full"/>;
     }
 
+    console.log("Filtered Products:", filteredProducts);
+
 
     return (
         <PageTransition>
             <Banner
                 backgroundImage={categoryDetails?.image}
                 hugeText={categoryDetails?.title}
+                showBdImage={false}
             >
                 <PortableText
                     value={categoryDetails?.header}

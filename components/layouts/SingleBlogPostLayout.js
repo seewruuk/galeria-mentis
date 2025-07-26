@@ -37,7 +37,7 @@ export default function SingleBlogPostLayout({ slug }) {
                         alt="Sanity image"
                         width={500}
                         height={500}
-                        className="h-[600px] object-cover"
+                        className="max-w-[650px] h-auto object-contain"
                     />
                 </div>
             ),
@@ -53,7 +53,7 @@ export default function SingleBlogPostLayout({ slug }) {
             <Banner backgroundImage={data.mainImage}
                     hugeText={"Blog"}>
                 <h2 className={"text-[32px]"}>{data.title}</h2>
-                <p className={"max-w-[650px] text-[16px] mt-[24px]"}>{data.description}</p>
+                <p className={"max-w-[650px] text-[16px] mt-[24px] text-balance text-center"}>{data.description}</p>
             </Banner>
 
             <Layout>

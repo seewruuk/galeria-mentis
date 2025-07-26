@@ -89,6 +89,7 @@ function ArtistsRootLayout() {
                     artistsPageSettings.image
                 }
                 hugeText={"Artists"}
+                showBdImage={false}
             >
                 <PortableText value={artistsPageSettings?.header} components={PortableComponents}/>
             </Banner>

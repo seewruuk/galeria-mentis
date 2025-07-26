@@ -66,9 +66,9 @@ export default function ProductFilters({
                 <h4 className="font-medium mb-2">Price</h4>
                 <input
                     type="range"
-                    min="0"
-                    max="10000"
-                    step="100"
+                    min="100"
+                    max="1500"
+                    step="25"
                     value={priceRange}
                     onChange={(e) => setPriceRange(Number(e.target.value))}
                     className="w-full accent-[#AE8974] appearance-none bg-[#E7E0DC] h-2 rounded-full"

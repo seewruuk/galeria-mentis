@@ -79,7 +79,7 @@ export default function ContactForm() {
                 <p className={"flex-1 font-freightBig text-black max-w-[550px] leading-[120%] text-[32px] font-semibold"}>Contact
                     us</p>
                 <p className={"flex-1 text-[15px] leading-[170%] text-gray"}>
-                    If you have any questions or inquiries, please fill out the form below and we will get back to you
+                    If you have any questions or enquiries, please fill out the form below and we will get back to you
                     as
                     soon as possible.
                 </p>

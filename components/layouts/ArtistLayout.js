@@ -126,7 +126,7 @@ export default function ArtistLayout({slug}) {
                 >
                     <div>
                         <h3 className="font-freightBig text-[21px] font-semibold">
-                            Discover More {artist?.name} artworks
+                            Discover more from {artist?.name}
                         </h3>
                     </div>
                     <div>

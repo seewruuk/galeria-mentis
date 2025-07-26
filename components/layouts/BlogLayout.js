@@ -22,11 +22,16 @@ export default function BlogLayout() {
     }, [])
 
 
-    if (!mounted) return null;
+    if (
+        loading ||
+        loadingBlogSettings ||
+        !mounted
+    ) return null;
 
     return (
         <PageTransition>
             <Banner
+                showBdImage={false}
                 backgroundImage={blogSettings.image}
                 hugeText={"Blog"}>
                 < PortableText value={blogSettings.header} components={PortableComponents}/>
@@ -68,9 +73,14 @@ export default function BlogLayout() {
                                         {post.title}
                                     </Link>
                                 </h3>
-                                <p className={"text-white/70 mt-[16px]"}>{post.description}</p>
+                                <p className={"text-white/70 mt-[16px]"}>{
+                                    post.description.length > 100 ?
+                                        post.description.slice(0, 100) + "..." : post.description
+
+                                }</p>
                             </article>
                         ))}
+
                     </div>
                 </div>
             </Layout>
