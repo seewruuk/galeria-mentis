@@ -9,7 +9,7 @@ export default function Discover({artworks, artist}) {
     return (
         <>
             <SectionHeader
-                title={`Discover more ${
+                title={`Discover more from ${
                     artist.name
                 } artwork's`}
                 buttonText={"Check profile"}

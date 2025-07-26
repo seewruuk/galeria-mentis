@@ -92,7 +92,7 @@ export default function Footer({showContactForm = true}) {
                 <Layout>
                     <section className={"py-[12px]"}>
                         <div
-                            className={"py-[90px] flex justify-between max-lg:flex-col max-lg:items-center max-lg:text-center"}>
+                            className={"py-[90px] flex justify-between max-lg:flex-col max-lg:items-center max-lg:text-center gap-12"}>
                             <div className={"flex flex-col gap-[24px] max-lg:items-center max-lg:py-[32px]"}>
                                 <div>
                                     <Link href={"/"} className={"opacity-100 hover:opacity-80 transition-all"}>
@@ -178,7 +178,7 @@ export default function Footer({showContactForm = true}) {
                                 </div>
                             </div>
 
-                            <div className={"flex flex-grow gap-[72px] justify-end max-lg:flex-col"}>
+                            <div className={"flex flex-grow gap-12 justify-between max-lg:flex-col"}>
                                 {
                                     footerLinks.map((item, index) => {
                                         return (

@@ -197,19 +197,19 @@ function ProductsRootLayout({category}) {
 
     return (
         <PageTransition>
-            <Banner
-                backgroundImage={categoryDetails?.image}
-                hugeText={categoryDetails?.title}
-                showBdImage={false}
-            >
-                <PortableText
-                    value={categoryDetails?.header}
-                    components={ptComponents}
-                />
-            </Banner>
+            {/*<Banner*/}
+            {/*    backgroundImage={categoryDetails?.image}*/}
+            {/*    hugeText={categoryDetails?.title}*/}
+            {/*    showBdImage={false}*/}
+            {/*>*/}
+            {/*    <PortableText*/}
+            {/*        value={categoryDetails?.header}*/}
+            {/*        components={ptComponents}*/}
+            {/*    />*/}
+            {/*</Banner>*/}
 
             <Layout>
-                <div className="flex gap-5 py-[64px] max-lg:flex-col">
+                <div className="flex gap-5 py-[64px] max-lg:flex-col pt-[150px]">
                     <ProductFilters
                         productOptions={productOptions}
                         filters={filters}

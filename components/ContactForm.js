@@ -73,7 +73,7 @@ export default function ContactForm() {
     return (
         <section
             id={"contact"}
-            className={"py-[120px] mx-auto max-w-[650px]"}
+            className={"py-[120px] mx-auto max-w-[650px] max-lg:px-6"}
         >
             <div className={"flex justify-between gap-3 py-6 max-lg:flex-col"}>
                 <p className={"flex-1 font-freightBig text-black max-w-[550px] leading-[120%] text-[32px] font-semibold"}>Contact

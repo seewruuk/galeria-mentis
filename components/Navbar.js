@@ -90,7 +90,7 @@ export default function Navbar() {
 }
 
 const DesktopMenu = ({pathname, totalQty}) => {
-    const blackNavbarPages = ["/", '/artists', "/blog", ...darkNavLinks, ...artistsLinks, ...blogLinks]; // Podstrony z białym
+    const blackNavbarPages = ["/", ...artistsLinks, ...blogLinks]; // Podstrony z białym
     const isBlackTheme = blackNavbarPages.includes(pathname);
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ? process.env.NEXT_PUBLIC_BASE_URL : "https://galeria-mentis.vercel.app";

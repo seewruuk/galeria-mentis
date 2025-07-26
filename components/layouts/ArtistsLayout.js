@@ -84,18 +84,18 @@ function ArtistsRootLayout() {
 
     return (
         <PageTransition>
-            <Banner
-                backgroundImage={
-                    artistsPageSettings.image
-                }
-                hugeText={"Artists"}
-                showBdImage={false}
-            >
-                <PortableText value={artistsPageSettings?.header} components={PortableComponents}/>
-            </Banner>
+            {/*<Banner*/}
+            {/*    backgroundImage={*/}
+            {/*        artistsPageSettings.image*/}
+            {/*    }*/}
+            {/*    hugeText={"Artists"}*/}
+            {/*    showBdImage={false}*/}
+            {/*>*/}
+            {/*    <PortableText value={artistsPageSettings?.header} components={PortableComponents}/>*/}
+            {/*</Banner>*/}
 
             <Layout>
-                <div className="flex gap-5 py-[64px] max-lg:flex-col">
+                <div className="flex gap-5 py-[64px] max-lg:flex-col pt-[150px]">
                     <ArtistFilters
                         searchQuery={searchQuery}
                         setSearchQuery={setSearchQuery}

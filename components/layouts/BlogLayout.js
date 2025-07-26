@@ -30,16 +30,16 @@ export default function BlogLayout() {
 
     return (
         <PageTransition>
-            <Banner
-                showBdImage={false}
-                backgroundImage={blogSettings.image}
-                hugeText={"Blog"}>
-                < PortableText value={blogSettings.header} components={PortableComponents}/>
-            </Banner>
+            {/*<Banner*/}
+            {/*    showBdImage={false}*/}
+            {/*    backgroundImage={blogSettings.image}*/}
+            {/*    hugeText={"Blog"}>*/}
+            {/*    < PortableText value={blogSettings.header} components={PortableComponents}/>*/}
+            {/*</Banner>*/}
 
 
             <Layout>
-                <div className="bg-white">
+                <div className="bg-white pt-[150px]">
                     <div
                         className="mx-auto mt-16 grid max-w-2xl auto-rows-fr grid-cols-1 gap-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
                         {posts.map((post) => (
