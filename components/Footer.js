@@ -178,7 +178,7 @@ export default function Footer({showContactForm = true}) {
                                 </div>
                             </div>
 
-                            <div className={"flex flex-grow gap-12 justify-between max-lg:flex-col"}>
+                            <div className={"flex flex-grow gap-12 justify-end max-lg:flex-col max-lg:justify-center"}>
                                 {
                                     footerLinks.map((item, index) => {
                                         return (
