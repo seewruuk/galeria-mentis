@@ -45,7 +45,7 @@ function ProductsRootLayout({category}) {
     );
 
     useEffect(() => {
-        console.log("productCategories", productCategories)
+        // console.log("productCategories", productCategories)
         const findCategory = productCategories.find((item) => item.slug === category.toLowerCase());
 
         if(!findCategory) {

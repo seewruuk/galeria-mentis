@@ -4,19 +4,22 @@ import ProductDetails from "@/components/ProductDetails";
 import Discover from "@/components/Discover";
 import Layout from "@/components/Layout";
 import useSanity from "@/hooks/useSanity";
-import { getProduct } from "@/sanity/getSanity/getProduct";
+import {getProduct} from "@/sanity/getSanity/getProduct";
 import Loading from "@/components/Loading";
 import PageTransition from "@/components/PageTransition";
-import { getArtistArtworks } from "@/sanity/getSanity/getArtistArtworks";
-import { getArtist } from "@/sanity/getSanity/getArtist";
-import { useEffect, useState } from "react";
+import {getArtistArtworks} from "@/sanity/getSanity/getArtistArtworks";
+import {getArtist} from "@/sanity/getSanity/getArtist";
+import {useEffect, useState} from "react";
 import RecommendedProducts from "@/components/RecommendedProducts";
 import Footer from "@/components/Footer";
 import {AnimatePresence} from "framer-motion";
 import FullScreenImages from "@/components/FullScreenImages";
+import toast from "react-hot-toast";
+import {useRouter} from "next/navigation";
 
-export default function ProductLayout({ slug }) {
-    const { data: product, loading, error } = useSanity(getProduct, slug);
+export default function ProductLayout({slug}) {
+    const router = useRouter();
+    const {data: product, loading, error} = useSanity(getProduct, slug);
     const [artworks, setArtworks] = useState([]);
     const [artist, setArtist] = useState(null);
     const [isDataReady, setIsDataReady] = useState(false);
@@ -26,8 +29,6 @@ export default function ProductLayout({ slug }) {
         images: [],
         selectedIndex: 0,
     });
-
-    if(!product){console.log("nie ma produktu") }
 
 
     useEffect(() => {
@@ -58,10 +59,13 @@ export default function ProductLayout({ slug }) {
 
         if (product) {
             fetchData();
+        } else {
+            toast.error("Product not found");
+            router.push("/categories/all");
         }
     }, [product]);
 
-    if (loading || !isDataReady) return <Loading />;
+    if (loading || !isDataReady) return <Loading/>;
 
     return (
         <PageTransition>
@@ -96,14 +100,14 @@ export default function ProductLayout({ slug }) {
                 />
 
 
-                <Discover artworks={artworks.slice(0,3)} artist={artist} />
+                <Discover artworks={artworks.slice(0, 3)} artist={artist}/>
 
 
                 {/*<RecommendedProducts />*/}
 
             </Layout>
 
-            <Footer />
+            <Footer/>
         </PageTransition>
     );
 }
