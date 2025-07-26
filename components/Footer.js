@@ -96,7 +96,7 @@ export default function Footer({showContactForm = true}) {
                             <div className={"flex flex-col gap-[24px] max-lg:items-center max-lg:py-[32px]"}>
                                 <div>
                                     <Link href={"/"} className={"opacity-100 hover:opacity-80 transition-all"}>
-                                        <div className={"w-[320px] h-[62px] relative"}>
+                                        <div className={"w-[320px] h-[92px] relative"}>
                                             <Image src={icons.logoWhite} layout={"fill"} alt={"Logo"}/>
                                         </div>
                                     </Link>

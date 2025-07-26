@@ -160,7 +160,7 @@ const DesktopMenu = ({pathname, totalQty}) => {
                                 }
                                 alt={"Galeria Mentis Logo"}
                                 width={220}
-                                height={50}
+                                height={90}
                             />
                         </Link>
                     </div>
