@@ -1188,7 +1188,7 @@
               }
             ],
             "type": "reference",
-            "title": "Reference to art works"
+            "title": "Reference to artworks"
           }
         ],
         "name": "recommendedArtworks",
@@ -1202,7 +1202,7 @@
     ],
     "name": "product",
     "type": "document",
-    "title": "Art works"
+    "title": "Artworks"
   },
   {
     "fields": [
@@ -1502,7 +1502,7 @@
               }
             ],
             "type": "reference",
-            "title": "Reference to art works"
+            "title": "Reference to artworks"
           }
         ],
         "name": "artworks",
@@ -1582,7 +1582,7 @@
               }
             ],
             "type": "reference",
-            "title": "Reference to art works"
+            "title": "Reference to artworks"
           }
         ],
         "name": "featuredProducts",

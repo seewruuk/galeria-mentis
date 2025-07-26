@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 import {validateEmail} from "@/lib/validateEmail";
 import {saveToNewsletter} from "@/lib/saveToNewsletter";
 
-export default function Footer() {
+export default function Footer({showContactForm = true}) {
 
     const [userEmail, setUserEmail] = useState("");
     const [isSending, setIsSending] = useState(false);
@@ -86,9 +86,7 @@ export default function Footer() {
     return (
 
         <>
-
-            <ContactForm/>
-
+            {showContactForm && <ContactForm/>}
 
             <section className={"bg-black"}>
                 <Layout>

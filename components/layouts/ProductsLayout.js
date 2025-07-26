@@ -16,6 +16,7 @@ import Footer from "@/components/Footer";
 import {PortableText} from "@portabletext/react";
 import {AnimatePresence, motion} from "framer-motion";
 import {getProductCategories} from "@/sanity/getSanity/getProductCategories";
+import {useRouter} from "next/navigation";
 
 export default function ProductsLayout({category}) {
     return (
@@ -26,6 +27,7 @@ export default function ProductsLayout({category}) {
 }
 
 function ProductsRootLayout({category}) {
+    const router = useRouter();
     const {data: products, loading: loadingProducts} = useSanity(
         getProductsByCategory,
         category
@@ -41,6 +43,16 @@ function ProductsRootLayout({category}) {
     const {data: productCategories, loading: loadingProductCategories} = useSanity(
         getProductCategories
     );
+
+    useEffect(() => {
+        console.log("productCategories", productCategories)
+        const findCategory = productCategories.find((item) => item.slug === category.toLowerCase());
+
+        if(!findCategory) {
+            router.push("/categories/all");
+        }
+
+    }, [productCategories]);
 
 
     const [mounted, setMounted] = useState(false);
