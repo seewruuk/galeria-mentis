@@ -54,7 +54,7 @@ export default function Hero({ data }) {
 
     return (
         <div
-            className="min-h-[95dvh] w-screen relative isolate overflow-hidden text-white"
+            className="lg:min-h-[95dvh] h-[100%] border-2  min-h-screen w-screen relative isolate overflow-hidden text-white"
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
         >
@@ -62,7 +62,7 @@ export default function Hero({ data }) {
             <div className="absolute inset-0 bg-black -z-10"/>
 
 
-            {/* Tło */}
+             Tło
             <AnimatePresence mode="wait">
                 <motion.div
                     key={selectedIndex}
@@ -81,12 +81,12 @@ export default function Hero({ data }) {
 
 
             {/* Maska */}
-            <div className="absolute inset-0 bg-black/70 z-0"/>
+            <div className="absolute inset-0 bg-black/70 z-0 "/>
 
 
             {/* Zawartość */}
-            <div className="absolute inset-0 z-20">
-                <div className="max-w-screen-xl px-10 mx-auto h-full flex flex-col">
+            <div className="absolute inset-0 z-20 max-lg:relative max-lg:h-screen">
+                <div className="max-w-screen-xl px-10 mx-auto h-full flex flex-col ">
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={selectedIndex}

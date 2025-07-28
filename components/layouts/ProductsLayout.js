@@ -44,17 +44,6 @@ function ProductsRootLayout({category}) {
         getProductCategories
     );
 
-    useEffect(() => {
-        // console.log("productCategories", productCategories)
-        const findCategory = productCategories.find((item) => item.slug === category.toLowerCase());
-
-        if(!findCategory) {
-            router.push("/categories/all");
-        }
-
-    }, [productCategories]);
-
-
     const [mounted, setMounted] = useState(false);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [filters, setFilters] = useState({});
@@ -191,8 +180,6 @@ function ProductsRootLayout({category}) {
     ) {
         return <Loading type="full"/>;
     }
-
-    console.log("Filtered Products:", filteredProducts);
 
 
     return (
