@@ -159,8 +159,8 @@ const DesktopMenu = ({pathname, totalQty}) => {
                                     scrolled ? `${process.env.NEXT_PUBLIC_BASE_URL}/assets/logo-white.svg` : logoSrc
                                 }
                                 alt={"Galeria Mentis Logo"}
-                                width={220}
-                                height={90}
+                                width={250}
+                                height={500}
                             />
                         </Link>
                     </div>
