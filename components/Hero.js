@@ -54,7 +54,7 @@ export default function Hero({ data }) {
 
     return (
         <div
-            className="lg:min-h-[95dvh] h-[100%] border-2  min-h-screen w-screen relative isolate overflow-hidden text-white"
+            className="lg:min-h-[95dvh] h-[100%] min-h-screen w-screen relative isolate overflow-hidden text-white"
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
         >
@@ -62,7 +62,7 @@ export default function Hero({ data }) {
             <div className="absolute inset-0 bg-black -z-10"/>
 
 
-             Tło
+             {/*Tło*/}
             <AnimatePresence mode="wait">
                 <motion.div
                     key={selectedIndex}
