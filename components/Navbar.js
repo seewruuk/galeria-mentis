@@ -39,7 +39,7 @@ const artistsLinks = artists.map((artist) => {
     return `/artists/${artist.slug}`;
 });
 
-const index = catLinks.findIndex(item => item.name === "All Artworks");
+const index = catLinks.findIndex(item => item.name === "All Artwork");
 
 if( index > -1) {
     const [temp] = catLinks.splice(index, 1);

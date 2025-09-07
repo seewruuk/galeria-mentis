@@ -67,7 +67,7 @@ export default function ProductFilters({
                 <input
                     type="range"
                     min="100"
-                    max="1500"
+                    max="3000"
                     step="25"
                     value={priceRange}
                     onChange={(e) => setPriceRange(Number(e.target.value))}
