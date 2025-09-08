@@ -5,7 +5,7 @@ import {sendEmailToCustomer} from "@/utils/emailService";
 export async function POST(req) {
     try {
         const body = await req.json();
-        const order = body.order;
+        const {order} = body;
 
         const emailResponse = await sendEmailToCustomer(order);
 

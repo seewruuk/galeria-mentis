@@ -1,11 +1,13 @@
 import groq from "groq";
-import { client } from "../lib/client";
+import {client} from "../lib/client";
 
 export async function getProductsByCategory(slug) {
     return client.fetch(
-        groq`*[_type == "product" ${slug === "all" ? "" : "&& productCategory->slug.current == $slug"}]{
+        groq`*[_type == "product" ${slug === "all" ? "" : "&& productCategory->slug.current == $slug"} && quantity > 0]{
+      _id,
       _createdAt,
       name,
+      quantity,
       slug,
       price,
       "thumbnail": thumbnail.asset->url,
@@ -21,6 +23,6 @@ export async function getProductsByCategory(slug) {
         content
       }
     }`,
-        { slug }
+        {slug}
     );
 }

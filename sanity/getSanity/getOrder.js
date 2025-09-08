@@ -12,6 +12,7 @@ export async function getOrder(id) {
             orderInfo,
             products[]{
                 name,
+                id,
                 author,
                 authorSlug,
                 slug,

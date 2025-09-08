@@ -121,6 +121,11 @@
                 "type": "string"
               },
               {
+                "name": "id",
+                "type": "string",
+                "title": "id"
+              },
+              {
                 "name": "authorSlug",
                 "type": "string"
               },
@@ -775,6 +780,28 @@
         ],
         "name": "slug",
         "type": "slug"
+      },
+      {
+        "initialValue": 1,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error",
+            "message": "Quantity is required"
+          }
+        ],
+        "name": "quantity",
+        "type": "number"
+      },
+      {
+        "name": "allowToSell",
+        "type": "boolean",
+        "title": "AllowToSell"
       },
       {
         "name": "thumbnail",
@@ -1539,12 +1566,155 @@
               {
                 "fields": [
                   {
+                    "validation": [
+                      {
+                        "rules": [
+                          {
+                            "flag": "presence",
+                            "constraint": "required"
+                          }
+                        ],
+                        "level": "error"
+                      }
+                    ],
                     "name": "label",
                     "type": "string"
                   },
                   {
-                    "name": "link",
-                    "type": "string"
+                    "initialValue": "route",
+                    "options": {
+                      "layout": "radio",
+                      "direction": "horizontal",
+                      "list": [
+                        {
+                          "title": "Route (page)",
+                          "value": "route"
+                        },
+                        {
+                          "title": "Anchor (section on this page)",
+                          "value": "anchor"
+                        },
+                        {
+                          "title": "External URL",
+                          "value": "external"
+                        }
+                      ]
+                    },
+                    "validation": [
+                      {
+                        "rules": [
+                          {
+                            "flag": "valid",
+                            "constraint": [
+                              "route",
+                              "anchor",
+                              "external"
+                            ]
+                          },
+                          {
+                            "flag": "presence",
+                            "constraint": "required"
+                          }
+                        ],
+                        "level": "error"
+                      }
+                    ],
+                    "name": "mode",
+                    "type": "string",
+                    "title": "Action type"
+                  },
+                  {
+                    "validation": [
+                      {
+                        "rules": [
+                          {
+                            "flag": "custom"
+                          }
+                        ],
+                        "level": "error"
+                      }
+                    ],
+                    "description": "eg. \"/contact\" or \"contact\" — \"/\" is optional.",
+                    "hidden": "conditional",
+                    "name": "internalPath",
+                    "type": "string",
+                    "title": "Internal path (route)"
+                  },
+                  {
+                    "validation": [
+                      {
+                        "rules": [
+                          {
+                            "flag": "custom"
+                          }
+                        ],
+                        "level": "error"
+                      }
+                    ],
+                    "description": "eg. \"benefits\" or \"#benefits\" — \"#\" is optional.",
+                    "hidden": "conditional",
+                    "name": "anchorId",
+                    "type": "string",
+                    "title": "Section ID (anchor)"
+                  },
+                  {
+                    "initialValue": true,
+                    "hidden": "conditional",
+                    "name": "smoothScroll",
+                    "type": "boolean",
+                    "title": "Smooth scroll"
+                  },
+                  {
+                    "description": "Eg. -80 for sticky header.",
+                    "hidden": "conditional",
+                    "name": "scrollOffset",
+                    "type": "number",
+                    "title": "Scroll offset (px)"
+                  },
+                  {
+                    "validation": [
+                      {
+                        "rules": [
+                          {
+                            "flag": "uri",
+                            "constraint": {
+                              "options": {
+                                "scheme": [
+                                  "/^http$/",
+                                  "/^https$/",
+                                  "/^mailto$/",
+                                  "/^tel$/"
+                                ],
+                                "allowRelative": false,
+                                "relativeOnly": false,
+                                "allowCredentials": false
+                              }
+                            }
+                          },
+                          {
+                            "flag": "custom"
+                          }
+                        ],
+                        "level": "error",
+                        "message": "In \"External\" mode you need to provie URL."
+                      }
+                    ],
+                    "hidden": "conditional",
+                    "name": "url",
+                    "type": "url",
+                    "title": "External URL"
+                  },
+                  {
+                    "initialValue": false,
+                    "hidden": "conditional",
+                    "name": "newTab",
+                    "type": "boolean",
+                    "title": "Open in new tab"
+                  },
+                  {
+                    "name": "ariaLabel",
+                    "type": "string",
+                    "title": "ARIA label (optional)"
                   }
                 ],
                 "name": "button",
@@ -1922,6 +2092,181 @@
       }
     ],
     "name": "blogSettings",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "options": {
+          "list": [
+            {
+              "title": "Cookies",
+              "value": "cookies"
+            },
+            {
+              "title": "Artist Terms",
+              "value": "artistTerms"
+            },
+            {
+              "title": "Cookies Consent",
+              "value": "cookiesConsent"
+            },
+            {
+              "title": "FAQ",
+              "value": "faq"
+            },
+            {
+              "title": "Privacy Policy",
+              "value": "privacyPolicy"
+            },
+            {
+              "title": "Shipping & Returns",
+              "value": "shippingReturns"
+            },
+            {
+              "title": "Terms and Conditions",
+              "value": "termsConditions"
+            }
+          ]
+        },
+        "name": "type",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error",
+            "message": "Content is required"
+          }
+        ],
+        "of": [
+          {
+            "marks": {
+              "annotations": [
+                {
+                  "i18nTitleKey": "inputs.portable-text.annotation.link",
+                  "options": {
+                    "modal": {
+                      "type": "popover"
+                    }
+                  },
+                  "fields": [
+                    {
+                      "validation": [
+                        {
+                          "rules": [
+                            {
+                              "flag": "uri",
+                              "constraint": {
+                                "options": {
+                                  "scheme": [
+                                    "/^http$/",
+                                    "/^https$/",
+                                    "/^tel$/",
+                                    "/^mailto$/"
+                                  ],
+                                  "allowRelative": true,
+                                  "relativeOnly": false,
+                                  "allowCredentials": false
+                                }
+                              }
+                            }
+                          ],
+                          "level": "error"
+                        }
+                      ],
+                      "description": "A valid web, email, phone, or relative link.",
+                      "name": "href",
+                      "type": "url",
+                      "title": "Link"
+                    }
+                  ],
+                  "name": "link",
+                  "type": "object"
+                }
+              ],
+              "decorators": [
+                {
+                  "value": "strong",
+                  "title": "Strong"
+                },
+                {
+                  "value": "em",
+                  "title": "Italic"
+                },
+                {
+                  "value": "code",
+                  "title": "Code"
+                },
+                {
+                  "value": "underline",
+                  "title": "Underline"
+                },
+                {
+                  "value": "strike-through",
+                  "title": "Strike"
+                }
+              ]
+            },
+            "lists": [
+              {
+                "value": "bullet",
+                "title": "Bulleted list"
+              },
+              {
+                "value": "number",
+                "title": "Numbered list"
+              }
+            ],
+            "styles": [
+              {
+                "value": "normal",
+                "title": "Normal"
+              },
+              {
+                "value": "h1",
+                "title": "Heading 1"
+              },
+              {
+                "value": "h2",
+                "title": "Heading 2"
+              },
+              {
+                "value": "h3",
+                "title": "Heading 3"
+              },
+              {
+                "value": "h4",
+                "title": "Heading 4"
+              },
+              {
+                "value": "h5",
+                "title": "Heading 5"
+              },
+              {
+                "value": "h6",
+                "title": "Heading 6"
+              },
+              {
+                "value": "blockquote",
+                "title": "Quote"
+              }
+            ],
+            "of": [],
+            "type": "block"
+          }
+        ],
+        "name": "content",
+        "type": "array"
+      }
+    ],
+    "name": "policies",
     "type": "document"
   }
 ]

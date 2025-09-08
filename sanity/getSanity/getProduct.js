@@ -7,6 +7,7 @@ export async function getProduct(slug) {
         groq`*[_type == "product" && slug.current == $slug]{
         _id,
         name,
+        quantity,
         "slug": slug.current,
         "thumbnail": thumbnail.asset->url,
         "images": images[].asset->url,

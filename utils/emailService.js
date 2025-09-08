@@ -197,6 +197,10 @@ export async function sendEmailToCustomer(order) {
     const emailUserId = process.env.EMAILJS_PUBLISH_KEY;
 
 
+
+    let header;
+    let description;
+
     const {
         orderNumber,
         personData,
@@ -204,9 +208,6 @@ export async function sendEmailToCustomer(order) {
         totalPrice,
         orderStatus,
     } = order;
-
-    let header;
-    let description;
 
     switch (orderStatus) {
         case "paid": {

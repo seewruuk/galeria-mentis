@@ -73,6 +73,7 @@ function ProductsRootLayout({category}) {
 
         if (products && productOptions) {
             setFilteredProducts(products);
+            // console.log(products)
             const initialFilters = productOptions.reduce((acc, option) => {
                 acc[option.name] = [];
                 return acc;

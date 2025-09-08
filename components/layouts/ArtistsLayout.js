@@ -13,8 +13,6 @@ import ArtistsList from "@/components/ArtistsList";
 import PageTransition from "@/components/PageTransition";
 import Footer from "@/components/Footer";
 import {getArtistsSettings} from "@/sanity/getSanity/getArtistsSettings";
-import {PortableText} from "@portabletext/react";
-import {PortableComponents} from "@/lib/PortableComponents";
 import {AnimatePresence, motion} from "framer-motion";
 
 function ArtistsRootLayout() {

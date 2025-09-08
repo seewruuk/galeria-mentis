@@ -45,6 +45,7 @@ export async function POST(req, res) {
                 products: item.products.map((item, index) => {
                         return {
                             _key: uuidv4(),
+                            id: item._id,
                             name: item.name,
                             slug: item.slug,
                             author: item.artist.name,

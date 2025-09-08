@@ -8,7 +8,6 @@ export default function Page(){
     )
 }
 
-
 export async function generateMetadata({ params }) {
 
     const data = await getArtistsSettings();

@@ -19,6 +19,21 @@ export default {
             },
         },
         {
+
+            initialValue: 1,
+
+            name: "quantity",
+            title: "Quantity",
+            type: "number",
+            validation: Rule => Rule.required().error('Quantity is required'),
+        },
+        {
+            name: "allowToSell",
+            title: "AllowToSell",
+            type: "boolean",
+            // validation: Rule => Rule.required().error('Quantity is required'),
+        },
+        {
             name: "thumbnail",
             title: "Thumbnail",
             type: "image",
@@ -37,22 +52,22 @@ export default {
             ],
         },
         {
-            name : "imageAspectRatio",
-            title : "Image Aspect Ratio",
-            type : "string",
-            options : {
-                list : [
+            name: "imageAspectRatio",
+            title: "Image Aspect Ratio",
+            type: "string",
+            options: {
+                list: [
                     {
-                        title : "Landscape",
-                        value : "landscape",
+                        title: "Landscape",
+                        value: "landscape",
                     },
                     {
-                        title : "Portrait",
-                        value : "portrait",
+                        title: "Portrait",
+                        value: "portrait",
                     },
                     {
-                        title : "Square",
-                        value : "square",
+                        title: "Square",
+                        value: "square",
                     },
                 ],
             },
@@ -61,7 +76,7 @@ export default {
             name: 'artist',
             title: 'Artist',
             type: 'reference',
-            to: [{ type: 'artist' }],
+            to: [{type: 'artist'}],
             validation: Rule => Rule.required().error('Artist reference is required'),
         },
         {
@@ -89,7 +104,7 @@ export default {
             name: 'productCategory',
             title: 'Product Category',
             type: 'reference',
-            to: [{ type: 'productCategory' }],
+            to: [{type: 'productCategory'}],
             validation: Rule => Rule.required().error('Product category is required'),
         },
         {
@@ -103,9 +118,9 @@ export default {
                         {
                             type: 'reference',
                             name: 'productDetails',
-                            to: [{ type: 'product-details' }], // poprawiona referencja
+                            to: [{type: 'product-details'}], // poprawiona referencja
                         },
-                        { name: 'content', title: 'Content', type: 'string' },
+                        {name: 'content', title: 'Content', type: 'string'},
                     ],
                 },
             ],
@@ -119,13 +134,13 @@ export default {
                     name: 'needToKnow',
                     title: 'Need to Know',
                     type: 'array',
-                    of: [{ type: 'block' }],
+                    of: [{type: 'block'}],
                 },
                 {
                     name: 'shippingAndReturns',
                     title: 'Shipping & Returns',
                     type: 'array',
-                    of: [{ type: 'block' }],
+                    of: [{type: 'block'}],
                 },
                 {
                     name: 'faq',
@@ -135,8 +150,8 @@ export default {
                         {
                             type: 'object',
                             fields: [
-                                { name: 'question', title: 'Question', type: 'string' },
-                                { name: 'answer', title: 'Answer', type: 'text' },
+                                {name: 'question', title: 'Question', type: 'string'},
+                                {name: 'answer', title: 'Answer', type: 'text'},
                             ],
                         }
                     ],
@@ -150,7 +165,7 @@ export default {
             of: [
                 {
                     type: 'reference',
-                    to: [{ type: 'product' }],
+                    to: [{type: 'product'}],
                 },
             ],
         },
@@ -158,6 +173,7 @@ export default {
             title: "SEO",
             name: "seo",
             type: "seo",
-        }
+        },
     ],
+
 };

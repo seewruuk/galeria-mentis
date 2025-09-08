@@ -3,6 +3,7 @@ import {buffer} from 'micro';
 import Stripe from 'stripe';
 import {getOrder} from "@/sanity/getSanity/getOrder";
 import {sendEmailToCustomer} from "@/utils/emailService";
+import {decreaseQty} from "@/utils/decreaseQty";
 
 
 export async function POST(req, res) {
@@ -38,6 +39,9 @@ export async function POST(req, res) {
             body: JSON.stringify({orderId: orderId, orderStatus: "paid"}),
         });
 
+
+
+
         const sanityData = await updateOrder.json();
         if (sanityData.status === "ok") {
 
@@ -49,7 +53,7 @@ export async function POST(req, res) {
                 });
             }
 
-
+            // const decreaseQtyModule = await decreaseQty(orderInfo)
             const emailResponse = await sendEmailToCustomer(orderInfo);
 
             if (emailResponse.status !== 200) {
@@ -59,7 +63,9 @@ export async function POST(req, res) {
                 });
             }
 
-            return NextResponse.json({status: 200, message: "ALl operations completed successfully"});
+
+
+            return NextResponse.json({decreaseQtyModule});
 
 
         } else {

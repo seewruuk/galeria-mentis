@@ -14,6 +14,7 @@ import productDetails from "./schemas/product-details"
 import productDetailsOption from "./schemas/product-details-option"
 import artistsSettings from "./schemas/artistsSettings"
 import blogSettings from "./schemas/blogSettings"
+import policies from "./schemas/policies"
 
 
 export const schema = {
@@ -34,5 +35,6 @@ export const schema = {
         homepage,
         artistsSettings,
         blogSettings,
+        policies,
     ],
 }

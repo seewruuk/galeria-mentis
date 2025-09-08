@@ -423,19 +423,22 @@ export default function CartContextProvider({children}) {
 
             if (response.status === 200) {
 
+                const order = await getOrder(orderNumber);
+
                 const sendEmail = await fetch("/api/sendEmailToCustomer", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        order: await getOrder(orderNumber)
+                        order
                     })
                 });
 
                 const emailResult = await sendEmail.json();
 
                 if (emailResult.status !== 200) {
+                    console.log(emailResult)
                     toast.error("There was an error sending the email. Please contact us to confirm your order.");
                 } else {
                     router.push(stripeRedirectUrl);
@@ -453,14 +456,16 @@ export default function CartContextProvider({children}) {
         const exist = cartItems.find(x => x._id === item._id);
 
         if (exist) {
-            setCartItems(
-                cartItems.map(x =>
-                    x._id === item._id
-                        ? {...exist, qty: exist.qty + 1}
-                        : x
-                )
-            );
-            toast.success("Successfully increased the amount of product in the shopping cart.");
+            // setCartItems(
+            //     cartItems.map(x =>
+            //         x._id === item._id
+            //             ? {...exist, qty: exist.qty + 1}
+            //             : x
+            //     )
+            // );
+            // toast.success("Successfully increased the amount of product in the shopping cart.");
+            toast.error("The product is already in the cart.");
+            return ;
         } else {
             setCartItems([
                 ...cartItems,

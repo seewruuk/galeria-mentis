@@ -1,7 +1,7 @@
 // /components/Gallery.jsx
 "use client";
 
-import { useContext, useState } from "react";
+import {useContext, useEffect, useState} from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -12,6 +12,7 @@ import { formatPrice } from "@/lib/formatPrice";
 import Button from "@/components/Button";
 import { CartContext } from "@/context/CartContext";
 import { WishlistContext } from "@/context/WishlistContext";
+import product from "@/sanity/schemas/product";
 
 export default function Gallery({
                                     images,
@@ -24,11 +25,11 @@ export default function Gallery({
                                     openGallery,
                                 }) {
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+    const [allowAddToCart, setAllowAddToCart] = useState(true);
     const { addToCart } = useContext(CartContext);
     const { addItem } = useContext(WishlistContext);
     const router = useRouter();
 
-    // Stany do pokazywania loadera w trakcie ładowania głównego obrazka
     const [isMainLoading, setIsMainLoading] = useState(true);
 
     const handleMainLoadComplete = () => {
@@ -39,6 +40,15 @@ export default function Gallery({
         setIsMainLoading(true);
         setSelectedImageIndex(idx);
     };
+
+    useEffect(() => {
+        console.log(product);
+        if(product && product.quantity > 0) {
+            setAllowAddToCart(false);
+        }else{
+            setAllowAddToCart(true);
+        }
+    }, [product]);
 
     return (
         <section className="pt-[180px] mx-auto max-lg:pt-[120px] px-4">
@@ -153,12 +163,14 @@ export default function Gallery({
                             type="button"
                             style="primary"
                             title="Add to Cart"
+                            disabled={allowAddToCart}
                             onClick={() => addToCart(product)}
                         />
                         <Button
                             type="button"
                             style={"white"}
                             title="Buy Now"
+                            disabled={allowAddToCart}
                             onClick={() => {
                                 addToCart(product);
                                 router.push("/cart");
@@ -167,6 +179,7 @@ export default function Gallery({
                         <Button
                             type="button"
                             style="white"
+                            disabled={allowAddToCart}
                             title="Add to wishlist"
                             onClick={() => addItem(product)}
                         />

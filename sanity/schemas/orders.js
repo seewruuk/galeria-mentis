@@ -131,6 +131,11 @@ export default {
                             type: "string",
                         },
                         {
+                            title: "id",
+                            name: "id",
+                            type: "string",
+                        },
+                        {
                             title: "Author Slug",
                             name: "authorSlug",
                             type: "string",

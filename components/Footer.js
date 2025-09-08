@@ -26,22 +26,22 @@ export default function Footer({showContactForm = true}) {
         {
             header: "Links",
             links: [
-                {name: "Artist Terms", link: `/artist-terms.pdf`},
-                {name: "Cookies", link: `/cookies.pdf`},
-                {name: "Cookies Consent", link: `/cookies-consent-text.pdf`},
-                {name: "FAQ", link: `/faq.pdf`},
-                {name: "Privacy Policy", link: `/privacy-policy.pdf`},
-                {name: "Shipping and Returns", link: `/shipping-and-returns.pdf`},
-                {name: "Terms and Conditions", link: `/terms-and-conditions.pdf`},
+                {name: "Artist Terms", link: `/links/artistTerms`},
+                {name: "Cookies", link: `/links/cookies`},
+                {name: "Cookies Consent", link: `/links/cookiesConsent`},
+                {name: "FAQ", link: `/links/faq`},
+                {name: "Privacy Policy", link: `/links/privacyPolicy`},
+                {name: "Shipping and Returns", link: `/links/shippingReturns`},
+                {name: "Terms and Conditions", link: `/links/termsConditions`},
             ]
         },
         {header: "Menu", links: links},
-        {
-            header: "Company", links: [
-                {name: "Terms", link: "/"},
-                {name: "Privacy Policy", link: "/"},
-            ]
-        },
+        // {
+        //     header: "Company", links: [
+        //         {name: "Terms", link: "/"},
+        //         {name: "Privacy Policy", link: "/"},
+        //     ]
+        // },
         {
             header: "Contact", links: [
                 {name: process.env.NEXT_PUBLIC_COMPANY_PHONE, link: `tel:${process.env.NEXT_PUBLIC_COMPANY_PHONE}`},
