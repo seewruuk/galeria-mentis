@@ -1,11 +1,11 @@
 "use client"
-import React, { useState } from "react";
-import { motion } from "framer-motion";
+import React, {useState} from "react";
+import {motion} from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import Logo from "@/public/assets/logo-white.svg";
-import { links } from "@/components/Navbar";
-import { useRouter } from "next/navigation";
+import {links} from "@/components/Navbar";
+import {useRouter} from "next/navigation";
 import ArrowDown from "@/public/assets/arrow-down.svg"
 
 export const MobileMenu = () => {
@@ -27,34 +27,32 @@ export const MobileMenu = () => {
     };
 
     const toggleExpand = (idx) => {
-        setExpandedMenus(prev => ({ ...prev, [idx]: !prev[idx] }));
+        setExpandedMenus(prev => ({...prev, [idx]: !prev[idx]}));
     };
 
     // --- Animacje Framera ---
     const hideNavItemsVariant = {
-        opened: { opacity: 0, y: "-100%", transition: { duration: 0.5, ease: "easeInOut" } },
-        closed: { opacity: 1, y: "0%", transition: { delay: 1.1, duration: 0.5, ease: "easeInOut" } },
+        opened: {opacity: 0, y: "-100%", transition: {duration: 0.5, ease: "easeInOut"}},
+        closed: {opacity: 1, y: "0%", transition: {delay: 1.1, duration: 0.5, ease: "easeInOut"}},
     };
     const mobileMenuVariant = {
-        opened: { y: "0%", transition: { delay: 0.15, duration: 1.1, ease: [0.74, 0, 0.19, 1.02] } },
-        closed: { y: "-100%", transition: { delay: 0.15, duration: 0.63, ease: [0.74, 0, 0.19, 1.02] } },
+        opened: {y: "0%", transition: {delay: 0.15, duration: 1.1, ease: [0.74, 0, 0.19, 1.02]}},
+        closed: {y: "-100%", transition: {delay: 0.15, duration: 0.63, ease: [0.74, 0, 0.19, 1.02]}},
     };
     const fadeInVariant = {
-        opened: { opacity: 1, transition: { delay: 1.2 } },
-        closed: { opacity: 0, transition: { duration: 0.3 } },
+        opened: {opacity: 1, transition: {delay: 1.2}}, closed: {opacity: 0, transition: {duration: 0.3}},
     };
     const ulVariant = {
-        opened: { transition: { delayChildren: 0.1, staggerChildren: 0.1 } },
-        closed: { transition: { staggerChildren: 0.06, staggerDirection: -1 } },
+        opened: {transition: {delayChildren: 0.1, staggerChildren: 0.1}},
+        closed: {transition: {staggerChildren: 0.06, staggerDirection: -1}},
     };
     const liVariant = {
-        opened: { opacity: 1, y: "0%", transition: { duration: 0.65, ease: "easeOut" } },
-        closed: { opacity: 0, y: "100%", transition: { duration: 0.25, ease: "easeInOut" } },
+        opened: {opacity: 1, y: "0%", transition: {duration: 0.65, ease: "easeOut"}},
+        closed: {opacity: 0, y: "100%", transition: {duration: 0.25, ease: "easeInOut"}},
     };
     // --------------------------
 
-    return (
-        <main className="fixed inset-x-0 top-0 z-50">
+    return (<main className="fixed inset-x-0 top-0 z-50">
             {/* HEADER */}
             <motion.nav
                 initial="closed"
@@ -62,7 +60,7 @@ export const MobileMenu = () => {
                 className="h-[80px] flex justify-between items-center px-8 bg-[#101214] text-white"
             >
                 <Link href="/">
-                    <Image src={Logo} width={150} height={60} alt="Logo" />
+                    <Image src={Logo} width={150} height={60} alt="Logo"/>
                 </Link>
                 <motion.button
                     variants={hideNavItemsVariant}
@@ -84,7 +82,7 @@ export const MobileMenu = () => {
                 {/* Logo + Close */}
                 <div className="flex-shrink-0 w-full flex justify-between items-center px-8 h-[80px] bg-[#101214]">
                     <Link href="/">
-                        <Image src={Logo} width={150} height={60} alt="Logo" />
+                        <Image src={Logo} width={150} height={60} alt="Logo"/>
                     </Link>
                     <motion.button
                         variants={fadeInVariant}
@@ -103,15 +101,13 @@ export const MobileMenu = () => {
                     exit="closed"
                     className="flex-1 overflow-y-auto flex flex-col items-center gap-6 mt-10 px-4"
                 >
-                    {links.map((item, idx) => (
-                        <motion.li
+                    {links.map((item, idx) => (<motion.li
                             key={idx}
                             variants={liVariant}
                             className="w-full text-center"
-                            whileTap={{ scale: 0.95 }}
+                            whileTap={{scale: 0.95}}
                         >
-                            {item.links ? (
-                                <>
+                            {item.links ? (<>
                                     {/* Kategoria z submenu */}
                                     <button
                                         onClick={() => toggleExpand(idx)}
@@ -119,51 +115,41 @@ export const MobileMenu = () => {
                                     >
                                         {item.name}
                                         <div
-                                            className={`inline-block relative transition-transform aspect-square h-[14px] ${
-                                                expandedMenus[idx] ? "rotate-180" : ""
-                                            }`}
+                                            className={`inline-block relative transition-transform aspect-square h-[14px] ${expandedMenus[idx] ? "rotate-180" : ""}`}
                                         >
-                                            <Image src={ArrowDown} alt="Arrow Down" fill className="object-contain" />
+                                            <Image src={ArrowDown} alt="Arrow Down" fill className="object-contain"/>
 
-                    </div>
+                                        </div>
                                     </button>
 
                                     {/* Submenu */}
-                                    {expandedMenus[idx] && (
-                                        <motion.ul
+                                    {expandedMenus[idx] && (<motion.ul
                                             variants={ulVariant}
                                             initial="closed"
                                             animate="opened"
                                             exit="closed"
                                             className="mt-4 flex flex-col items-center gap-4"
                                         >
-                                            {item.links.map((sub, sidx) => (
-                                                <motion.li
+                                            {item.links.map((sub, sidx) => (<motion.li
                                                     key={sidx}
                                                     variants={liVariant}
                                                     className="text-[20px]"
-                                                    whileTap={{ scale: 0.95 }}
+                                                    whileTap={{scale: 0.95}}
                                                 >
                                                     <Link href={sub.link} onClick={() => handleMenuToggle(false)}>
                             <span className="hover:text-primary transition-all">
                               {sub.name}
                             </span>
                                                     </Link>
-                                                </motion.li>
-                                            ))}
-                                        </motion.ul>
-                                    )}
-                                </>
-                            ) : (
-                                // Prosty link
+                                                </motion.li>))}
+                                        </motion.ul>)}
+                                </>) : (// Prosty link
                                 <Link href={item.link} onClick={() => handleMenuToggle(false)}>
                   <span className="text-[28px] hover:text-primary transition-all">
                     {item.name}
                   </span>
-                                </Link>
-                            )}
-                        </motion.li>
-                    ))}
+                                </Link>)}
+                        </motion.li>))}
                 </motion.ul>
 
                 {/* Stopka */}
@@ -172,6 +158,5 @@ export const MobileMenu = () => {
                 {/*    <h5>contact@ozerecycling.pl</h5>*/}
                 {/*</div>*/}
             </motion.div>
-        </main>
-    );
+        </main>);
 };
