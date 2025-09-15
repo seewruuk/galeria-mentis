@@ -1,96 +1,110 @@
+
 import { NextResponse } from "next/server";
-
 export async function POST(req) {
-    // Bezpieczne parsowanie body
-    let orderInfo;
-    try {
-        const raw = await req.text();
-        if (!raw?.trim()) {
-            return NextResponse.json({ status: "error", message: "Empty body" });
-        }
-        const parsed = JSON.parse(raw);
-        orderInfo = parsed?.orderInfo;
-    } catch {
-        return NextResponse.json({ status: "error", message: "Invalid JSON" });
-    }
-
-    if (!orderInfo?.products || !Array.isArray(orderInfo.products)) {
-        return NextResponse.json({
-            status: "error",
-            message: "Missing products array in orderInfo",
-        });
-    }
-
     const sanityProjectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID?.toString();
     const sanityDataSet = process.env.NEXT_PUBLIC_SANITY_DATASET?.toString();
     const sanityApiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION?.toString();
     const token = process.env.NEXT_PUBLIC_SANITY_API_TOKEN?.toString();
 
-    if (!sanityProjectId || !sanityDataSet || !sanityApiVersion || !token) {
+    // if (!sanityProjectId || !sanityDataSet || !sanityApiVersion || !token) {
+    //     return NextResponse.json(
+    //         {
+    //             status: "error",
+    //             message:
+    //                 "Missing Sanity env vars: NEXT_PUBLIC_SANITY_PROJECT_ID / NEXT_PUBLIC_SANITY_DATASET / NEXT_PUBLIC_SANITY_API_VERSION / NEXT_PUBLIC_SANITY_API_TOKEN",
+    //         },
+    //         { status: 500 }
+    //     );
+    // }
+
+    // try {
+    //     const body = await req.json();
+    //     const { products } = await body;
+
         return NextResponse.json({
-            status: "error",
-            message:
-                "Missing Sanity env variables (PROJECT_ID, DATASET, API_VERSION, API_TOKEN).",
+            status: 200,
+            message: "Products received",
         });
-    }
 
-    const url = `https://${sanityProjectId}.api.sanity.io/v${sanityApiVersion}/data/mutate/${sanityDataSet}`;
 
-    try {
-        // Zbieramy unikalne _id produktów z zamówienia
-        const uniqueIds = [
-            ...new Set(
-                orderInfo.products
-                    .map((p) => p?.id)
-                    .filter((id) => typeof id === "string" && id.trim().length > 0)
-            ),
-        ];
+        // if (!products) {
+        //     return NextResponse.json(
+        //         { status: "error", message: "Missing 'products' in request body" },
+        //         { status: 400 }
+        //     );
+        // }
+        //
+        // if (products.length === 0) {
+        //     return NextResponse.json(
+        //         {
+        //             status: "ok",
+        //             message: "No products to update (empty products array).",
+        //             updatedCount: 0,
+        //             updatedIds: [],
+        //         },
+        //         { status: 200 }
+        //     );
+        // }
 
-        if (uniqueIds.length === 0) {
-            return NextResponse.json({
-                status: "ok",
-                message: "No valid product ids to update",
-                updated: 0,
-            });
-        }
+        // Upewniamy się, że mamy unikalne i niepuste ID dokumentów w Sanity
+        // const uniqueIds = [...new Set(products.map((p) => p?.id).filter(Boolean))];
+        //
+        // if (uniqueIds.length === 0) {
+        //     return NextResponse.json(
+        //         { status: "error", message: "No valid product IDs found to update." },
+        //         { status: 400 }
+        //     );
+        // }
 
-        // Mutations w wymaganym formacie: patch → set → quantity: 0
-        const mutations = uniqueIds.map((id) => ({
-            patch: {
-                id: id,
-                set: { quantity: 0 },
-            },
-        }));
-
+        // Budowa batcha mutations: patch -> set { quantity: 0 } dla każdego ID
+        // const mutations = products.map((item) => ({
+        //     patch: {
+        //         id: item.id,
+        //         set: { quantity: 0 },
+        //     },
+        // }));
+        //
+        //
+        // const url = `https://${sanityProjectId}.api.sanity.io/v${sanityApiVersion}/data/mutate/${sanityDataSet}`;
+        //
         // const response = await fetch(url, {
         //     method: "POST",
         //     headers: {
         //         "Content-Type": "application/json",
         //         Authorization: `Bearer ${token}`,
         //     },
-        //     body: JSON.stringify({ mutations }),
+        //     body: JSON.stringify({mutations}),
         // });
-        //
-        // // Odczyt wyniku bez ryzyka "Unexpected end of JSON input"
-        // const text = await response.text();
-        // let data = {};
-        // try {
-        //     if (text?.trim()) data = JSON.parse(text);
-        // } catch {
-        //     // jeśli Sanity zwróci coś nie-JSON, przekażemy surowy tekst
-        //     data = { raw: text };
-        // }
-        //
-        // const updated = Array.isArray(data?.results) ? data.results.length : 0;
 
-        return NextResponse.json({
-            smutations
-        });
-    } catch (err) {
-        return NextResponse.json({
-            status: "error",
-            message: "Order not updated",
-            error: err?.message || "Unknown",
-        });
-    }
+        // Złapanie błędów HTTP (np. 4xx/5xx)
+        // if (!response.ok) {
+        //     const text = await response.text().catch(() => "");
+        //     return NextResponse.json(
+        //         {
+        //             status: "error",
+        //             message: "Sanity mutate request failed",
+        //             httpStatus: response.status,
+        //             details: text || "No details",
+        //         },
+        //         { status: 500 }
+        //     );
+        // }
+
+    //     const data = await response.json();
+    //
+    //     return NextResponse.json({
+    //         status: "ok",
+    //         message: "Products quantity set to 0.",
+    //         sanity: data,
+    //     });
+    // } catch (err) {
+    //     return NextResponse.json(
+    //         {
+    //             status: "error",
+    //             message: "Failed to update product quantities",
+    //             error: err?.message || "Unknown",
+    //         },
+    //         { status: 500 }
+    //     );
+    // }
 }
