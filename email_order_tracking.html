@@ -1,0 +1,217 @@
+<html lang="en">
+<head>
+    <title>${header || 'Your order is on the way'}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        * { line-height: 170%; }
+        /* Basic responsiveness for small screens */
+        @media only screen and (max-width: 600px) {
+            .container { width: 100% !important; }
+            .px-20 { padding-left: 16px !important; padding-right: 16px !important; }
+            .py-20 { padding-top: 16px !important; padding-bottom: 16px !important; }
+            .stack { display: block !important; width: 100% !important; }
+            .text-right { text-align: left !important; }
+            .btn a { display:block !important; }
+        }
+    </style>
+</head>
+
+<body style="margin:0; padding:0; font-family: Arial, sans-serif; background-color:#f4f4f4; color:#333333;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" width="100%" style="background-color:#f4f4f4;">
+    <tr>
+        <td>
+
+            <!-- Wrapper -->
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" class="container" width="100%" style="max-width:650px; background-color:#ffffff;">
+                <!-- Header Image -->
+                <tr>
+                    <td style="padding:0;">
+                        <img src="${emailHeaderImageUrl || 'http://localhost:3000/email-image.svg'}"
+                             title="Brand header"
+                             alt="Brand header"
+                             style="width:100%; height:200px; display:block; object-fit:cover;" />
+                    </td>
+                </tr>
+
+                <!-- Title & Intro -->
+                <tr>
+                    <td class="px-20 py-20" style="padding:20px;">
+                        <h2 style="font-size:24px; font-weight:bold; color:#333333; margin:0 0 8px;">
+                            ${header || 'Your order is on the way'}
+                        </h2>
+                        <p style="font-size:14px; color:#666666; margin:0;">
+                            Hi ${customerName || 'there'},<br/>
+                            Great news! Your package has left our warehouse and is now on its way.
+                        </p>
+                    </td>
+                </tr>
+
+                <!-- Shipment Highlights -->
+                <tr>
+                    <td class="px-20" style="padding:0 20px 20px 20px;">
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #e5e7eb; border-radius:8px;">
+                            <tr>
+                                <td style="padding:16px;">
+                                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                                        <tr>
+                                            <td class="stack" style="vertical-align:top; width:60%;">
+                                                <p style="font-size:14px; color:#333333; margin:0 0 4px;"><strong>Order:</strong> ${orderNumber}</p>
+                                                <p style="font-size:14px; color:#333333; margin:0 0 4px;"><strong>Carrier:</strong> ${carrierName || 'DPD'}</p>
+                                                <p style="font-size:14px; color:#333333; margin:0 0 4px;"><strong>Tracking #:</strong> ${trackingNumber}</p>
+                                                <p style="font-size:14px; color:#333333; margin:0;"><strong>ETA:</strong> ${estimatedDelivery || '—'}</p>
+                                            </td>
+                                            <td class="stack text-right" style="vertical-align:top; width:40%; text-align:right;">
+                                                <!-- Track button -->
+                                                <table role="presentation" border="0" cellspacing="0" cellpadding="0" class="btn" align="${/* fallback */''}">
+                                                    <tr>
+                                                        <td style="border-radius:6px; background:#1d4ed8;">
+                                                            <a href="${trackingUrl}"
+                                                               target="_blank"
+                                                               style="display:inline-block; padding:12px 18px; font-size:14px; font-weight:bold; color:#ffffff; text-decoration:none;">
+                                                                Track your package →
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <!-- Plain link fallback -->
+                                                <div style="margin-top:8px;">
+                                                    <a href="${trackingUrl}" target="_blank" style="font-size:12px; color:#1d4ed8; text-decoration:underline;">
+                                                        ${trackingUrl}
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <!-- Items -->
+                <tr>
+                    <td class="px-20" style="padding:0 20px 20px 20px; border-top:1px solid #dddddd;">
+                        <h3 style="font-size:16px; font-weight:bold; color:#333333; margin:16px 0 8px;">Items in this shipment</h3>
+
+                        <!--
+                          Repeat the block between START/END for each item in the shipment.
+                          Expected fields: item.name, item.slug, item.category, item.qty, item.price, item.image
+                        -->
+
+                        <!-- START: Item -->
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:12px;">
+                            <tr>
+                                <!-- Image -->
+                                <td style="width:90px; vertical-align:top;">
+                                    <a href="${process.env.NEXT_PUBLIC_BASE_URL + '/products/' + item.slug}" target="_blank" style="text-decoration:none;">
+                                        <img src="${item.image}" alt="${item.name}" title="${item.name}" style="width:90px; height:90px; object-fit:cover; border-radius:6px; display:block;" />
+                                    </a>
+                                </td>
+                                <!-- Details -->
+                                <td style="vertical-align:top; padding-left:12px;">
+                                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                                        <tr>
+                                            <td style="font-size:15px; font-weight:bold; color:#333333;">
+                                                <a href="${process.env.NEXT_PUBLIC_BASE_URL + '/products/' + item.slug}" target="_blank" style="text-decoration:none; color:#333333;">
+                                                    ${item.name}
+                                                </a>
+                                            </td>
+                                            <td style="font-size:15px; font-weight:bold; color:#333333; text-align:right; white-space:nowrap;">
+                                                ${item.price} ${currency || 'PLN'}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-size:13px; color:#666666;">${item.category}</td>
+                                            <td style="font-size:13px; color:#666666; text-align:right;">Qty: ${item.qty}</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                        <!-- END: Item -->
+
+                        <!-- You can inject a pre-rendered HTML list instead of looping, e.g. ${itemsHtml} -->
+                        ${itemsHtml || ''}
+                    </td>
+                </tr>
+
+                <!-- Delivery address -->
+                <tr>
+                    <td class="px-20" style="padding:0 20px 20px 20px; border-top:1px solid #dddddd;">
+                        <h3 style="font-size:16px; font-weight:bold; color:#333333; margin:16px 0 8px;">Delivery address</h3>
+                        <p style="font-size:14px; color:#333333; margin:0;">
+                            ${personData?.name || ''} ${personData?.lastname || ''}<br/>
+                            ${personData?.address || ''}${personData?.apartment ? (', ' + personData.apartment) : ''}<br/>
+                            ${personData?.postal || ''} ${personData?.city || ''}<br/>
+                            ${personData?.state ? (personData.state + ', ') : ''}${personData?.country || ''}
+                        </p>
+                    </td>
+                </tr>
+
+                <!-- Payment & Total (optional) -->
+                <tr>
+                    <td class="px-20" style="padding:0 20px 20px 20px; border-top:1px solid #dddddd;">
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="font-size:14px; color:#666666;">
+                            <tr>
+                                <td>Payment</td>
+                                <td style="text-align:right; color:#333333;">
+                                    Online payment via <a href="https://stripe.com/" style="color:#1d4ed8; text-decoration:none;">Stripe</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:bold; color:#333333;">Total</td>
+                                <td style="text-align:right; font-weight:bold; color:#333333;">${formatPrice(totalPrice)}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <!-- Help -->
+                <tr>
+                    <td class="px-20" style="padding:0 20px 20px 20px; border-top:1px solid #dddddd;">
+                        <p style="font-size:14px; color:#666666; margin:0;">
+                            If you won’t be home, you can usually redirect or reschedule your delivery on the carrier’s page after opening the tracking link.
+                            For any issues, reply to this email or contact us at
+                            <a href="mailto:${supportEmail || 'support@example.com'}" style="color:#1d4ed8; text-decoration:none;">
+                                ${supportEmail || 'support@example.com'}
+                            </a>.
+                        </p>
+                    </td>
+                </tr>
+
+                <!-- Policies (links) -->
+                <tr>
+                    <td class="px-20" style="padding:0 20px 20px 20px;">
+                        <p style="font-size:12px; color:#666666; line-height:1.5; margin:0;">
+                            Return policy:
+                            <a href="${process.env.NEXT_PUBLIC_BASE_URL + '/withdrawal-policy.pdf'}" target="_blank" style="color:#1d4ed8; text-decoration:underline;">
+                                download here
+                            </a>.
+                            Terms & conditions:
+                            <a href="${process.env.NEXT_PUBLIC_BASE_URL + '/terms-and-conditions.pdf'}" target="_blank" style="color:#1d4ed8; text-decoration:underline;">
+                                available here
+                            </a>.
+                        </p>
+                        <p style="margin-top:10px; font-size:10px; color:#666666;">
+                            ${companyLine1 || 'JOINEROO MARCEL NOWAKOWSKI / VAT ID: 5941612784 / Oraczewice 99a, 73-200 Oraczewice'}
+                        </p>
+                    </td>
+                </tr>
+
+                <!-- Footer link -->
+                <tr>
+                    <td align="right" class="px-20" style="padding:0 20px 20px 20px; border-top:1px solid #dddddd;">
+                        <a href="${process.env.NEXT_PUBLIC_BASE_URL}" style="font-size:14px; color:#1d4ed8; text-decoration:none;">
+                            ${brandName || 'Galeria Mentis'} <span aria-hidden="true"> &rarr;</span>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+            <!-- /Wrapper -->
+
+        </td>
+    </tr>
+</table>
+</body>
+</html>

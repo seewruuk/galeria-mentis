@@ -27,12 +27,12 @@ export default {
             type: "number",
             validation: Rule => Rule.required().error('Quantity is required'),
         },
-        {
-            name: "allowToSell",
-            title: "AllowToSell",
-            type: "boolean",
+        // {
+        //     name: "allowToSell",
+        //     title: "AllowToSell",
+        //     type: "boolean",
             // validation: Rule => Rule.required().error('Quantity is required'),
-        },
+        // },
         {
             name: "thumbnail",
             title: "Thumbnail",
