@@ -2,11 +2,16 @@
 import {useSearchParams} from 'next/navigation'
 import PageTransition from "@/components/PageTransition";
 import Link from "next/link";
+import Cookies from "js-cookie";
+import {useEffect} from "react";
 
 export default function SuccessCancelLayout({header, subtitle}) {
 
     const searchParams = useSearchParams()
     const orderId = searchParams.get('orderId')
+    useEffect(() => {
+        Cookies.remove("cart");
+    }, []);
 
     return (
         <PageTransition>
