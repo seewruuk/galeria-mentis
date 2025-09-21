@@ -799,11 +799,6 @@
         "type": "number"
       },
       {
-        "name": "allowToSell",
-        "type": "boolean",
-        "title": "AllowToSell"
-      },
-      {
         "name": "thumbnail",
         "type": "image"
       },

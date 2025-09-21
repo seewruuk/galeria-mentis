@@ -1,5 +1,5 @@
-
 import { NextResponse } from "next/server";
+
 export async function POST(req) {
     const sanityProjectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID?.toString();
     const sanityDataSet = process.env.NEXT_PUBLIC_SANITY_DATASET?.toString();
@@ -19,7 +19,7 @@ export async function POST(req) {
 
     try {
         const body = await req.json();
-        const { products } = await body;
+        const { products } = body || {};
 
         if (!products) {
             return NextResponse.json(
@@ -28,7 +28,7 @@ export async function POST(req) {
             );
         }
 
-        if (products.length === 0) {
+        if (!Array.isArray(products) || products.length === 0) {
             return NextResponse.json(
                 {
                     status: "ok",
@@ -40,32 +40,109 @@ export async function POST(req) {
             );
         }
 
-        const uniqueIds = [...new Set(products.map((p) => p?.id).filter(Boolean))];
+        // 1) Zgrupuj po ID i zsumuj zamówione ilości
+        const wantedById = new Map();
+        for (const p of products) {
+            const id = p?.id;
+            if (!id) continue;
+            const ordered =
+                Number(p?.quantity ?? p?.qty ?? p?.count ?? 0);
 
-        if (uniqueIds.length === 0) {
+            if (!Number.isFinite(ordered) || ordered <= 0) continue;
+            wantedById.set(id, (wantedById.get(id) ?? 0) + ordered);
+        }
+
+        const ids = Array.from(wantedById.keys());
+        if (ids.length === 0) {
             return NextResponse.json(
-                { status: "error", message: "No valid product IDs found to update." },
+                { status: "error", message: "No valid product IDs / quantities to update." },
                 { status: 400 }
             );
         }
 
-        const mutations = products.map((item) => ({
-            patch: {
-                id: item.id,
-                set: { quantity: 0 },
-            },
-        }));
+        // 2) Pobierz aktualne stany quantity dla tych ID
+        const query = `*[_type == "product" && _id in $ids]{_id, quantity}`;
+        const queryUrl = `https://${sanityProjectId}.api.sanity.io/v${sanityApiVersion}/data/query/${sanityDataSet}`;
 
-
-        const url = `https://${sanityProjectId}.api.sanity.io/v${sanityApiVersion}/data/mutate/${sanityDataSet}`;
-
-        const response = await fetch(url, {
+        const queryResp = await fetch(queryUrl, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify({mutations}),
+            body: JSON.stringify({
+                query,
+                params: { ids },
+            }),
+        });
+
+        if (!queryResp.ok) {
+            const text = await queryResp.text().catch(() => "");
+            return NextResponse.json(
+                {
+                    status: "error",
+                    message: "Sanity query request failed",
+                    httpStatus: queryResp.status,
+                    details: text || "No details",
+                },
+                { status: 500 }
+            );
+        }
+
+        const queryData = await queryResp.json();
+        const currentDocs = (queryData?.result ?? []).reduce((acc, doc) => {
+            acc.set(doc._id, Number(doc.quantity ?? 0));
+            return acc;
+        }, new Map());
+
+        // 3) Policz nowe ilości i zbuduj mutacje (clamp na 0)
+        const mutations = [];
+        const summary = [];
+
+        for (const id of ids) {
+            const currentQty = Number(currentDocs.get(id) ?? 0);
+            const ordered = Number(wantedById.get(id) ?? 0);
+            const newQty = Math.max(0, currentQty - ordered);
+
+            // Jeśli nic się nie zmienia, pomiń
+            if (!Number.isFinite(newQty) || newQty === currentQty) {
+                summary.push({ id, currentQty, ordered, newQty, skipped: true });
+                continue;
+            }
+
+            mutations.push({
+                patch: {
+                    id,
+                    set: { quantity: newQty },
+                },
+            });
+
+            summary.push({ id, currentQty, ordered, newQty, skipped: false });
+        }
+
+        if (mutations.length === 0) {
+            return NextResponse.json(
+                {
+                    status: "ok",
+                    message: "Nothing to update (quantities unchanged or invalid).",
+                    updatedCount: 0,
+                    updatedIds: [],
+                    details: summary,
+                },
+                { status: 200 }
+            );
+        }
+
+        // 4) Wyślij mutacje
+        const mutateUrl = `https://${sanityProjectId}.api.sanity.io/v${sanityApiVersion}/data/mutate/${sanityDataSet}`;
+
+        const response = await fetch(mutateUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ mutations }),
         });
 
         if (!response.ok) {
@@ -85,8 +162,11 @@ export async function POST(req) {
 
         return NextResponse.json({
             status: "ok",
-            message: "Products quantity set to 0.",
+            message: "Products quantity decreased by ordered amounts.",
+            updatedCount: mutations.length,
+            updatedIds: mutations.map(m => m.patch.id),
             sanity: data,
+            details: summary,
         });
     } catch (err) {
         return NextResponse.json(
