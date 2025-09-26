@@ -19,3 +19,11 @@ export default function Page() {
     )
 }
 
+
+export async function generateMetadata() {
+    return {
+        title: `Dashboard`,
+        description: `Admin dashboard to manage orders and products.`
+    }
+}
+

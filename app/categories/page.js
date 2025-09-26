@@ -12,7 +12,7 @@ export default function Page({params}) {
 export async function generateMetadata() {
 
     return {
-        title: "All Artwork`",
+        title: "All Artworks`",
         description: "Explore our collection of artworks from various categories.",
         keywords: "art, artworks, collection, categories, paintings, sculptures",
     };

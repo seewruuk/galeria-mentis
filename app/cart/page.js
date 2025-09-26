@@ -5,3 +5,11 @@ export default function page() {
         <CartLayout/>
     )
 }
+
+
+export async function generateMetadata() {
+    return {
+        title: `Your Cart`,
+        description: `Review the items in your cart and proceed to checkout when you're ready.`
+    };
+}
