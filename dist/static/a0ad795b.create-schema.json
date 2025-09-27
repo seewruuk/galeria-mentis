@@ -2,246 +2,30 @@
   {
     "fields": [
       {
-        "name": "orderDate",
+        "description": "Max 60 characters",
+        "name": "metaTitle",
         "type": "string",
-        "title": "Date of order"
+        "title": "Meta title"
       },
       {
-        "options": {
-          "list": [
-            {
-              "title": "New",
-              "value": "new"
-            },
-            {
-              "title": "Paid",
-              "value": "paid"
-            },
-            {
-              "title": "Done",
-              "value": "done"
-            },
-            {
-              "title": "Cancelled",
-              "value": "cancelled"
-            }
-          ]
-        },
-        "name": "orderStatus",
-        "type": "string"
-      },
-      {
-        "name": "orderNumber",
-        "type": "string"
-      },
-      {
-        "fields": [
-          {
-            "name": "email",
-            "type": "string"
-          },
-          {
-            "name": "name",
-            "type": "string",
-            "title": "First name"
-          },
-          {
-            "name": "lastname",
-            "type": "string",
-            "title": "Last name"
-          },
-          {
-            "name": "address",
-            "type": "string"
-          },
-          {
-            "name": "apartment",
-            "type": "string",
-            "title": "Apartment, suite, etc."
-          },
-          {
-            "name": "city",
-            "type": "string"
-          },
-          {
-            "name": "country",
-            "type": "string"
-          },
-          {
-            "name": "state",
-            "type": "string",
-            "title": "State / Province"
-          },
-          {
-            "name": "postal",
-            "type": "string",
-            "title": "Postal Code"
-          },
-          {
-            "name": "phone",
-            "type": "string"
-          }
-        ],
-        "name": "personData",
-        "type": "object",
-        "title": "Personal Data"
-      },
-      {
-        "fields": [
-          {
-            "options": {
-              "list": [
-                {
-                  "title": "Standard",
-                  "value": "standard"
-                },
-                {
-                  "title": "Express",
-                  "value": "express"
-                }
-              ]
-            },
-            "name": "deliveryMethod",
-            "type": "string"
-          }
-        ],
-        "name": "orderInfo",
-        "type": "object"
+        "description": "Max 160 characters",
+        "name": "metaDescription",
+        "type": "text",
+        "title": "Meta description"
       },
       {
         "of": [
           {
-            "fields": [
-              {
-                "name": "name",
-                "type": "string"
-              },
-              {
-                "name": "author",
-                "type": "string"
-              },
-              {
-                "name": "id",
-                "type": "string",
-                "title": "id"
-              },
-              {
-                "name": "authorSlug",
-                "type": "string"
-              },
-              {
-                "name": "slug",
-                "type": "string",
-                "title": "slug"
-              },
-              {
-                "name": "price",
-                "type": "number"
-              },
-              {
-                "name": "qty",
-                "type": "number",
-                "title": "Quantity"
-              },
-              {
-                "name": "category",
-                "type": "string"
-              },
-              {
-                "name": "tax",
-                "type": "number",
-                "title": "TAX"
-              }
-            ],
-            "type": "object"
-          }
-        ],
-        "name": "products",
-        "type": "array"
-      },
-      {
-        "fields": [
-          {
-            "name": "status",
-            "type": "boolean",
-            "title": "Invoice"
-          },
-          {
-            "options": {
-              "list": [
-                {
-                  "title": "Individual",
-                  "value": "individual"
-                },
-                {
-                  "title": "Company",
-                  "value": "company"
-                }
-              ]
-            },
-            "name": "companyType",
             "type": "string"
-          },
-          {
-            "fields": [
-              {
-                "name": "companyName",
-                "type": "string",
-                "title": "Company Name / First name"
-              },
-              {
-                "name": "nip",
-                "type": "string",
-                "title": "NIP / Last name"
-              },
-              {
-                "name": "phone",
-                "type": "string"
-              },
-              {
-                "name": "address",
-                "type": "string"
-              },
-              {
-                "name": "companyPostal",
-                "type": "string",
-                "title": "Postal Code"
-              },
-              {
-                "name": "companyCity",
-                "type": "string",
-                "title": "City"
-              },
-              {
-                "name": "companyCountry",
-                "type": "string",
-                "title": "Country"
-              }
-            ],
-            "name": "companyData",
-            "type": "object"
           }
         ],
-        "name": "invoice",
-        "type": "object"
-      },
-      {
-        "name": "totalPrice",
-        "type": "string"
-      },
-      {
-        "name": "stripeSessionId",
-        "type": "string",
-        "title": "Stripe Session ID"
-      },
-      {
-        "name": "newsletter",
-        "type": "boolean"
+        "name": "keywords",
+        "type": "array"
       }
     ],
-    "name": "order",
-    "type": "document",
-    "title": "Orders"
+    "name": "seo",
+    "type": "object",
+    "title": "SEO"
   },
   {
     "fields": [
@@ -294,39 +78,39 @@
     ],
     "name": "user",
     "type": "document",
-    "title": "Users"
+    "title": "Authorization"
   },
   {
     "fields": [
       {
-        "validation": [
-          {
-            "rules": [
-              {
-                "flag": "presence",
-                "constraint": "required"
-              }
-            ],
-            "level": "error"
-          }
-        ],
-        "name": "title",
-        "type": "string"
+        "options": {
+          "hotspot": true
+        },
+        "name": "avatar",
+        "type": "image"
       },
       {
         "options": {
-          "source": "title",
-          "maxLength": 200
+          "hotspot": true
+        },
+        "name": "bannerImage",
+        "type": "image"
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "title": "First Name and Last Name"
+      },
+      {
+        "options": {
+          "source": "name",
+          "maxLength": 96
         },
         "validation": [
           {
             "rules": [
               {
                 "flag": "custom"
-              },
-              {
-                "flag": "presence",
-                "constraint": "required"
               }
             ],
             "level": "error"
@@ -336,403 +120,214 @@
         "type": "slug"
       },
       {
-        "validation": [
+        "fields": [
           {
-            "rules": [
-              {
-                "flag": "presence",
-                "constraint": "required"
-              }
-            ],
-            "level": "error"
+            "name": "city",
+            "type": "string"
+          },
+          {
+            "name": "country",
+            "type": "string"
           }
         ],
+        "name": "location",
+        "type": "object"
+      },
+      {
         "name": "description",
         "type": "text"
       },
       {
-        "validation": [
-          {
-            "rules": [
-              {
-                "flag": "presence",
-                "constraint": "required"
-              }
-            ],
-            "level": "error"
-          }
-        ],
-        "name": "mainImage",
-        "type": "image",
-        "title": "Main image"
-      },
-      {
-        "validation": [
-          {
-            "rules": [
-              {
-                "flag": "presence",
-                "constraint": "required"
-              }
-            ],
-            "level": "error"
-          }
-        ],
         "of": [
           {
-            "marks": {
-              "annotations": [
-                {
-                  "i18nTitleKey": "inputs.portable-text.annotation.link",
-                  "options": {
-                    "modal": {
-                      "type": "popover"
-                    }
-                  },
-                  "fields": [
-                    {
-                      "validation": [
+            "fields": [
+              {
+                "name": "header",
+                "type": "string"
+              },
+              {
+                "of": [
+                  {
+                    "marks": {
+                      "annotations": [
                         {
-                          "rules": [
+                          "i18nTitleKey": "inputs.portable-text.annotation.link",
+                          "options": {
+                            "modal": {
+                              "type": "popover"
+                            }
+                          },
+                          "fields": [
                             {
-                              "flag": "uri",
-                              "constraint": {
-                                "options": {
-                                  "scheme": [
-                                    "/^http$/",
-                                    "/^https$/",
-                                    "/^tel$/",
-                                    "/^mailto$/"
+                              "validation": [
+                                {
+                                  "rules": [
+                                    {
+                                      "flag": "uri",
+                                      "constraint": {
+                                        "options": {
+                                          "scheme": [
+                                            "/^http$/",
+                                            "/^https$/",
+                                            "/^tel$/",
+                                            "/^mailto$/"
+                                          ],
+                                          "allowRelative": true,
+                                          "relativeOnly": false,
+                                          "allowCredentials": false
+                                        }
+                                      }
+                                    }
                                   ],
-                                  "allowRelative": true,
-                                  "relativeOnly": false,
-                                  "allowCredentials": false
+                                  "level": "error"
                                 }
-                              }
+                              ],
+                              "description": "A valid web, email, phone, or relative link.",
+                              "name": "href",
+                              "type": "url",
+                              "title": "Link"
                             }
                           ],
-                          "level": "error"
+                          "name": "link",
+                          "type": "object"
                         }
                       ],
-                      "description": "A valid web, email, phone, or relative link.",
-                      "name": "href",
-                      "type": "url",
-                      "title": "Link"
-                    }
-                  ],
-                  "name": "link",
-                  "type": "object"
-                }
-              ],
-              "decorators": [
-                {
-                  "value": "strong",
-                  "title": "Strong"
-                },
-                {
-                  "value": "em",
-                  "title": "Italic"
-                },
-                {
-                  "value": "code",
-                  "title": "Code"
-                },
-                {
-                  "value": "underline",
-                  "title": "Underline"
-                },
-                {
-                  "value": "strike-through",
-                  "title": "Strike"
-                }
-              ]
-            },
-            "lists": [
-              {
-                "value": "bullet",
-                "title": "Bulleted list"
-              },
-              {
-                "value": "number",
-                "title": "Numbered list"
+                      "decorators": [
+                        {
+                          "value": "strong",
+                          "title": "Strong"
+                        },
+                        {
+                          "value": "em",
+                          "title": "Italic"
+                        },
+                        {
+                          "value": "code",
+                          "title": "Code"
+                        },
+                        {
+                          "value": "underline",
+                          "title": "Underline"
+                        },
+                        {
+                          "value": "strike-through",
+                          "title": "Strike"
+                        }
+                      ]
+                    },
+                    "lists": [
+                      {
+                        "value": "bullet",
+                        "title": "Bulleted list"
+                      },
+                      {
+                        "value": "number",
+                        "title": "Numbered list"
+                      }
+                    ],
+                    "styles": [
+                      {
+                        "value": "normal",
+                        "title": "Normal"
+                      },
+                      {
+                        "value": "h1",
+                        "title": "Heading 1"
+                      },
+                      {
+                        "value": "h2",
+                        "title": "Heading 2"
+                      },
+                      {
+                        "value": "h3",
+                        "title": "Heading 3"
+                      },
+                      {
+                        "value": "h4",
+                        "title": "Heading 4"
+                      },
+                      {
+                        "value": "h5",
+                        "title": "Heading 5"
+                      },
+                      {
+                        "value": "h6",
+                        "title": "Heading 6"
+                      },
+                      {
+                        "value": "blockquote",
+                        "title": "Quote"
+                      }
+                    ],
+                    "of": [],
+                    "type": "block"
+                  }
+                ],
+                "name": "content",
+                "type": "array"
               }
             ],
-            "styles": [
-              {
-                "value": "normal",
-                "title": "Normal"
-              },
-              {
-                "value": "h1",
-                "title": "Heading 1"
-              },
-              {
-                "value": "h2",
-                "title": "Heading 2"
-              },
-              {
-                "value": "h3",
-                "title": "Heading 3"
-              },
-              {
-                "value": "h4",
-                "title": "Heading 4"
-              },
-              {
-                "value": "h5",
-                "title": "Heading 5"
-              },
-              {
-                "value": "h6",
-                "title": "Heading 6"
-              },
-              {
-                "value": "blockquote",
-                "title": "Quote"
-              }
-            ],
-            "of": [],
-            "type": "block"
-          },
-          {
-            "type": "image"
+            "type": "object"
           }
         ],
-        "name": "body",
-        "type": "array"
-      },
-      {
-        "name": "seo",
-        "type": "seo",
-        "title": "seo"
-      }
-    ],
-    "name": "blog",
-    "type": "document"
-  },
-  {
-    "fields": [
-      {
-        "description": "Max 60 characters",
-        "name": "metaTitle",
-        "type": "string",
-        "title": "Meta title"
-      },
-      {
-        "description": "Max 160 characters",
-        "name": "metaDescription",
-        "type": "text",
-        "title": "Meta description"
-      },
-      {
-        "of": [
-          {
-            "type": "string"
-          }
-        ],
-        "name": "keywords",
-        "type": "array"
-      }
-    ],
-    "name": "seo",
-    "type": "object",
-    "title": "SEO"
-  },
-  {
-    "fields": [
-      {
-        "name": "name",
-        "type": "string"
-      },
-      {
-        "of": [
-          {
-            "type": "product-details-option"
-          }
-        ],
-        "name": "options",
+        "name": "bio",
         "type": "array",
-        "title": "Available Options"
+        "title": "Artist Information"
       },
       {
-        "name": "showOnWebsite",
-        "type": "boolean",
-        "title": "Show on Website"
-      }
-    ],
-    "name": "product-details",
-    "type": "document",
-    "title": "Product-Details"
-  },
-  {
-    "fields": [
-      {
-        "name": "value",
-        "type": "string"
-      }
-    ],
-    "name": "product-details-option",
-    "type": "object"
-  },
-  {
-    "fields": [
-      {
-        "validation": [
+        "of": [
           {
-            "rules": [
+            "to": [
               {
-                "flag": "presence",
-                "constraint": "required"
+                "type": "artisticStyle"
               }
             ],
-            "level": "error",
-            "message": "Title is required"
+            "type": "reference",
+            "title": "Reference to artistic style"
           }
         ],
-        "name": "title",
-        "type": "string"
+        "name": "artisticStyle",
+        "type": "array"
       },
       {
-        "options": {
-          "source": "title"
-        },
+        "of": [
+          {
+            "to": [
+              {
+                "type": "paintingStyle"
+              }
+            ],
+            "type": "reference",
+            "title": "Reference to painting style"
+          }
+        ],
+        "name": "paintingStyle",
+        "type": "array"
+      },
+      {
         "validation": [
           {
             "rules": [
               {
-                "flag": "custom"
+                "flag": "max",
+                "constraint": 2
               }
             ],
             "level": "error"
           }
         ],
-        "name": "slug",
-        "type": "slug"
-      },
-      {
-        "name": "image",
-        "type": "image",
-        "title": "Background Image"
-      },
-      {
         "of": [
           {
-            "marks": {
-              "annotations": [
-                {
-                  "i18nTitleKey": "inputs.portable-text.annotation.link",
-                  "options": {
-                    "modal": {
-                      "type": "popover"
-                    }
-                  },
-                  "fields": [
-                    {
-                      "validation": [
-                        {
-                          "rules": [
-                            {
-                              "flag": "uri",
-                              "constraint": {
-                                "options": {
-                                  "scheme": [
-                                    "/^http$/",
-                                    "/^https$/",
-                                    "/^tel$/",
-                                    "/^mailto$/"
-                                  ],
-                                  "allowRelative": true,
-                                  "relativeOnly": false,
-                                  "allowCredentials": false
-                                }
-                              }
-                            }
-                          ],
-                          "level": "error"
-                        }
-                      ],
-                      "description": "A valid web, email, phone, or relative link.",
-                      "name": "href",
-                      "type": "url",
-                      "title": "Link"
-                    }
-                  ],
-                  "name": "link",
-                  "type": "object"
-                }
-              ],
-              "decorators": [
-                {
-                  "value": "strong",
-                  "title": "Strong"
-                },
-                {
-                  "value": "em",
-                  "title": "Italic"
-                },
-                {
-                  "value": "code",
-                  "title": "Code"
-                },
-                {
-                  "value": "underline",
-                  "title": "Underline"
-                },
-                {
-                  "value": "strike-through",
-                  "title": "Strike"
-                }
-              ]
-            },
-            "lists": [
+            "to": [
               {
-                "value": "bullet",
-                "title": "Bulleted list"
-              },
-              {
-                "value": "number",
-                "title": "Numbered list"
+                "type": "product"
               }
             ],
-            "styles": [
-              {
-                "value": "normal",
-                "title": "Normal"
-              },
-              {
-                "value": "h1",
-                "title": "Heading 1"
-              },
-              {
-                "value": "h2",
-                "title": "Heading 2"
-              },
-              {
-                "value": "h3",
-                "title": "Heading 3"
-              },
-              {
-                "value": "h4",
-                "title": "Heading 4"
-              },
-              {
-                "value": "h5",
-                "title": "Heading 5"
-              },
-              {
-                "value": "h6",
-                "title": "Heading 6"
-              },
-              {
-                "value": "blockquote",
-                "title": "Quote"
-              }
-            ],
-            "of": [],
-            "type": "block"
+            "type": "reference",
+            "title": "Reference to all products / artworks"
           }
         ],
-        "name": "header",
+        "name": "artworks",
         "type": "array"
       },
       {
@@ -741,7 +336,7 @@
         "title": "SEO"
       }
     ],
-    "name": "productCategory",
+    "name": "artist",
     "type": "document"
   },
   {
@@ -797,6 +392,12 @@
         ],
         "name": "quantity",
         "type": "number"
+      },
+      {
+        "hidden": true,
+        "name": "allowToSell",
+        "type": "boolean",
+        "title": "AllowToSell"
       },
       {
         "name": "thumbnail",
@@ -1210,7 +811,7 @@
               }
             ],
             "type": "reference",
-            "title": "Reference to artworks"
+            "title": "Reference to all products / artworks"
           }
         ],
         "name": "recommendedArtworks",
@@ -1224,93 +825,283 @@
     ],
     "name": "product",
     "type": "document",
-    "title": "Artworks"
+    "title": "All products / Artworks"
   },
   {
     "fields": [
       {
-        "validation": [
-          {
-            "rules": [
-              {
-                "flag": "presence",
-                "constraint": "required"
-              }
-            ],
-            "level": "error",
-            "message": "Title is required"
-          }
-        ],
-        "name": "title",
-        "type": "string"
-      },
-      {
-        "description": "Optional description of the artistic style.",
-        "name": "description",
-        "type": "text"
-      }
-    ],
-    "name": "artisticStyle",
-    "type": "document"
-  },
-  {
-    "fields": [
-      {
-        "validation": [
-          {
-            "rules": [
-              {
-                "flag": "presence",
-                "constraint": "required"
-              }
-            ],
-            "level": "error",
-            "message": "Title is required"
-          }
-        ],
-        "name": "title",
-        "type": "string"
-      },
-      {
-        "description": "Optional description of the painting style.",
-        "name": "description",
-        "type": "text"
-      }
-    ],
-    "name": "paintingStyle",
-    "type": "document"
-  },
-  {
-    "fields": [
-      {
-        "options": {
-          "hotspot": true
-        },
-        "name": "avatar",
-        "type": "image"
-      },
-      {
-        "options": {
-          "hotspot": true
-        },
-        "name": "bannerImage",
-        "type": "image"
-      },
-      {
-        "name": "name",
+        "name": "orderDate",
         "type": "string",
-        "title": "First Name and Last Name"
+        "title": "Date of order"
       },
       {
         "options": {
-          "source": "name",
-          "maxLength": 96
+          "list": [
+            {
+              "title": "New",
+              "value": "new"
+            },
+            {
+              "title": "Paid",
+              "value": "paid"
+            },
+            {
+              "title": "Done",
+              "value": "done"
+            },
+            {
+              "title": "Cancelled",
+              "value": "cancelled"
+            }
+          ]
+        },
+        "name": "orderStatus",
+        "type": "string"
+      },
+      {
+        "name": "orderNumber",
+        "type": "string"
+      },
+      {
+        "fields": [
+          {
+            "name": "email",
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "title": "First name"
+          },
+          {
+            "name": "lastname",
+            "type": "string",
+            "title": "Last name"
+          },
+          {
+            "name": "address",
+            "type": "string"
+          },
+          {
+            "name": "apartment",
+            "type": "string",
+            "title": "Apartment, suite, etc."
+          },
+          {
+            "name": "city",
+            "type": "string"
+          },
+          {
+            "name": "country",
+            "type": "string"
+          },
+          {
+            "name": "state",
+            "type": "string",
+            "title": "State / Province"
+          },
+          {
+            "name": "postal",
+            "type": "string",
+            "title": "Postal Code"
+          },
+          {
+            "name": "phone",
+            "type": "string"
+          }
+        ],
+        "name": "personData",
+        "type": "object",
+        "title": "Personal Data"
+      },
+      {
+        "fields": [
+          {
+            "options": {
+              "list": [
+                {
+                  "title": "Standard",
+                  "value": "standard"
+                },
+                {
+                  "title": "Express",
+                  "value": "express"
+                }
+              ]
+            },
+            "name": "deliveryMethod",
+            "type": "string"
+          }
+        ],
+        "name": "orderInfo",
+        "type": "object"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "name",
+                "type": "string"
+              },
+              {
+                "name": "author",
+                "type": "string"
+              },
+              {
+                "name": "id",
+                "type": "string",
+                "title": "id"
+              },
+              {
+                "name": "authorSlug",
+                "type": "string"
+              },
+              {
+                "name": "slug",
+                "type": "string",
+                "title": "slug"
+              },
+              {
+                "name": "price",
+                "type": "number"
+              },
+              {
+                "name": "qty",
+                "type": "number",
+                "title": "Quantity"
+              },
+              {
+                "name": "category",
+                "type": "string"
+              },
+              {
+                "name": "tax",
+                "type": "number",
+                "title": "TAX"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "products",
+        "type": "array"
+      },
+      {
+        "fields": [
+          {
+            "name": "status",
+            "type": "boolean",
+            "title": "Invoice"
+          },
+          {
+            "options": {
+              "list": [
+                {
+                  "title": "Individual",
+                  "value": "individual"
+                },
+                {
+                  "title": "Company",
+                  "value": "company"
+                }
+              ]
+            },
+            "name": "companyType",
+            "type": "string"
+          },
+          {
+            "fields": [
+              {
+                "name": "companyName",
+                "type": "string",
+                "title": "Company Name / First name"
+              },
+              {
+                "name": "nip",
+                "type": "string",
+                "title": "NIP / Last name"
+              },
+              {
+                "name": "phone",
+                "type": "string"
+              },
+              {
+                "name": "address",
+                "type": "string"
+              },
+              {
+                "name": "companyPostal",
+                "type": "string",
+                "title": "Postal Code"
+              },
+              {
+                "name": "companyCity",
+                "type": "string",
+                "title": "City"
+              },
+              {
+                "name": "companyCountry",
+                "type": "string",
+                "title": "Country"
+              }
+            ],
+            "name": "companyData",
+            "type": "object"
+          }
+        ],
+        "name": "invoice",
+        "type": "object"
+      },
+      {
+        "name": "totalPrice",
+        "type": "string"
+      },
+      {
+        "name": "stripeSessionId",
+        "type": "string",
+        "title": "Stripe Session ID"
+      },
+      {
+        "name": "newsletter",
+        "type": "boolean"
+      }
+    ],
+    "name": "order",
+    "type": "document",
+    "title": "Orders"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "options": {
+          "source": "title",
+          "maxLength": 200
         },
         "validation": [
           {
             "rules": [
               {
                 "flag": "custom"
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
               }
             ],
             "level": "error"
@@ -1320,197 +1111,43 @@
         "type": "slug"
       },
       {
-        "fields": [
+        "validation": [
           {
-            "name": "city",
-            "type": "string"
-          },
-          {
-            "name": "country",
-            "type": "string"
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
           }
         ],
-        "name": "location",
-        "type": "object"
-      },
-      {
         "name": "description",
         "type": "text"
-      },
-      {
-        "of": [
-          {
-            "fields": [
-              {
-                "name": "header",
-                "type": "string"
-              },
-              {
-                "of": [
-                  {
-                    "marks": {
-                      "annotations": [
-                        {
-                          "i18nTitleKey": "inputs.portable-text.annotation.link",
-                          "options": {
-                            "modal": {
-                              "type": "popover"
-                            }
-                          },
-                          "fields": [
-                            {
-                              "validation": [
-                                {
-                                  "rules": [
-                                    {
-                                      "flag": "uri",
-                                      "constraint": {
-                                        "options": {
-                                          "scheme": [
-                                            "/^http$/",
-                                            "/^https$/",
-                                            "/^tel$/",
-                                            "/^mailto$/"
-                                          ],
-                                          "allowRelative": true,
-                                          "relativeOnly": false,
-                                          "allowCredentials": false
-                                        }
-                                      }
-                                    }
-                                  ],
-                                  "level": "error"
-                                }
-                              ],
-                              "description": "A valid web, email, phone, or relative link.",
-                              "name": "href",
-                              "type": "url",
-                              "title": "Link"
-                            }
-                          ],
-                          "name": "link",
-                          "type": "object"
-                        }
-                      ],
-                      "decorators": [
-                        {
-                          "value": "strong",
-                          "title": "Strong"
-                        },
-                        {
-                          "value": "em",
-                          "title": "Italic"
-                        },
-                        {
-                          "value": "code",
-                          "title": "Code"
-                        },
-                        {
-                          "value": "underline",
-                          "title": "Underline"
-                        },
-                        {
-                          "value": "strike-through",
-                          "title": "Strike"
-                        }
-                      ]
-                    },
-                    "lists": [
-                      {
-                        "value": "bullet",
-                        "title": "Bulleted list"
-                      },
-                      {
-                        "value": "number",
-                        "title": "Numbered list"
-                      }
-                    ],
-                    "styles": [
-                      {
-                        "value": "normal",
-                        "title": "Normal"
-                      },
-                      {
-                        "value": "h1",
-                        "title": "Heading 1"
-                      },
-                      {
-                        "value": "h2",
-                        "title": "Heading 2"
-                      },
-                      {
-                        "value": "h3",
-                        "title": "Heading 3"
-                      },
-                      {
-                        "value": "h4",
-                        "title": "Heading 4"
-                      },
-                      {
-                        "value": "h5",
-                        "title": "Heading 5"
-                      },
-                      {
-                        "value": "h6",
-                        "title": "Heading 6"
-                      },
-                      {
-                        "value": "blockquote",
-                        "title": "Quote"
-                      }
-                    ],
-                    "of": [],
-                    "type": "block"
-                  }
-                ],
-                "name": "content",
-                "type": "array"
-              }
-            ],
-            "type": "object"
-          }
-        ],
-        "name": "bio",
-        "type": "array",
-        "title": "Artist Information"
-      },
-      {
-        "of": [
-          {
-            "to": [
-              {
-                "type": "artisticStyle"
-              }
-            ],
-            "type": "reference",
-            "title": "Reference to artistic style"
-          }
-        ],
-        "name": "artisticStyle",
-        "type": "array"
-      },
-      {
-        "of": [
-          {
-            "to": [
-              {
-                "type": "paintingStyle"
-              }
-            ],
-            "type": "reference",
-            "title": "Reference to painting style"
-          }
-        ],
-        "name": "paintingStyle",
-        "type": "array"
       },
       {
         "validation": [
           {
             "rules": [
               {
-                "flag": "max",
-                "constraint": 2
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "mainImage",
+        "type": "image",
+        "title": "Main image"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
               }
             ],
             "level": "error"
@@ -1518,25 +1155,134 @@
         ],
         "of": [
           {
-            "to": [
+            "marks": {
+              "annotations": [
+                {
+                  "i18nTitleKey": "inputs.portable-text.annotation.link",
+                  "options": {
+                    "modal": {
+                      "type": "popover"
+                    }
+                  },
+                  "fields": [
+                    {
+                      "validation": [
+                        {
+                          "rules": [
+                            {
+                              "flag": "uri",
+                              "constraint": {
+                                "options": {
+                                  "scheme": [
+                                    "/^http$/",
+                                    "/^https$/",
+                                    "/^tel$/",
+                                    "/^mailto$/"
+                                  ],
+                                  "allowRelative": true,
+                                  "relativeOnly": false,
+                                  "allowCredentials": false
+                                }
+                              }
+                            }
+                          ],
+                          "level": "error"
+                        }
+                      ],
+                      "description": "A valid web, email, phone, or relative link.",
+                      "name": "href",
+                      "type": "url",
+                      "title": "Link"
+                    }
+                  ],
+                  "name": "link",
+                  "type": "object"
+                }
+              ],
+              "decorators": [
+                {
+                  "value": "strong",
+                  "title": "Strong"
+                },
+                {
+                  "value": "em",
+                  "title": "Italic"
+                },
+                {
+                  "value": "code",
+                  "title": "Code"
+                },
+                {
+                  "value": "underline",
+                  "title": "Underline"
+                },
+                {
+                  "value": "strike-through",
+                  "title": "Strike"
+                }
+              ]
+            },
+            "lists": [
               {
-                "type": "product"
+                "value": "bullet",
+                "title": "Bulleted list"
+              },
+              {
+                "value": "number",
+                "title": "Numbered list"
               }
             ],
-            "type": "reference",
-            "title": "Reference to artworks"
+            "styles": [
+              {
+                "value": "normal",
+                "title": "Normal"
+              },
+              {
+                "value": "h1",
+                "title": "Heading 1"
+              },
+              {
+                "value": "h2",
+                "title": "Heading 2"
+              },
+              {
+                "value": "h3",
+                "title": "Heading 3"
+              },
+              {
+                "value": "h4",
+                "title": "Heading 4"
+              },
+              {
+                "value": "h5",
+                "title": "Heading 5"
+              },
+              {
+                "value": "h6",
+                "title": "Heading 6"
+              },
+              {
+                "value": "blockquote",
+                "title": "Quote"
+              }
+            ],
+            "of": [],
+            "type": "block"
+          },
+          {
+            "type": "image"
           }
         ],
-        "name": "artworks",
+        "name": "body",
         "type": "array"
       },
       {
         "name": "seo",
         "type": "seo",
-        "title": "SEO"
+        "title": "seo"
       }
     ],
-    "name": "artist",
+    "name": "blog",
     "type": "document"
   },
   {
@@ -1747,7 +1493,7 @@
               }
             ],
             "type": "reference",
-            "title": "Reference to artworks"
+            "title": "Reference to all products / artworks"
           }
         ],
         "name": "featuredProducts",
@@ -1803,148 +1549,6 @@
       }
     ],
     "name": "homepage",
-    "type": "document"
-  },
-  {
-    "fields": [
-      {
-        "name": "title",
-        "type": "string",
-        "title": "title"
-      },
-      {
-        "name": "image",
-        "type": "image",
-        "title": "Background Image"
-      },
-      {
-        "of": [
-          {
-            "marks": {
-              "annotations": [
-                {
-                  "i18nTitleKey": "inputs.portable-text.annotation.link",
-                  "options": {
-                    "modal": {
-                      "type": "popover"
-                    }
-                  },
-                  "fields": [
-                    {
-                      "validation": [
-                        {
-                          "rules": [
-                            {
-                              "flag": "uri",
-                              "constraint": {
-                                "options": {
-                                  "scheme": [
-                                    "/^http$/",
-                                    "/^https$/",
-                                    "/^tel$/",
-                                    "/^mailto$/"
-                                  ],
-                                  "allowRelative": true,
-                                  "relativeOnly": false,
-                                  "allowCredentials": false
-                                }
-                              }
-                            }
-                          ],
-                          "level": "error"
-                        }
-                      ],
-                      "description": "A valid web, email, phone, or relative link.",
-                      "name": "href",
-                      "type": "url",
-                      "title": "Link"
-                    }
-                  ],
-                  "name": "link",
-                  "type": "object"
-                }
-              ],
-              "decorators": [
-                {
-                  "value": "strong",
-                  "title": "Strong"
-                },
-                {
-                  "value": "em",
-                  "title": "Italic"
-                },
-                {
-                  "value": "code",
-                  "title": "Code"
-                },
-                {
-                  "value": "underline",
-                  "title": "Underline"
-                },
-                {
-                  "value": "strike-through",
-                  "title": "Strike"
-                }
-              ]
-            },
-            "lists": [
-              {
-                "value": "bullet",
-                "title": "Bulleted list"
-              },
-              {
-                "value": "number",
-                "title": "Numbered list"
-              }
-            ],
-            "styles": [
-              {
-                "value": "normal",
-                "title": "Normal"
-              },
-              {
-                "value": "h1",
-                "title": "Heading 1"
-              },
-              {
-                "value": "h2",
-                "title": "Heading 2"
-              },
-              {
-                "value": "h3",
-                "title": "Heading 3"
-              },
-              {
-                "value": "h4",
-                "title": "Heading 4"
-              },
-              {
-                "value": "h5",
-                "title": "Heading 5"
-              },
-              {
-                "value": "h6",
-                "title": "Heading 6"
-              },
-              {
-                "value": "blockquote",
-                "title": "Quote"
-              }
-            ],
-            "of": [],
-            "type": "block"
-          }
-        ],
-        "name": "header",
-        "type": "array"
-      },
-      {
-        "name": "seo",
-        "type": "seo",
-        "title": "SEO"
-      }
-    ],
-    "name": "artistsSettings",
     "type": "document"
   },
   {
@@ -2262,6 +1866,408 @@
       }
     ],
     "name": "policies",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "name": "title",
+        "type": "string",
+        "title": "title"
+      },
+      {
+        "name": "image",
+        "type": "image",
+        "title": "Background Image"
+      },
+      {
+        "of": [
+          {
+            "marks": {
+              "annotations": [
+                {
+                  "i18nTitleKey": "inputs.portable-text.annotation.link",
+                  "options": {
+                    "modal": {
+                      "type": "popover"
+                    }
+                  },
+                  "fields": [
+                    {
+                      "validation": [
+                        {
+                          "rules": [
+                            {
+                              "flag": "uri",
+                              "constraint": {
+                                "options": {
+                                  "scheme": [
+                                    "/^http$/",
+                                    "/^https$/",
+                                    "/^tel$/",
+                                    "/^mailto$/"
+                                  ],
+                                  "allowRelative": true,
+                                  "relativeOnly": false,
+                                  "allowCredentials": false
+                                }
+                              }
+                            }
+                          ],
+                          "level": "error"
+                        }
+                      ],
+                      "description": "A valid web, email, phone, or relative link.",
+                      "name": "href",
+                      "type": "url",
+                      "title": "Link"
+                    }
+                  ],
+                  "name": "link",
+                  "type": "object"
+                }
+              ],
+              "decorators": [
+                {
+                  "value": "strong",
+                  "title": "Strong"
+                },
+                {
+                  "value": "em",
+                  "title": "Italic"
+                },
+                {
+                  "value": "code",
+                  "title": "Code"
+                },
+                {
+                  "value": "underline",
+                  "title": "Underline"
+                },
+                {
+                  "value": "strike-through",
+                  "title": "Strike"
+                }
+              ]
+            },
+            "lists": [
+              {
+                "value": "bullet",
+                "title": "Bulleted list"
+              },
+              {
+                "value": "number",
+                "title": "Numbered list"
+              }
+            ],
+            "styles": [
+              {
+                "value": "normal",
+                "title": "Normal"
+              },
+              {
+                "value": "h1",
+                "title": "Heading 1"
+              },
+              {
+                "value": "h2",
+                "title": "Heading 2"
+              },
+              {
+                "value": "h3",
+                "title": "Heading 3"
+              },
+              {
+                "value": "h4",
+                "title": "Heading 4"
+              },
+              {
+                "value": "h5",
+                "title": "Heading 5"
+              },
+              {
+                "value": "h6",
+                "title": "Heading 6"
+              },
+              {
+                "value": "blockquote",
+                "title": "Quote"
+              }
+            ],
+            "of": [],
+            "type": "block"
+          }
+        ],
+        "name": "header",
+        "type": "array"
+      },
+      {
+        "name": "seo",
+        "type": "seo",
+        "title": "SEO"
+      }
+    ],
+    "name": "artistsSettings",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "of": [
+          {
+            "type": "product-details-option"
+          }
+        ],
+        "name": "options",
+        "type": "array",
+        "title": "Available Options"
+      },
+      {
+        "name": "showOnWebsite",
+        "type": "boolean",
+        "title": "Show on Website"
+      }
+    ],
+    "name": "product-details",
+    "type": "document",
+    "title": "Product-Details"
+  },
+  {
+    "fields": [
+      {
+        "name": "value",
+        "type": "string"
+      }
+    ],
+    "name": "product-details-option",
+    "type": "object"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error",
+            "message": "Title is required"
+          }
+        ],
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "options": {
+          "source": "title"
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "slug",
+        "type": "slug"
+      },
+      {
+        "name": "image",
+        "type": "image",
+        "title": "Background Image"
+      },
+      {
+        "of": [
+          {
+            "marks": {
+              "annotations": [
+                {
+                  "i18nTitleKey": "inputs.portable-text.annotation.link",
+                  "options": {
+                    "modal": {
+                      "type": "popover"
+                    }
+                  },
+                  "fields": [
+                    {
+                      "validation": [
+                        {
+                          "rules": [
+                            {
+                              "flag": "uri",
+                              "constraint": {
+                                "options": {
+                                  "scheme": [
+                                    "/^http$/",
+                                    "/^https$/",
+                                    "/^tel$/",
+                                    "/^mailto$/"
+                                  ],
+                                  "allowRelative": true,
+                                  "relativeOnly": false,
+                                  "allowCredentials": false
+                                }
+                              }
+                            }
+                          ],
+                          "level": "error"
+                        }
+                      ],
+                      "description": "A valid web, email, phone, or relative link.",
+                      "name": "href",
+                      "type": "url",
+                      "title": "Link"
+                    }
+                  ],
+                  "name": "link",
+                  "type": "object"
+                }
+              ],
+              "decorators": [
+                {
+                  "value": "strong",
+                  "title": "Strong"
+                },
+                {
+                  "value": "em",
+                  "title": "Italic"
+                },
+                {
+                  "value": "code",
+                  "title": "Code"
+                },
+                {
+                  "value": "underline",
+                  "title": "Underline"
+                },
+                {
+                  "value": "strike-through",
+                  "title": "Strike"
+                }
+              ]
+            },
+            "lists": [
+              {
+                "value": "bullet",
+                "title": "Bulleted list"
+              },
+              {
+                "value": "number",
+                "title": "Numbered list"
+              }
+            ],
+            "styles": [
+              {
+                "value": "normal",
+                "title": "Normal"
+              },
+              {
+                "value": "h1",
+                "title": "Heading 1"
+              },
+              {
+                "value": "h2",
+                "title": "Heading 2"
+              },
+              {
+                "value": "h3",
+                "title": "Heading 3"
+              },
+              {
+                "value": "h4",
+                "title": "Heading 4"
+              },
+              {
+                "value": "h5",
+                "title": "Heading 5"
+              },
+              {
+                "value": "h6",
+                "title": "Heading 6"
+              },
+              {
+                "value": "blockquote",
+                "title": "Quote"
+              }
+            ],
+            "of": [],
+            "type": "block"
+          }
+        ],
+        "name": "header",
+        "type": "array"
+      },
+      {
+        "name": "seo",
+        "type": "seo",
+        "title": "SEO"
+      }
+    ],
+    "name": "productCategory",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error",
+            "message": "Title is required"
+          }
+        ],
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "description": "Optional description of the artistic style.",
+        "name": "description",
+        "type": "text"
+      }
+    ],
+    "name": "artisticStyle",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error",
+            "message": "Title is required"
+          }
+        ],
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "description": "Optional description of the painting style.",
+        "name": "description",
+        "type": "text"
+      }
+    ],
+    "name": "paintingStyle",
     "type": "document"
   }
 ]
