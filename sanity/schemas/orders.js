@@ -1,6 +1,8 @@
+import { IoCartOutline } from "react-icons/io5";
 export default {
     title: "Orders",
     name: "order",
+    icon: IoCartOutline,
     type: "document",
     fields: [
         {

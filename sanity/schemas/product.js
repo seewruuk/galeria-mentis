@@ -1,6 +1,9 @@
+import { PlayIcon } from '@sanity/icons'
+import {BsBoxSeam} from "react-icons/bs";
 export default {
     name: 'product',
-    title: 'Artworks',
+    icon: BsBoxSeam,
+    title: 'All products / Artworks',
     type: 'document',
     fields: [
         {
@@ -27,12 +30,12 @@ export default {
             type: "number",
             validation: Rule => Rule.required().error('Quantity is required'),
         },
-        // {
-        //     name: "allowToSell",
-        //     title: "AllowToSell",
-        //     type: "boolean",
-            // validation: Rule => Rule.required().error('Quantity is required'),
-        // },
+        {
+            name: "allowToSell",
+            title: "AllowToSell",
+            type: "boolean",
+            hidden: true,
+        },
         {
             name: "thumbnail",
             title: "Thumbnail",

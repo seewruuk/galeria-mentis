@@ -1,6 +1,9 @@
+import { IoSettingsOutline } from "react-icons/io5";
+
 export default {
     name: 'artistsSettings',
     title: 'Artists Settings',
+    icon: IoSettingsOutline,
     type: 'document',
     fields: [
         {

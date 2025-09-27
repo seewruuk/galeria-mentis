@@ -1,5 +1,8 @@
+
+import { IoSettingsOutline } from "react-icons/io5";
 export default {
     name: 'blogSettings',
+    icon: IoSettingsOutline,
     title: 'Blog Settings',
     type: 'document',
     fields: [

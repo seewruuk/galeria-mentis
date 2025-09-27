@@ -1,5 +1,8 @@
+import { IoSettingsOutline } from "react-icons/io5";
+
 export default {
-    title: "Users",
+    title: "Authorization",
+    icon: IoSettingsOutline,
     name: "user",
     type: "document",
     fields: [

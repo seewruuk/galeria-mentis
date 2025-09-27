@@ -1,5 +1,7 @@
+import { IoHammerOutline } from "react-icons/io5";
 export default {
     name: 'productCategory',
+    icon: IoHammerOutline,
     title: 'Product Category',
     type: 'document',
     fields: [

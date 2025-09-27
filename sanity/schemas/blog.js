@@ -1,5 +1,7 @@
+import { TiNews } from "react-icons/ti";
 export default {
     title: "Blog",
+    icon: TiNews,
     name: "blog",
     type: "document",
     fields : [

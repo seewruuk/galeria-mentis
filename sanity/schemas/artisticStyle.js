@@ -1,5 +1,7 @@
+import { HiOutlinePaintBrush } from "react-icons/hi2";
 export default {
     name: 'artisticStyle',
+    icon: HiOutlinePaintBrush,
     title: 'Artistic Style',
     type: 'document',
     fields: [

@@ -1,6 +1,4 @@
-import productOption from "./schemas/productOption"
 import seo from "./schemas/seo"
-// import productDetails from "./schemas/productDetails"
 import productCategory from "./schemas/productCategory"
 import product from "./schemas/product"
 import artisticStyle from "./schemas/artisticStyle"
@@ -16,25 +14,26 @@ import artistsSettings from "./schemas/artistsSettings"
 import blogSettings from "./schemas/blogSettings"
 import policies from "./schemas/policies"
 
-
 export const schema = {
     types: [
-        orders,
+        seo,
         user,
+        artist,
+        product,
+        orders,
         blog,
 
-        // productOption,
-        seo,
+        homepage,
+        blogSettings,
+        policies,
+        artistsSettings,
+
+
         productDetails,
         productDetailsOption,
         productCategory,
-        product,
+
         artisticStyle,
         paintingStyle,
-        artist,
-        homepage,
-        artistsSettings,
-        blogSettings,
-        policies,
     ],
 }

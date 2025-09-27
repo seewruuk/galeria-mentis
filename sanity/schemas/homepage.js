@@ -1,6 +1,8 @@
+import { IoSettingsOutline } from "react-icons/io5";
 export default {
     name: 'homepage',
     title: 'Homepage',
+    icon: IoSettingsOutline,
     type: 'document',
     fields: [
         {
