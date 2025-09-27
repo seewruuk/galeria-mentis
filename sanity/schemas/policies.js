@@ -1,8 +1,8 @@
-import { IoSettingsOutline } from "react-icons/io5";
+import { IoDocumentsOutline } from "react-icons/io5";
 export default {
     name: 'policies',
-    icon: IoSettingsOutline,
-    title: 'Policies',
+    icon: IoDocumentsOutline,
+    title: 'Documents and Policies',
     type: 'document',
     fields: [
         {

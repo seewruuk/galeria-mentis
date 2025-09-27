@@ -19,21 +19,25 @@ export const schema = {
         seo,
         user,
         artist,
+        artisticStyle,
+        paintingStyle,
+        
         product,
+        productCategory,
+        productDetails,
+
+
         orders,
         blog,
 
         homepage,
         blogSettings,
-        policies,
         artistsSettings,
 
+        policies,
 
-        productDetails,
+
         productDetailsOption,
-        productCategory,
 
-        artisticStyle,
-        paintingStyle,
     ],
 }

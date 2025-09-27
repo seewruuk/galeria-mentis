@@ -1,8 +1,7 @@
 import HomeLayout from "@/components/layouts/HomeLayout";
 import {getHomePage} from "@/sanity/getSanity/getHomePage";
 
-export default function Home() {
-
+export default function Page() {
 
     return (
         <HomeLayout/>

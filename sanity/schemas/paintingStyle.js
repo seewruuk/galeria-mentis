@@ -2,7 +2,7 @@ import { HiOutlinePaintBrush } from "react-icons/hi2";
 export default {
     name: 'paintingStyle',
     icon: HiOutlinePaintBrush,
-    title: 'Painting Style',
+    title: 'Painting Styles',
     type: 'document',
     fields: [
         {

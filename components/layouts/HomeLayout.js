@@ -50,7 +50,6 @@ export default function HomeLayout() {
                             />
                             <FeaturedProductsCarousel
                                 products={homePageData.featuredProducts}
-                                // opcjonalnie:
                                 // prevButtonClassName="your-custom-classes"
                                 // nextButtonClassName="your-custom-classes"
                                 // PrevIcon={YourPrevIconComponent}

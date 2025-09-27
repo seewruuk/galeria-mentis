@@ -1,11 +1,11 @@
-// /app/products/[category]/layout.jsx  (lub analogicznie ProductsLayout.jsx)
+// /app/products/[category]/layout.jsx
 "use client";
 
 import useSanity from "@/hooks/useSanity";
 import {getProductsByCategory} from "@/sanity/getSanity/getProductsByCategory";
 import {getProductCategory} from "@/sanity/getSanity/getProductCategory";
 import {getProductOptions} from "@/sanity/getSanity/getProductOptions";
-import {Suspense, useEffect, useState} from "react";
+import {Suspense, useEffect, useState, useRef} from "react";
 import Loading from "@/components/Loading";
 import Banner from "@/components/Banner";
 import Layout from "@/components/Layout";
@@ -28,174 +28,168 @@ export default function ProductsLayout({category}) {
 
 function ProductsRootLayout({category}) {
     const router = useRouter();
-    const {data: products, loading: loadingProducts} = useSanity(
-        getProductsByCategory,
-        category
-    );
-    const {data: categoryDetails, loading: loadingCategoryDetails} = useSanity(
-        getProductCategory,
-        category
-    );
-    const {data: productOptions, loading: loadingProductOptions} = useSanity(
-        getProductOptions
-    );
-
-    const {data: productCategories, loading: loadingProductCategories} = useSanity(
-        getProductCategories
-    );
+    const {data: products, loading: loadingProducts} = useSanity(getProductsByCategory, category);
+    const {data: productOptions, loading: loadingProductOptions} = useSanity(getProductOptions);
+    const {data: productCategories, loading: loadingProductCategories} = useSanity(getProductCategories);
 
     const [mounted, setMounted] = useState(false);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [filters, setFilters] = useState({});
     const [categoryFilters, setCategoryFilters] = useState({});
-    const [sortOption, setSortOption] = useState("newest");
+    const [sortOption, setSortOption] = useState("all");
     const [searchQuery, setSearchQuery] = useState("");
-    const [priceRange, setPriceRange] = useState(1500);
+    const [priceRange, setPriceRange] = useState(2500);
 
-    // liczba elementów w pierwszej partii
     const itemsPerLoad = 12;
-    // ile łącznie ma być widoczne (pierwsze 12 + kolejne wciśnięte “Load More”)
-    const [visibleCount, setVisibleCount] = useState(itemsPerLoad);
-    const [isLoadingMore, setIsLoadingMore] = useState(false);
+    const [visibleCount, setVisibleCount] = useState(0);            // start od 0 — pokażemy partię dopiero po preloadzie
+    const [isPreparingBatch, setIsPreparingBatch] = useState(false); // steruje skeletonami podczas preloadu
+    const [isLoadingMore, setIsLoadingMore] = useState(false);       // status przy przycisku „Load More”
 
-    const ptComponents = {
-        block: {
-            normal: ({children}) => <p className="">{children}</p>,
-            h1: ({children}) => (
-                <h1 className="leading-[170%] text-[32px]">{children}</h1>
-            ),
-        },
-    };
+    // stabilny losowy porządek na czas wizyty
+    const baseOrderRef = useRef(new Map());
 
-    // Ustawiamy mounted i inicjalizujemy filtry
     useEffect(() => {
         setMounted(true);
 
         if (products && productOptions) {
-            setFilteredProducts(products);
-            // console.log(products)
             const initialFilters = productOptions.reduce((acc, option) => {
                 acc[option.name] = [];
                 return acc;
             }, {});
-            setFilters({
-                // "productCategories": [],
-                ...initialFilters
-            });
+            setFilters({...initialFilters});
         }
         if (productCategories) {
-            const initialCategoryFilters = productCategories.reduce((acc, category) => {
-                acc[category.slug] = false;
+            const initialCategoryFilters = productCategories.reduce((acc, cat) => {
+                acc[cat.slug] = false;
                 return acc;
             }, {});
             setCategoryFilters(initialCategoryFilters);
         }
     }, [products, productOptions, productCategories]);
 
-    // Filtruj i sortuj przy zmianie kryteriów
     useEffect(() => {
-        if (products) filterAndSortProducts();
-    }, [searchQuery,
-        filters,
-        priceRange,
-        sortOption,
-        categoryFilters,]);
+        if (!products || !products.length) return;
+        const ids = products.map(p => p._id);
+        const shuffled = [...ids].sort(() => Math.random() - 0.5);
+        baseOrderRef.current = new Map(shuffled.map((id, idx) => [id, idx]));
+    }, [products]);
 
-    // Reset “widocznych” elementów przy nowych filtrowaniach
-    useEffect(() => {
-        setVisibleCount(itemsPerLoad);
-    }, [filteredProducts]);
-
-    // Po aktualizacji visibleCount wyłączamy loader
-    useEffect(() => {
-        if (isLoadingMore) {
-            setIsLoadingMore(false);
+    // --- normalizacja ceny
+    const normalizePrice = (p) => {
+        if (typeof p === "number") return p;
+        if (typeof p === "string") {
+            const cleaned = p.replace(/[^0-9.,]/g, "").replace(/,/g, ".");
+            const n = parseFloat(cleaned);
+            return Number.isFinite(n) ? n : 0;
         }
-    }, [visibleCount]);
+        return 0;
+    };
 
-    const filterAndSortProducts = () => {
-        if (!products) return;
-
+    // filtr + sort (bez pokazywania; samo wyliczenie listy)
+    const buildFiltered = () => {
+        if (!products) return [];
         let temp = [...products];
 
-        // 1) Search by name
         if (searchQuery) {
-            temp = temp.filter((prod) =>
-                prod.name.toLowerCase().includes(searchQuery.toLowerCase())
-            );
+            const q = searchQuery.toLowerCase();
+            temp = temp.filter((prod) => prod.name.toLowerCase().includes(q));
         }
 
-        // 2) Filter by productCategory checkboxes
         const activeCats = Object.entries(categoryFilters)
             .filter(([_, v]) => v)
             .map(([key]) => key);
         if (activeCats.length > 0 && !categoryFilters.all) {
-            temp = temp.filter((prod) =>
-                activeCats.includes(prod.productCategory?.slug?.current)
-            );
+            temp = temp.filter((prod) => activeCats.includes(prod.productCategory?.slug?.current));
         }
 
-        // 3) Other detail-based filters
         Object.entries(filters).forEach(([filterName, values]) => {
             if (values.length) {
                 temp = temp.filter((prod) =>
-                    prod.details?.some(
-                        (d) =>
-                            d.productDetailsName === filterName &&
-                            values.includes(d.content)
-                    )
+                    prod.details?.some((d) => d.productDetailsName === filterName && values.includes(d.content))
                 );
             }
         });
 
-        // 4) Price range
         if (priceRange > 0) {
-            temp = temp.filter((prod) => {
-                const price = prod.price || 0; // Używamy 0, jeśli cena nie jest dostępna
-                return price <= priceRange;
-            });
+            temp = temp.filter((prod) => normalizePrice(prod.price) <= priceRange);
         }
 
-        // 5) Sorting
-        if (sortOption === "price-asc") temp.sort((a, b) => a.price - b.price);
-        if (sortOption === "price-desc") temp.sort((a, b) => b.price - a.price);
-        if (sortOption === "newest")
-            temp.sort(
-                (a, b) => new Date(b._createdAt) - new Date(a._createdAt)
-            );
-        if (sortOption === "oldest")
-            temp.sort(
-                (a, b) => new Date(a._createdAt) - new Date(b._createdAt)
-            );
+        if (sortOption === "all") {
+            temp.sort((a, b) => {
+                const ai = baseOrderRef.current.get(a._id) ?? Number.MAX_SAFE_INTEGER;
+                const bi = baseOrderRef.current.get(b._id) ?? Number.MAX_SAFE_INTEGER;
+                return ai - bi;
+            });
+        }
+        if (sortOption === "price-asc") temp.sort((a, b) => normalizePrice(a.price) - normalizePrice(b.price));
+        if (sortOption === "price-desc") temp.sort((a, b) => normalizePrice(b.price) - normalizePrice(a.price));
+        if (sortOption === "newest") temp.sort((a, b) => new Date(b._createdAt) - new Date(a._createdAt));
+        if (sortOption === "oldest") temp.sort((a, b) => new Date(a._createdAt) - new Date(b._createdAt));
 
-        setFilteredProducts(temp);
+        return temp;
     };
 
+    // Gdy któraś zależność się zmienia — przebuduj listę i przygotuj (preloaduj) 1. partię
+    useEffect(() => {
+        const next = buildFiltered();
+        setFilteredProducts(next);
+        setVisibleCount(0);            // schowaj dotychczasowe (będziemy odsłaniać partiami)
+        if (next.length > 0) {
+            prepareNextBatch(next, 0); // preload pierwszej partii po zmianie filtrów/sortowania
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [products, searchQuery, filters, priceRange, sortOption, categoryFilters]);
 
-    if (
-        loadingProducts ||
-        loadingCategoryDetails ||
-        loadingProductOptions ||
-        loadingProductCategories ||
-        !mounted
-    ) {
+    // PRELOAD obrazów partii i dopiero potem odsłoń
+    const getImageUrl = (p) =>
+        p?.thumbnail ?? (Array.isArray(p?.images) ? p.images[0] : undefined);
+
+    const preloadBatch = (list, start, end) => {
+        const urls = list.slice(start, end)
+            .map(getImageUrl)
+            .filter(Boolean);
+
+        if (urls.length === 0) {
+            return Promise.resolve(); // nic do preloadu
+        }
+
+        return Promise.all(
+            urls.map((src) => new Promise((res) => {
+                const img = new Image();
+                img.onload = img.onerror = () => res();
+                img.src = src;
+            }))
+        );
+    };
+
+    const prepareNextBatch = (list = filteredProducts, currentVisible = visibleCount) => {
+        const start = currentVisible;
+        const end = Math.min(start + itemsPerLoad, list.length);
+        if (start >= end) return;
+
+        setIsPreparingBatch(true);
+        preloadBatch(list, start, end).then(() => {
+            setVisibleCount(end);       // odsłoń całą partię NARAZ
+            setIsPreparingBatch(false);
+            setIsLoadingMore(false);
+        });
+    };
+
+    // klik „Load More” → preload następnej partii, a dopiero potem odsłoń
+    const handleLoadMore = () => {
+        if (isPreparingBatch) return;
+        setIsLoadingMore(true);
+        prepareNextBatch();
+    };
+
+    const loading = loadingProducts || loadingProductOptions || loadingProductCategories || !mounted;
+
+    if (loading) {
         return <Loading type="full"/>;
     }
 
-
     return (
         <PageTransition>
-            {/*<Banner*/}
-            {/*    backgroundImage={categoryDetails?.image}*/}
-            {/*    hugeText={categoryDetails?.title}*/}
-            {/*    showBdImage={false}*/}
-            {/*>*/}
-            {/*    <PortableText*/}
-            {/*        value={categoryDetails?.header}*/}
-            {/*        components={ptComponents}*/}
-            {/*    />*/}
-            {/*</Banner>*/}
-
             <Layout>
                 <div className="flex gap-5 py-[64px] max-lg:flex-col pt-[150px]">
                     <ProductFilters
@@ -207,7 +201,7 @@ function ProductsRootLayout({category}) {
                         priceRange={priceRange}
                         setPriceRange={setPriceRange}
                         productCategories={productCategories}
-                        filterAndSortProducts={filterAndSortProducts}
+                        filterAndSortProducts={() => {}} // nie wywołujemy już ręcznie; trzymamy w useEffect
                         categoryFilters={categoryFilters}
                         setCategoryFilters={setCategoryFilters}
                         category={category}
@@ -222,35 +216,24 @@ function ProductsRootLayout({category}) {
                                     animate={{opacity: 1}}
                                     exit={{opacity: 0}}
                                 >
-                                    {/*
-                    Teraz przekazujemy całą tablicę filteredProducts
-                    oraz visibleCount i itemsPerLoad
-                  */}
                                     <ProductsList
                                         allProducts={filteredProducts}
                                         visibleCount={visibleCount}
                                         itemsPerLoad={itemsPerLoad}
                                         sortOption={sortOption}
                                         setSortOption={setSortOption}
-                                        loading={isLoadingMore}
+                                        loading={isPreparingBatch}
                                     />
 
                                     <div className="flex justify-center mt-8">
-                                        {isLoadingMore ? (
+                                        {isPreparingBatch ? (
                                             <Loading type="small"/>
                                         ) : (
                                             visibleCount < filteredProducts.length && (
                                                 <button
-                                                    onClick={() => {
-                                                        setIsLoadingMore(true);
-                                                        setVisibleCount((prev) =>
-                                                            Math.min(
-                                                                prev + itemsPerLoad,
-                                                                filteredProducts.length
-                                                            )
-                                                        );
-                                                    }}
+                                                    onClick={handleLoadMore}
                                                     className="px-6 py-2 border rounded-md bg-primary text-white hover:bg-primary-dark"
+                                                    disabled={isPreparingBatch}
                                                 >
                                                     Load More
                                                 </button>

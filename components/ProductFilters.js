@@ -16,20 +16,18 @@ export default function ProductFilters({
                                            category
                                        }) {
     const handleFilterChange = (filterName, value) => {
-        if(filterName === "productCategory") {
+        if (filterName === "productCategory") {
             filterAndSortProducts("productCategory")
         }
         setFilters((prev) => {
             const currentValues = prev[filterName] || [];
             if (currentValues.includes(value)) {
                 return {
-                    ...prev,
-                    [filterName]: currentValues.filter((v) => v !== value),
+                    ...prev, [filterName]: currentValues.filter((v) => v !== value),
                 };
             } else {
                 return {
-                    ...prev,
-                    [filterName]: [...currentValues, value],
+                    ...prev, [filterName]: [...currentValues, value],
                 };
             }
         });
@@ -38,21 +36,18 @@ export default function ProductFilters({
 
 
     const handleCategoryChange = (categorySlug) => {
-        setCategoryFilters
-        ((prev) => ({
-            ...prev,
-            [categorySlug]: !prev[categorySlug],
+        setCategoryFilters((prev) => ({
+            ...prev, [categorySlug]: !prev[categorySlug],
         }));
         filterAndSortProducts("productCategory");
     }
 
 
-    return (
-        <div className="w-1/4 p-4 max-lg:w-full">
+    return (<div className="w-1/4 p-4 max-lg:w-full">
             <form
                 className="w-full rounded-md border border-gray-300 flex gap-3 items-center px-[15px] py-[10px]"
             >
-                <Image src={SearchIcon} alt="Search Icon" width={22} height={18} />
+                <Image src={SearchIcon} alt="Search Icon" width={22} height={18}/>
                 <input
                     type="text"
                     placeholder="Search by name"
@@ -76,8 +71,7 @@ export default function ProductFilters({
                 <p className="text-sm text-gray-500 mt-1">Up to {priceRange} £</p>
             </div>
 
-            {productOptions?.map((option) => (
-                <div key={option.name} className="mt-6">
+            {productOptions?.map((option) => (<div key={option.name} className="mt-6">
                     <h4 className="font-medium mb-2">{option.name}</h4>
                     {option.options?.map((opt) => opt.value).map((value) => (
                         <div key={value} className="flex items-center py-[8px]">
@@ -88,7 +82,8 @@ export default function ProductFilters({
                                     checked={filters[option.name]?.includes(value) || false}
                                     onChange={() => handleFilterChange(option.name, value)}
                                 />
-                                <span className="absolute text-[#AE8974] opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                <span
+                                    className="absolute text-[#AE8974] opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                                   <svg
                                       xmlns="http://www.w3.org/2000/svg"
                                       className="h-3.5 w-3.5"
@@ -106,30 +101,25 @@ export default function ProductFilters({
                                 </span>
                             </label>
                             <span className="ml-2 text-sm">{value}</span>
-                        </div>
-                    ))}
-                </div>
-            ))}
+                        </div>))}
+                </div>))}
 
-            {
-                category === "all" ? (
-                    <div className="mt-6">
-                        <h4 className="font-medium mb-2">Medium</h4>
-                        {
-                            productCategories?.map((item, index) => {
+            {category === "all" ? (<div className="mt-6">
+                    <h4 className="font-medium mb-2">Medium</h4>
+                    {productCategories?.map((item, index) => {
 
-                                    if(item.slug==="all") return ;
+                        if (item.slug === "all") return;
 
-                                    return (
-                                        <div key={index} className="flex items-center py-[8px]">
-                                            <label className="flex items-center cursor-pointer relative">
-                                                <input
-                                                    type="checkbox"
-                                                    className="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded-sm shadow bg-[#E7E0DC] checked:bg-[#E7E0DC]"
-                                                    checked={categoryFilters[item.slug] || false}
-                                                    onChange={() => handleCategoryChange(item.slug)}
-                                                />
-                                                <span className="absolute text-[#AE8974] opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                        return (<div key={index} className="flex items-center py-[8px]">
+                                <label className="flex items-center cursor-pointer relative">
+                                    <input
+                                        type="checkbox"
+                                        className="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded-sm shadow bg-[#E7E0DC] checked:bg-[#E7E0DC]"
+                                        checked={categoryFilters[item.slug] || false}
+                                        onChange={() => handleCategoryChange(item.slug)}
+                                    />
+                                    <span
+                                        className="absolute text-[#AE8974] opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                                   <svg
                                       xmlns="http://www.w3.org/2000/svg"
                                       className="h-3.5 w-3.5"
@@ -145,17 +135,12 @@ export default function ProductFilters({
                                     ></path>
                                   </svg>
                                 </span>
-                                            </label>
-                                            <span className="ml-2 text-sm">{item.title}</span>
-                                        </div>
+                                </label>
+                                <span className="ml-2 text-sm">{item.title}</span>
+                            </div>
 
-                                    );
-                                }
-                            )
-                        }
-                    </div>
-                ) : null
-            }
-        </div>
-    );
+                        );
+                    })}
+                </div>) : null}
+        </div>);
 }

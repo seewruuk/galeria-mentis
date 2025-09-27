@@ -2,7 +2,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 
 export default {
     name: 'artistsSettings',
-    title: 'Artists Settings',
+    title: 'Artists Subpage Settings & SEO',
     icon: IoSettingsOutline,
     type: 'document',
     fields: [

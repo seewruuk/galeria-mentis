@@ -3,7 +3,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 export default {
     name: 'blogSettings',
     icon: IoSettingsOutline,
-    title: 'Blog Settings',
+    title: 'Blog Settings & SEO',
     type: 'document',
     fields: [
         {
