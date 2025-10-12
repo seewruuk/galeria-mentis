@@ -16,7 +16,7 @@ export default function ProductCard({
                                         index,
                                     }) {
     return (
-        <motion.div className="flex flex-col items-start w-full">
+        <motion.div className="flex flex-col items-start w-full max-lg:py-7 lg:p-7">
             {/* Główny link do produktu */}
             <motion.a
                 href={`/products/${slug}`}
