@@ -456,16 +456,16 @@ export default function CartContextProvider({children}) {
         const exist = cartItems.find(x => x._id === item._id);
 
         if (exist) {
-            setCartItems(
-                cartItems.map(x =>
-                    x._id === item._id
-                        ? {...exist, qty: exist.qty + 1}
-                        : x
-                )
-            );
-            toast.success("Successfully increased the amount of product in the shopping cart.");
-            // toast.error("The product is already in the cart.");
-            return ;
+            // setCartItems(
+            //     cartItems.map(x =>
+            //         x._id === item._id
+            //             ? {...exist, qty: exist.qty + 1}
+            //             : x
+            //     )
+            // );
+            // toast.success("Successfully increased the amount of product in the shopping cart.");
+            toast.error("The product is already in the cart.");
+
         } else {
             setCartItems([
                 ...cartItems,

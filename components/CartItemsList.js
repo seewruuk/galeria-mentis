@@ -58,30 +58,30 @@ export default function CartItemsList({
                                 </div>
                             </div>
 
-                            <div className="flex flex-1 items-center justify-between pt-2 max-lg:flex-col max-lg:items-start max-lg:justify-start max-lg:gap-4">
-                                <p className="mt-1 text-sm font-medium text-gray-900">
-                                    {formatPrice(product.price)}
-                                </p>
-                                <div className="bg-gray/10 min-w-[60px] flex gap-5 items-center justify-center p-2">
-                                    <button
-                                        disabled={preventChange}
-                                        onClick={() => decreaseQty(product._id)}
-                                        type="button"
-                                        className="disabled:text-gray-500 text-black hover:text-primary transition-all"
-                                    >
-                                        <MdOutlineRemove />
-                                    </button>
-                                    <p className="flex-grow text-center">{product.qty}</p>
-                                    <button
-                                        disabled={preventChange}
-                                        onClick={() => increaseQty(product._id)}
-                                        type="button"
-                                        className="disabled:text-gray-500 text-black hover:text-primary transition-all"
-                                    >
-                                        <MdOutlineAdd />
-                                    </button>
-                                </div>
-                            </div>
+                            {/*<div className="flex flex-1 items-center justify-between pt-2 max-lg:flex-col max-lg:items-start max-lg:justify-start max-lg:gap-4">*/}
+                            {/*    <p className="mt-1 text-sm font-medium text-gray-900">*/}
+                            {/*        {formatPrice(product.price)}*/}
+                            {/*    </p>*/}
+                            {/*    <div className="bg-gray/10 min-w-[60px] flex gap-5 items-center justify-center p-2">*/}
+                            {/*        <button*/}
+                            {/*            disabled={preventChange}*/}
+                            {/*            onClick={() => decreaseQty(product._id)}*/}
+                            {/*            type="button"*/}
+                            {/*            className="disabled:text-gray-500 text-black hover:text-primary transition-all"*/}
+                            {/*        >*/}
+                            {/*            <MdOutlineRemove />*/}
+                            {/*        </button>*/}
+                            {/*        <p className="flex-grow text-center">{product.qty}</p>*/}
+                            {/*        <button*/}
+                            {/*            disabled={preventChange}*/}
+                            {/*            onClick={() => increaseQty(product._id)}*/}
+                            {/*            type="button"*/}
+                            {/*            className="disabled:text-gray-500 text-black hover:text-primary transition-all"*/}
+                            {/*        >*/}
+                            {/*            <MdOutlineAdd />*/}
+                            {/*        </button>*/}
+                            {/*    </div>*/}
+                            {/*</div>*/}
                         </div>
                     </li>
                 ))}
