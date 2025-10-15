@@ -7,7 +7,7 @@ export async function POST(req, res) {
 
     let data = JSON.stringify({
         "campaign": {
-            "campaignId": "XKpP3"
+            "campaignId": "LCSv5"
         },
         "email": body.dataToSend.email // użycie email z przesłanego body
     });
