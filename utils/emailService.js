@@ -158,16 +158,16 @@ export function generateOrderEmailHtml({
                 submit an appropriate declaration in writing or electronically to the email address provided in the
                 terms and conditions. For more information, please refer to the terms and conditions available on the
                 website <a
-                        href=${process.env.NEXT_PUBLIC_BASE_URL + "/terms-and-conditions.pdf"} target="_blank"
+                        href=${"https://galeria-mentis.vercel.app/links/shippingReturns"} target="_blank"
                         style="color: #1d4ed8; text-decoration: underline;">at this link.</a> Read it carefully before making
                 a purchase.
                 The withdrawal policy is available <a
-                        href=${process.env.NEXT_PUBLIC_BASE_URL + "/withdrawal-policy.pdf"} 
+                        href=${"https://galeria-mentis.vercel.app/links/privacyPolicy"} 
                         target="_blank"
                         style="color: #1d4ed8; text-decoration: underline;">at this link.</a>
             </p>
-            <p style="margin-top: 10px; font-size: 10px;">
-                Galeria Mentis / Company Information / Address: 123 Main Street, New York, NY 10030, USA / Phone: +1 234 567 890 / Email: example@gmail.com
+            <p style="margin-top: 10px; font-size: 10px; text-align: center;">
+                Galeria Mentis | contact@galeriamentis.com
             </p>
         </td>
     </tr>
