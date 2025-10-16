@@ -7,6 +7,7 @@ import createOrder from "@/lib/createOrder";
 import {useRouter} from "next/navigation";
 import {getOrder} from "@/sanity/getSanity/getOrder";
 import Link from "next/link";
+import {saveToNewsletter} from "@/lib/saveToNewsletter";
 
 
 export const CartContext = createContext({});
@@ -270,7 +271,7 @@ export default function CartContextProvider({children}) {
             name: "terms",
             label: (
                 <>
-                    *I accept the  <Link
+                    *I accept the <Link
                     href={"/terms-and-conditions.pdf"}
                     target={"_blank"}
                     className={"underline"}>
@@ -301,7 +302,7 @@ export default function CartContextProvider({children}) {
             label: (
                 <>
                     I agree to receive promotional offers and updates via email.
-                    <br />
+                    <br/>
                     You can unsubscribe at any time.
                 </>
             ),
@@ -327,7 +328,6 @@ export default function CartContextProvider({children}) {
             setSummaryButtonDisabled(true);
         }
     }, [form, termsAccepted, invoiceForm.status, invoiceInputs]);
-
 
 
     useEffect(() => {
@@ -356,6 +356,14 @@ export default function CartContextProvider({children}) {
 
         const disableFormState = form.map(input => ({...input, disabled: true}));
         toast.loading("Processing order...");
+
+        if (termsAccepted[3].value === true) {
+            const saveNewsletter = await saveToNewsletter(form[0].value);
+
+            if (saveNewsletter.status !== 200) {
+                toast.error("There was an error saving to newsletter.");
+            }
+        }
 
         setTermsDisabled(true);
         setForm(disableFormState);
@@ -528,12 +536,11 @@ export default function CartContextProvider({children}) {
         } else {
             setTermsAccepted(
                 termsAccepted.map((term) =>
-                    term.name === name ? { ...term, value: checked } : term
+                    term.name === name ? {...term, value: checked} : term
                 )
             );
         }
     };
-
 
 
     return (
@@ -558,7 +565,6 @@ export default function CartContextProvider({children}) {
             individualInvoiceFields,
             companyInvoiceFields,
             summaryButtonDisabled,
-
 
 
             handleAcceptAll,
