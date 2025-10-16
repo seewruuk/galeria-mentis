@@ -3,14 +3,18 @@ import {useSearchParams} from 'next/navigation'
 import PageTransition from "@/components/PageTransition";
 import Link from "next/link";
 import Cookies from "js-cookie";
-import {useEffect} from "react";
+import {useContext, useEffect} from "react";
+import {CartContext} from "@/context/CartContext";
 
 export default function SuccessCancelLayout({header, subtitle}) {
 
+    const {setCartItems} = useContext(CartContext);
     const searchParams = useSearchParams()
     const orderId = searchParams.get('orderId')
+
     useEffect(() => {
         Cookies.remove("cart");
+        setCartItems([])
     }, []);
 
     return (
