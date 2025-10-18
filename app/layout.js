@@ -7,6 +7,7 @@ import {Toaster} from "react-hot-toast";
 import AuthContextProvider from "@/context/AuthContext";
 import WishlistContextProvider from "@/context/WishlistContext";
 import Footer from "@/components/Footer";
+import ProtectedView from "@/components/ProtectedView";
 
 
 const merriweather = Merriweather({
@@ -41,7 +42,7 @@ export default function RootLayout({children}) {
                         <Navbar/>
                         <Toaster/>
 
-                        {children}
+                        <ProtectedView>{children}</ProtectedView>
 
                     </AuthContextProvider>
                 </WishlistContextProvider>
