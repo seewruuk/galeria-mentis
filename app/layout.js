@@ -8,6 +8,7 @@ import AuthContextProvider from "@/context/AuthContext";
 import WishlistContextProvider from "@/context/WishlistContext";
 import Footer from "@/components/Footer";
 import ProtectedView from "@/components/ProtectedView";
+import CookieConsent from "@/components/CookieConsent";
 
 
 const merriweather = Merriweather({
@@ -38,7 +39,7 @@ export default function RootLayout({children}) {
             <CartContextProvider>
                 <WishlistContextProvider>
                     <AuthContextProvider>
-
+                        <CookieConsent />
                         <Navbar/>
                         <Toaster/>
 
