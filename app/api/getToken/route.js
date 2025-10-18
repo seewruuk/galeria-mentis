@@ -6,7 +6,7 @@ export async function POST(req, res) {
 
 
     const apiUrl = 'https://api.getresponse.com/v3/token';
-    const credentials = "fec83ba1-600b-11f0-91bf-00163ec8ce26:98925a2a55dbfb206df6a378d6fc01217ca13ec2";
+    const credentials = "5f33e827-ac5b-11f0-8acb-00163e45cec4:77959697040f09915ed65266bc65d5baa5c10f4e";
     const base64Credentials = Buffer.from(credentials).toString('base64');
 
     try {
