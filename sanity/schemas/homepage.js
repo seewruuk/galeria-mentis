@@ -145,7 +145,7 @@ export default {
                     to: [{type: 'product'}],
                 },
             ],
-            validation: Rule => Rule.max(4).warning('You can only select up to 4 products'),
+            // validation: Rule => Rule.max(4).warning('You can only select up to 4 products'),
         },
         {
             name: 'highlightedArtists',

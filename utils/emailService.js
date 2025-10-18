@@ -212,7 +212,7 @@ export async function sendEmailToCustomer(order) {
     switch (orderStatus) {
         case "paid": {
             header = "Your payment was successful!";
-            description = `We have received confirmation of your payment. Your order is now being processed. 
+            description = `We have received confirmation of your payment. Your order is now being processed and you will be notified when your artwork has been dispatched. 
         If you have any questions, please contact our customer support team. Thank you for shopping with us!`;
             break;
         }
