@@ -18,7 +18,7 @@ const itemVariants = {
 export default function ArtistsList({ artists, artworksLimit = 3 }) {
     return (
         <motion.div
-            className="w-full relative flex flex-col gap-[250px]"
+            className="w-full relative flex flex-col gap-[100px]"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
