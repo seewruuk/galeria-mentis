@@ -16,6 +16,7 @@ import {AnimatePresence} from "framer-motion";
 import FullScreenImages from "@/components/FullScreenImages";
 import toast from "react-hot-toast";
 import {useRouter} from "next/navigation";
+import StructuredData from "@/components/StructuredData";
 
 export default function ProductLayout({slug}) {
     const router = useRouter();
@@ -69,7 +70,7 @@ export default function ProductLayout({slug}) {
 
     return (
         <PageTransition>
-
+            {product && <StructuredData data={product} type="Product" />}
 
             <AnimatePresence>
                 {openGallery.status && (

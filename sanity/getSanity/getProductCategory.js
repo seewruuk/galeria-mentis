@@ -10,7 +10,10 @@ export async function getProductCategory(slug) {
             "image": image.asset->url,
             header,
             subText,
-            seo,
+            seo{
+              ...,
+              "ogImage": seo.ogImage.asset->url
+            },
         }[0]`,
         { slug }
     );

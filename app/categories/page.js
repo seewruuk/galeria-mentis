@@ -1,5 +1,5 @@
 import ProductsLayout from "@/components/layouts/ProductsLayout";
-import {getProductCategory} from "@/sanity/getSanity/getProductCategory";
+import {generateSEO} from "@/lib/generateSEO";
 
 export default function Page({params}) {
 
@@ -10,10 +10,16 @@ export default function Page({params}) {
 
 
 export async function generateMetadata() {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
+    const pageUrl = `${baseUrl}/categories`;
 
-    return {
-        title: "All Artworks`",
+    return generateSEO({
+        title: "All Artworks",
         description: "Explore our collection of artworks from various categories.",
-        keywords: "art, artworks, collection, categories, paintings, sculptures",
-    };
+        seo: {
+            metaTitle: "All Artworks - Galeria Mentis",
+            metaDescription: "Explore our collection of artworks from various categories.",
+            keywords: ["art", "artworks", "collection", "categories", "paintings", "sculptures"],
+        }
+    }, pageUrl);
 }

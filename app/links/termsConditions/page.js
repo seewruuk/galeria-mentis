@@ -1,4 +1,6 @@
 import PolicyComponent from "@/components/PolicyComponent";
+import {getPolicyByType} from "@/sanity/getSanity/getPolicy";
+import {generateSEO} from "@/lib/generateSEO";
 
 export default function Page(){
     return(
@@ -7,9 +9,16 @@ export default function Page(){
 }
 
 export async function generateMetadata() {
-    return {
-        title: "Terms & Conditions",
-        description: "Read our Terms & Conditions to understand the rules and regulations for using our website and services.",
-        keywords: ["Terms & Conditions", "Terms of Service", "User Agreement"],
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
+    const data = await getPolicyByType('termsConditions');
+
+    if (!data) {
+        return {
+            title: "Terms & Conditions - Galeria Mentis",
+            description: "Read our Terms & Conditions to understand the rules and regulations for using our website and services.",
+        };
     }
+
+    const pageUrl = `${baseUrl}/links/termsConditions`;
+    return generateSEO(data, pageUrl);
 }

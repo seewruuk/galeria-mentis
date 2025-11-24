@@ -11,13 +11,15 @@ export default function Page({params}) {
 
 
 export async function generateMetadata({ params }) {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
     const data = await getProductCategory(params.slug);
 
-    // return {
-    //     title: data?.seo !== null && data.seo.metaTitle ? data.seo.metaTitle : "NO TITLE",
-    //     description:  data?.seo !== null && data.seo.metaDescription ? data.seo.metaDescription : "NO DESCRIPTION",
-    //     keywords: data?.seo !== null && data.seo.keywords ? data?.seo?.keywords.map((item) => item).join(", ") : "NO KEYWORDS",
-    // };
-    return generateSEO(data);
+    if (!data) return {
+        title: "Category not found",
+        description: "Category not found",
+    };
+
+    const pageUrl = `${baseUrl}/categories/${params.slug}`;
+    return generateSEO(data, pageUrl);
 
 }

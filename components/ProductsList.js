@@ -93,8 +93,8 @@ export default function ProductsList({
                                 {batchItems.map((product, idx) => {
                                     const key =
                                         batchIdx === 0
-                                            ? product.slug.current
-                                            : `${product.slug.current}-batch-${batchIdx}`;
+                                            ? product._id || product.slug.current
+                                            : `${product._id || product.slug.current}-batch-${batchIdx}`;
                                     const animationIndex = batchIdx * itemsPerLoad + idx;
 
                                     return (

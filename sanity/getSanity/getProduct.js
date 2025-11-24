@@ -28,9 +28,12 @@ export async function getProduct(slug) {
         "productDetailsName": productDetails->name,
         content
       },
-        seo,
+        seo{
+          ...,
+          "ogImage": seo.ogImage.asset->url
+        },
         
-       
+        
         
         }[0]`
         , {slug}

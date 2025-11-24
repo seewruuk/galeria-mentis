@@ -14,6 +14,7 @@ import Pagination from "@/components/Pagination";
 import Footer from "@/components/Footer";
 import Image from "next/image";
 import {motion} from "framer-motion";
+import StructuredData from "@/components/StructuredData";
 
 
 export default function ArtistLayout({slug}) {
@@ -87,6 +88,7 @@ export default function ArtistLayout({slug}) {
 
     return (
         <PageTransition>
+            {artist && <StructuredData data={artist} type="Person" />}
             <Banner backgroundImage={artist?.bannerImage} hugeText="Artist">
                 <motion.div
                     initial={{scale: 0}}

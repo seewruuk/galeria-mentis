@@ -48,8 +48,8 @@ export default function FeaturedProductsCarousel({
                 }}
                 navigation={navigationReady}
             >
-                {products.map((product) => (
-                    <SwiperSlide key={product.slug}>
+                {products.map((product, index) => (
+                    <SwiperSlide key={product._id || `product-${product.slug}-${index}`}>
                         <ProductCard
                             image={product.thumbnail ?? product.images[0]}
                             title={product.name}

@@ -12,7 +12,10 @@ export async function getArtist(slug) {
             description,
             "bannerImage": bannerImage.asset->url,
             bio,
-            seo,
+            seo{
+              ...,
+              "ogImage": seo.ogImage.asset->url
+            },
             
         }[0]`,
         {slug}

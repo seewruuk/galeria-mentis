@@ -25,7 +25,7 @@ export const metadata = {
 
 export default function RootLayout({children}) {
     return (
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning>
         <head>
             <link
                 rel="stylesheet"
@@ -33,7 +33,7 @@ export default function RootLayout({children}) {
             />
         </head>
 
-        <body className={`${merriweather.variable} antialiased font-serif relative overflow-x-hidden`}>
+        <body className={`${merriweather.variable} antialiased font-serif relative overflow-x-hidden`} suppressHydrationWarning>
 
         <DisplayContextProvider>
             <CartContextProvider>

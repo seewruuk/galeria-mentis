@@ -29,6 +29,7 @@ export async function getHomePage() {
             "backgroundImage": backgroundImage.asset->url
           },
           featuredProducts[]->{
+            _id,
             "thumbnail": thumbnail.asset->url,
             "images": images[].asset->url,
             name,
@@ -47,7 +48,10 @@ export async function getHomePage() {
           },
           benefitsSection[]{ ..., "icon": icon.asset->url },
           "benefitsSection_backgroundImage": benefitsSection_backgroundImage.asset->url,
-          seo
+          seo{
+            ...,
+            "ogImage": seo.ogImage.asset->url
+          }
         }[0]`
     );
 }

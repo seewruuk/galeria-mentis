@@ -1,5 +1,4 @@
 import ArtistsLayout from "@/components/layouts/ArtistsLayout";
-import {getArtist} from "@/sanity/getSanity/getArtist";
 import {getArtistsSettings} from "@/sanity/getSanity/getArtistsSettings";
 import {generateSEO} from "@/lib/generateSEO";
 
@@ -9,9 +8,15 @@ export default function Page(){
     )
 }
 
-export async function generateMetadata({ params }) {
-
+export async function generateMetadata() {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
     const data = await getArtistsSettings();
 
-    return generateSEO(data);
+    if (!data) return {
+        title: "Artists - Galeria Mentis",
+        description: "Meet our artists and discover their exceptional artworks at Galeria Mentis",
+    };
+
+    const pageUrl = `${baseUrl}/artists`;
+    return generateSEO(data, pageUrl);
 }

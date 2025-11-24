@@ -1,5 +1,6 @@
 import ProductLayout from "@/components/layouts/ProductLayout";
 import {getProduct} from "@/sanity/getSanity/getProduct";
+import {generateSEO} from "@/lib/generateSEO";
 
 export default function Page({params}) {
     return (
@@ -10,6 +11,7 @@ export default function Page({params}) {
 
 
 export async function generateMetadata({ params }) {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
     const data = await getProduct(params.slug);
 
     if (!data) return {
@@ -17,9 +19,6 @@ export async function generateMetadata({ params }) {
         description: "Product not found",
     };
 
-    return {
-        title: data.seo !== null && data.seo.metaTitle ? data.seo.metaTitle : "NO TITLE",
-        description:  data.seo !== null && data.seo.metaDescription ? data.seo.metaDescription : "NO DESCRIPTION",
-        keywords: data.seo !== null && data.seo.keywords ? data?.seo?.keywords.map((item) => item).join(", ") : "NO KEYWORDS",
-    };
+    const pageUrl = `${baseUrl}/products/${params.slug}`;
+    return generateSEO(data, pageUrl);
 }

@@ -8,7 +8,10 @@ export async function getBlogSettings() {
         title,
         "image" : image.asset->url,
         header,
-        seo,
+        seo{
+          ...,
+          "ogImage": seo.ogImage.asset->url
+        },
         }`
     )
 }

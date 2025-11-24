@@ -1,4 +1,6 @@
 import PolicyComponent from "@/components/PolicyComponent";
+import {getPolicyByType} from "@/sanity/getSanity/getPolicy";
+import {generateSEO} from "@/lib/generateSEO";
 
 export default function Page(){
     return(
@@ -7,10 +9,16 @@ export default function Page(){
 }
 
 export async function generateMetadata() {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
+    const data = await getPolicyByType('privacyPolicy');
 
-    return {
-        title: "Privacy Policy",
-        description: "Read our Privacy Policy to understand how we collect, use, and protect your personal information.",
-        keywords: ["Privacy Policy", "Data Protection", "Your Company Name", "User Privacy"],
-    };
+    if (!data) {
+        return {
+            title: "Privacy Policy - Galeria Mentis",
+            description: "Read our Privacy Policy to understand how we collect, use, and protect your personal information.",
+        };
+    }
+
+    const pageUrl = `${baseUrl}/links/privacyPolicy`;
+    return generateSEO(data, pageUrl);
 }

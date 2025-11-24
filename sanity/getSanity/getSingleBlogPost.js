@@ -12,7 +12,10 @@ export async function getSingleBlogPost(slug){
             "mainImage": mainImage.asset->url,
             description,
             body,
-            seo,
+            seo{
+              ...,
+              "ogImage": seo.ogImage.asset->url
+            },
         }[0]`,
         {slug}
     );

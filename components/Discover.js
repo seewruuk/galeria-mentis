@@ -34,7 +34,7 @@ export default function Discover({artworks, artist}) {
                             className="col-span-2 grid grid-cols-1 gap-5 lg:grid-cols-3 w-3/4 max-lg:w-full max-lg:max-w-[350px] max-lg:mx-auto">
                             {artworks.map((artwork, index) => (
                                 <ProductCard
-                                    key={index}
+                                    key={artwork._id || `artwork-${artwork.slug}-${index}`}
                                     image={artwork.thumbnail ? artwork.thumbnail : artwork.images[0]}
                                     title={artwork.name}
                                     artist={artwork.artist.name}

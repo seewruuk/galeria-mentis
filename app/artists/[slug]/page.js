@@ -11,6 +11,7 @@ export default function Page({params}){
 
 
 export async function generateMetadata({ params }) {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
     const data = await getArtist(params.slug);
 
     if (!data) return {
@@ -18,6 +19,7 @@ export async function generateMetadata({ params }) {
         description: "Unfortunately, the artist you are looking for does not exist."
     };
 
-    return generateSEO(data);
+    const pageUrl = `${baseUrl}/artists/${params.slug}`;
+    return generateSEO(data, pageUrl);
 
 }

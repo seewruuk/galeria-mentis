@@ -14,13 +14,16 @@ export default async function Page({params}){
 
 
 export async function generateMetadata({ params }) {
-    const data = await getSingleBlogPost(params.slug);
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
+    const slug = await params.slug;
+    const data = await getSingleBlogPost(slug);
 
     if (!data) return {
-        title: "No artist found",
-        description: "Unfortunately, the artist you are looking for does not exist."
+        title: "Blog post not found",
+        description: "Unfortunately, the blog post you are looking for does not exist."
     };
 
-    return generateSEO(data);
+    const pageUrl = `${baseUrl}/blog/${slug}`;
+    return generateSEO(data, pageUrl);
 
 }

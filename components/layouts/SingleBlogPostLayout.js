@@ -9,6 +9,7 @@ import { PortableText } from "@portabletext/react";
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 import Footer from "@/components/Footer";
+import StructuredData from "@/components/StructuredData";
 
 export default function SingleBlogPostLayout({ slug }) {
     const { data, error } = useSanity(getSingleBlogPost, slug);
@@ -50,6 +51,7 @@ export default function SingleBlogPostLayout({ slug }) {
 
     return (
         <PageTransition>
+            {data && <StructuredData data={data} type="Article" />}
             <Banner backgroundImage={data.mainImage}
                     hugeText={"Blog"}>
                 <h2 className={"text-[32px]"}>{data.title}</h2>

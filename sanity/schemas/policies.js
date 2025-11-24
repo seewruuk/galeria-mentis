@@ -28,7 +28,32 @@ export default {
             of: [{type: 'block'}],
             validation: Rule => Rule.required().error('Content is required'),
         },
-
-
-    ]
+        {
+            title: "SEO",
+            name: "seo",
+            type: "seo",
+            description: "SEO metadata for this policy page",
+        },
+    ],
+    preview: {
+        select: {
+            title: 'type',
+            subtitle: 'content',
+        },
+        prepare({title, subtitle}) {
+            const typeNames = {
+                'cookies': 'Cookies',
+                'artistTerms': 'Artist Terms',
+                'cookiesConsent': 'Cookies Consent',
+                'faq': 'FAQ',
+                'privacyPolicy': 'Privacy Policy',
+                'shippingReturns': 'Shipping & Returns',
+                'termsConditions': 'Terms and Conditions',
+            };
+            return {
+                title: typeNames[title] || title,
+                subtitle: subtitle ? `${subtitle.length} block(s)` : 'No content',
+            };
+        },
+    },
 }
