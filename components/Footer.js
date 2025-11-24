@@ -44,7 +44,7 @@ export default function Footer({showContactForm = true}) {
         // },
         {
             header: "Contact", links: [
-                {name: process.env.NEXT_PUBLIC_COMPANY_PHONE, link: `tel:${process.env.NEXT_PUBLIC_COMPANY_PHONE}`},
+                // {name: process.env.NEXT_PUBLIC_COMPANY_PHONE, link: `tel:${process.env.NEXT_PUBLIC_COMPANY_PHONE}`},
                 {name: process.env.NEXT_PUBLIC_COMPANY_EMAIL, link: `mailto:${process.env.NEXT_PUBLIC_COMPANY_EMAIL}`},
             ]
         },
