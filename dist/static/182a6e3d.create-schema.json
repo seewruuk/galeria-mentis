@@ -2,24 +2,263 @@
   {
     "fields": [
       {
-        "description": "Max 60 characters",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 60
+              }
+            ],
+            "level": "warning",
+            "message": "Title should be max 60 characters for best SEO results"
+          }
+        ],
+        "description": "Page title (max 60 characters). Visible in search results.",
         "name": "metaTitle",
         "type": "string",
         "title": "Meta title"
       },
       {
-        "description": "Max 160 characters",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "max",
+                "constraint": 160
+              }
+            ],
+            "level": "warning",
+            "message": "Description should be max 160 characters for best SEO results"
+          }
+        ],
+        "description": "Page description (max 160 characters). Visible in search results.",
         "name": "metaDescription",
         "type": "text",
         "title": "Meta description"
       },
       {
+        "description": "Main focus keyword for this page",
+        "name": "focusKeyword",
+        "type": "string",
+        "title": "Focus keyword"
+      },
+      {
+        "description": "Additional keywords (separated by commas)",
         "of": [
           {
             "type": "string"
           }
         ],
         "name": "keywords",
+        "type": "array"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "uri",
+                "constraint": {
+                  "options": {
+                    "scheme": [
+                      "/^http$/",
+                      "/^https$/"
+                    ],
+                    "allowRelative": false,
+                    "relativeOnly": false,
+                    "allowCredentials": false
+                  }
+                }
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "description": "Canonical URL of the page (optional, if different from default)",
+        "name": "canonicalUrl",
+        "type": "url",
+        "title": "Canonical URL"
+      },
+      {
+        "options": {
+          "collapsible": true,
+          "collapsed": true
+        },
+        "description": "Page indexing settings for search engine robots",
+        "fields": [
+          {
+            "initialValue": true,
+            "description": "Should the page be indexed? (index/noindex)",
+            "name": "index",
+            "type": "boolean"
+          },
+          {
+            "initialValue": true,
+            "description": "Should robots follow links? (follow/nofollow)",
+            "name": "follow",
+            "type": "boolean"
+          }
+        ],
+        "name": "metaRobots",
+        "type": "object"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "description": "Image displayed when sharing on social media (recommended: 1200x630px)",
+        "name": "ogImage",
+        "type": "image",
+        "title": "Open Graph Image"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "website",
+              "value": "website"
+            },
+            {
+              "title": "article",
+              "value": "article"
+            },
+            {
+              "title": "product",
+              "value": "product"
+            },
+            {
+              "title": "profile",
+              "value": "profile"
+            }
+          ]
+        },
+        "initialValue": "website",
+        "description": "Typ strony Open Graph",
+        "name": "ogType",
+        "type": "string",
+        "title": "Open Graph Type"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "summary",
+              "value": "summary"
+            },
+            {
+              "title": "summary_large_image",
+              "value": "summary_large_image"
+            }
+          ]
+        },
+        "initialValue": "summary_large_image",
+        "description": "Typ karty Twitter",
+        "name": "twitterCard",
+        "type": "string",
+        "title": "Twitter Card Type"
+      },
+      {
+        "options": {
+          "collapsible": true,
+          "collapsed": true
+        },
+        "description": "Structured data in JSON-LD format for better SEO (optional)",
+        "fields": [
+          {
+            "options": {
+              "list": [
+                {
+                  "title": "Product",
+                  "value": "Product"
+                },
+                {
+                  "title": "Article",
+                  "value": "Article"
+                },
+                {
+                  "title": "Person (Artist)",
+                  "value": "Person"
+                },
+                {
+                  "title": "Organization",
+                  "value": "Organization"
+                },
+                {
+                  "title": "BreadcrumbList",
+                  "value": "BreadcrumbList"
+                },
+                {
+                  "title": "WebPage",
+                  "value": "WebPage"
+                },
+                {
+                  "title": "None"
+                }
+              ]
+            },
+            "description": "Schema.org structured data type",
+            "name": "type",
+            "type": "string"
+          },
+          {
+            "description": "Custom JSON-LD code (advanced)",
+            "name": "customJsonLd",
+            "type": "text",
+            "title": "Custom JSON-LD"
+          }
+        ],
+        "name": "structuredData",
+        "type": "object",
+        "title": "Schema.org Structured Data (JSON-LD)"
+      },
+      {
+        "options": {
+          "collapsible": true,
+          "collapsed": true
+        },
+        "description": "Alternate language versions of the page (for multilingual sites)",
+        "of": [
+          {
+            "fields": [
+              {
+                "description": "Language code (e.g. 'pl', 'en')",
+                "name": "lang",
+                "type": "string",
+                "title": "Language Code"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "uri",
+                        "constraint": {
+                          "options": {
+                            "scheme": [
+                              "/^http$/",
+                              "/^https$/"
+                            ],
+                            "allowRelative": false,
+                            "relativeOnly": false,
+                            "allowCredentials": false
+                          }
+                        }
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "description": "URL of the alternate language version",
+                "name": "url",
+                "type": "url",
+                "title": "URL"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "alternateLanguages",
         "type": "array"
       }
     ],
@@ -1727,18 +1966,6 @@
         "type": "array"
       },
       {
-        "validation": [
-          {
-            "rules": [
-              {
-                "flag": "max",
-                "constraint": 4
-              }
-            ],
-            "level": "warning",
-            "message": "You can only select up to 4 products"
-          }
-        ],
         "of": [
           {
             "to": [
@@ -2262,6 +2489,12 @@
         ],
         "name": "content",
         "type": "array"
+      },
+      {
+        "description": "SEO metadata for this policy page",
+        "name": "seo",
+        "type": "seo",
+        "title": "SEO"
       }
     ],
     "name": "policies",
