@@ -1,5 +1,6 @@
 import "./globals.css";
 import {Merriweather} from "next/font/google";
+import Script from "next/script";
 import CartContextProvider from "@/context/CartContext";
 import DisplayContextProvider from "@/context/DisplayContext";
 import Navbar from "@/components/Navbar";
@@ -32,6 +33,19 @@ export default function RootLayout({children}) {
                 href="https://use.typekit.net/icu4qan.css"
             />
         </head>
+
+        <Script
+            src="https://www.googletagmanager.com/gtag/js?id=G-3WST4J96ND"
+            strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+            {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', 'G-3WST4J96ND');
+            `}
+        </Script>
 
         <body className={`${merriweather.variable} antialiased font-serif relative overflow-x-hidden`} suppressHydrationWarning>
 
