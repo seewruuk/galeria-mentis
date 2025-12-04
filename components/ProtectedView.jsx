@@ -2,21 +2,45 @@
 
 import { useState, useEffect } from "react";
 import Timeout from "@/components/Timeout";
+import useSanity from "@/hooks/useSanity";
+import { getMaintenanceMode } from "@/sanity/getSanity/getMaintenanceMode";
+import Navbar from "@/components/Navbar";
 
 export default function ProtectedView({ children }) {
     const [unlocked, setUnlocked] = useState(false);
-    const requirePassword =
-        process.env.NEXT_PUBLIC_REQUIRE_PASSWORD === "true";
+    const [mounted, setMounted] = useState(false);
+    const { data: maintenanceData, loading } = useSanity(getMaintenanceMode);
 
+    useEffect(() => {
+        setMounted(true);
+        // Check if user has already unlocked the site
+        const isUnlocked = localStorage.getItem("maintenance_unlocked") === "true";
+        if (isUnlocked) {
+            setUnlocked(true);
+        }
+    }, []);
 
     const handleUnlock = () => {
-        // localStorage.setItem("page_unlocked", "true");
         setUnlocked(true);
     };
 
-    if (requirePassword && !unlocked) {
-        return <Timeout onUnlock={handleUnlock} />;
+    // Show nothing while loading or not mounted
+    if (!mounted || loading) {
+        return null;
     }
 
-    return children;
+    // Check if maintenance mode is active (default to false if data is not available)
+    const isMaintenanceActive = maintenanceData?.isActive === true;
+
+    // If maintenance is active and user hasn't unlocked, show timeout screen
+    if (isMaintenanceActive && !unlocked) {
+        return <Timeout onUnlock={handleUnlock} maintenanceData={maintenanceData || {}} />;
+    }
+
+    return (
+        <>
+        <Navbar/>
+        {children}
+        </>
+    )
 }

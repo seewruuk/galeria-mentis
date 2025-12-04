@@ -73,8 +73,10 @@ export default function ProductFilters({
 
             {productOptions?.map((option) => (<div key={option.name} className="mt-6">
                     <h4 className="font-medium mb-2">{option.name}</h4>
-                    {option.options?.map((opt) => opt.value).map((value) => (
-                        <div key={value} className="flex items-center py-[8px]">
+                    {option.options?.map((opt, optIndex) => {
+                        const value = opt.value;
+                        return (
+                        <div key={`${option.name}-${value}-${optIndex}`} className="flex items-center py-[8px]">
                             <label className="flex items-center cursor-pointer relative">
                                 <input
                                     type="checkbox"
@@ -101,7 +103,9 @@ export default function ProductFilters({
                                 </span>
                             </label>
                             <span className="ml-2 text-sm">{value}</span>
-                        </div>))}
+                        </div>
+                        );
+                    })}
                 </div>))}
 
             {category === "all" ? (<div className="mt-6">

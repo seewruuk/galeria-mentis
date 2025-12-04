@@ -54,7 +54,7 @@ export default function RootLayout({children}) {
                 <WishlistContextProvider>
                     <AuthContextProvider>
                         <CookieConsent />
-                        <Navbar/>
+                        {/* <Navbar/> */}
                         <Toaster/>
 
                         <ProtectedView>{children}</ProtectedView>

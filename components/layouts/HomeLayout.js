@@ -28,7 +28,6 @@ export default function HomeLayout() {
 
     if (loading || !mounted || !homePageData) return <Loading/>
 
-    console.log(homePageData);
 
     return (
         <PageTransition>

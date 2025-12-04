@@ -13,6 +13,7 @@ import productDetailsOption from "./schemas/product-details-option"
 import artistsSettings from "./schemas/artistsSettings"
 import blogSettings from "./schemas/blogSettings"
 import policies from "./schemas/policies"
+import maintenanceMode from "./schemas/maintenanceMode"
 
 export const schema = {
     types: [
@@ -35,6 +36,7 @@ export const schema = {
         artistsSettings,
 
         policies,
+        maintenanceMode,
 
 
         productDetailsOption,
