@@ -32,13 +32,21 @@ export default function SingleBlogPostLayout({ slug }) {
         },
         types: {
             image: ({ value }) => (
-                <div className="grid place-items-center">
+                <div className="grid place-items-center my-8">
                     <Image
-                        src={urlFor(value.asset._ref).url()}
-                        alt="Sanity image"
-                        width={500}
-                        height={500}
+                        src={urlFor(value.asset._ref, {
+                            width: 1300,
+                            height: 1300,
+                            quality: 85,
+                            format: 'webp',
+                            fit: 'max'
+                        }).url()}
+                        alt={value.alt || "Blog post image"}
+                        width={650}
+                        height={650}
+                        sizes="(max-width: 768px) 100vw, 650px"
                         className="max-w-[650px] h-auto object-contain"
+                        loading="lazy"
                     />
                 </div>
             ),

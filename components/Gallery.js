@@ -30,7 +30,7 @@ export default function Gallery({
     const { addItem } = useContext(WishlistContext);
     const router = useRouter();
 
-    const [isMainLoading, setIsMainLoading] = useState(true);
+    const [isMainLoading, setIsMainLoading] = useState(false);
 
     const handleMainLoadComplete = () => {
         setIsMainLoading(false);
@@ -42,7 +42,6 @@ export default function Gallery({
     };
 
     useEffect(() => {
-        console.log(product);
         if(product && product.quantity > 0) {
             setAllowAddToCart(false);
         }else{
@@ -128,15 +127,17 @@ export default function Gallery({
 
                         <h1 className="text-3xl font-semibold mb-2">{title}</h1>
 
-                        <p className="text-sm text-gray-600 mb-4">
-                            <span className="font-semibold">Artist: </span>
-                            <Link
-                                className="text-primary hover:underline"
-                                href={"/artists/" + artist.slug}
-                            >
-                                {artist.name}
-                            </Link>
-                        </p>
+                        {artist && artist.slug && (
+                            <p className="text-sm text-gray-600 mb-4">
+                                <span className="font-semibold">Artist: </span>
+                                <Link
+                                    className="text-primary hover:underline"
+                                    href={"/artists/" + artist.slug}
+                                >
+                                    {artist.name || "Unknown"}
+                                </Link>
+                            </p>
+                        )}
 
                         <p className="text-2xl font-bold mb-6">{formatPrice(price)}</p>
 

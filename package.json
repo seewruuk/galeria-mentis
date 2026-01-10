@@ -15,8 +15,11 @@
     "@sanity/image-url": "^1.1.0",
     "@sanity/vision": "^3.64.1",
     "@stripe/stripe-js": "^5.4.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "crypto-js": "^4.2.0",
     "framer-motion": "^11.11.17",
+    "gl-matrix": "^3.4.4",
     "groq": "^3.64.1",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.511.0",
@@ -31,6 +34,8 @@
     "stripe": "^17.5.0",
     "styled-components": "^6.1.13",
     "swiper": "^11.2.8",
+    "tailwind-merge": "^3.4.0",
+    "tailwindcss-animate": "^1.0.7",
     "uuid": "^11.0.3"
   },
   "devDependencies": {

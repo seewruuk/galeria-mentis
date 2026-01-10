@@ -1,11 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, A11y } from "swiper/modules";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import "swiper/css";
-import "swiper/css/navigation";
 import ProductCard from "@/components/ProductCard";
 
 export default function FeaturedProductsCarousel({
@@ -18,26 +14,70 @@ export default function FeaturedProductsCarousel({
     const prevRef = useRef(null);
     const nextRef = useRef(null);
     const [navigationReady, setNavigationReady] = useState({ prevEl: null, nextEl: null });
+    const [isClient, setIsClient] = useState(false);
+    const [Swiper, setSwiper] = useState(null);
+    const [SwiperSlide, setSwiperSlide] = useState(null);
+    const [modules, setModules] = useState(null);
     const Prev = PrevIcon || ChevronLeft;
     const Next = NextIcon || ChevronRight;
 
-    // Po zamontowaniu ustawiamy elementy nawigacji
+    // Ładujemy Swiper tylko po stronie klienta
     useEffect(() => {
-        setNavigationReady({ prevEl: prevRef.current, nextEl: nextRef.current });
+        setIsClient(true);
+        
+        // Dynamicznie ładujemy Swiper i jego moduły
+        Promise.all([
+            import("swiper/react"),
+            import("swiper/modules"),
+            import("swiper/css"),
+            import("swiper/css/navigation"),
+        ]).then(([swiperMod, modulesMod]) => {
+            setSwiper(() => swiperMod.Swiper);
+            setSwiperSlide(() => swiperMod.SwiperSlide);
+            setModules([modulesMod.Navigation, modulesMod.A11y]);
+            
+            // Ustawiamy nawigację po załadowaniu modułów
+            setTimeout(() => {
+                setNavigationReady({ prevEl: prevRef.current, nextEl: nextRef.current });
+            }, 0);
+        });
     }, []);
+
+    // Fallback dla SSR - renderujemy zwykłą grid
+    if (!isClient || !Swiper || !SwiperSlide || !modules) {
+        return (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {products.slice(0, 4).map((product, idx) => (
+                    <ProductCard
+                        key={product._id || `product-${product.slug}-${idx}`}
+                        image={product.thumbnail ?? product.images[0]}
+                        title={product.name}
+                        category={product.productCategory.title}
+                        categoryLink={product.productCategory.slug}
+                        artist={product.artist.name}
+                        artistsLink={product.artist.slug}
+                        price={product.price}
+                        slug={product.slug}
+                        index={idx}
+                    />
+                ))}
+            </div>
+        );
+    }
 
     return (
         <div className="relative">
             <button
                 ref={prevRef}
                 className={`absolute left-0 top-1/2 transform -translate-y-1/2 z-10 ${prevButtonClassName}`}
+                aria-label="Previous slide"
             >
                 <Prev />
             </button>
 
             <Swiper
-                modules={[Navigation, A11y]}
-                loop={true}
+                modules={modules}
+                loop={products.length > 4}
                 spaceBetween={24}
                 speed={500}
                 breakpoints={{
@@ -46,7 +86,7 @@ export default function FeaturedProductsCarousel({
                     768: { slidesPerView: 3 },
                     1024: { slidesPerView: 4 },
                 }}
-                navigation={navigationReady}
+                navigation={navigationReady.prevEl && navigationReady.nextEl ? navigationReady : false}
             >
                 {products.map((product, index) => (
                     <SwiperSlide key={product._id || `product-${product.slug}-${index}`}>
@@ -59,6 +99,7 @@ export default function FeaturedProductsCarousel({
                             artistsLink={product.artist.slug}
                             price={product.price}
                             slug={product.slug}
+                            index={index}
                         />
                     </SwiperSlide>
                 ))}
@@ -67,6 +108,7 @@ export default function FeaturedProductsCarousel({
             <button
                 ref={nextRef}
                 className={`absolute right-0 top-1/2 transform -translate-y-1/2 z-10 ${nextButtonClassName}`}
+                aria-label="Next slide"
             >
                 <Next />
             </button>

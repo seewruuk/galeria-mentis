@@ -23,7 +23,8 @@ export default function ProductLayout({slug}) {
     const {data: product, loading, error} = useSanity(getProduct, slug);
     const [artworks, setArtworks] = useState([]);
     const [artist, setArtist] = useState(null);
-    const [isDataReady, setIsDataReady] = useState(false);
+    const [isAdditionalDataLoading, setIsAdditionalDataLoading] = useState(false);
+    const [hasRedirected, setHasRedirected] = useState(false);
 
     const [openGallery, setOpenGallery] = useState({
         status: false,
@@ -31,42 +32,98 @@ export default function ProductLayout({slug}) {
         selectedIndex: 0,
     });
 
-
+    // Przekierowanie w przypadku błędu lub braku produktu (tylko raz po zakończeniu loading)
     useEffect(() => {
-        if (product) {
-            setOpenGallery({
-                ...openGallery,
-                images: product.images,
-            });
+        if (loading) return; // Czekamy aż loading się skończy
+        if (hasRedirected) return; // Zapobiegamy wielokrotnym przekierowaniom
+
+        // Jeśli błąd - przekieruj
+        if (error) {
+            setHasRedirected(true);
+            toast.error("Error loading product");
+            router.push("/categories/all");
+            return;
         }
-    }, [product]);
 
+        // Sprawdzamy czy product jest faktycznie załadowany (null/undefined/pusta tablica/invalid)
+        // Product może być null, undefined, pustą tablicą, lub obiektem bez wymaganych pól
+        const isProductInvalid = !product || Array.isArray(product) || !product._id || !product.name;
+        
+        // Jeśli produkt nie został znaleziony - przekieruj
+        if (isProductInvalid) {
+            setHasRedirected(true);
+            toast.error("Product not found");
+            router.push("/categories/all");
+            return;
+        }
+
+        // Jeśli produkt istnieje ale nie ma artysty - NIE przekierowujemy (może być produkt bez artysty)
+        // Po prostu nie ładujemy dodatkowych danych (Discover)
+    }, [loading, error, product, router, hasRedirected]);
+
+    // Ustawiamy obrazy dla galerii gdy product jest załadowany
     useEffect(() => {
+        if (product?.images && product.images.length > 0 && !Array.isArray(product)) {
+            setOpenGallery(prev => ({
+                ...prev,
+                images: product.images,
+            }));
+        }
+    }, [product?.images]);
+
+    // Ładujemy dodatkowe dane (artworks, artist) w tle - nie blokują renderowania
+    useEffect(() => {
+        // Sprawdzamy czy product jest faktycznie załadowany i poprawny
+        if (loading || !product || Array.isArray(product) || !product._id || !product.name) {
+            return; // Czekamy na dane
+        }
+
+        // Jeśli produkt nie ma artysty, nie ładujemy dodatkowych danych
+        if (!product.artist || !product.artist.id) {
+            return;
+        }
+
+        // Ładujemy dodatkowe dane tylko jeśli mamy poprawne dane produktu
         const fetchData = async () => {
-            if (product?.artist?.id && product.artist.slug) {
+            if (product.artist?.id && product.artist.slug) {
+                setIsAdditionalDataLoading(true);
                 try {
                     const [artworksData, artistData] = await Promise.all([
                         getArtistArtworks(product.artist.id, product._id),
                         getArtist(product.artist.slug),
                     ]);
-                    setArtworks(artworksData);
+                    setArtworks(artworksData || []);
                     setArtist(artistData);
-                    setIsDataReady(true);
                 } catch (err) {
-                    console.error("Error fetching data:", err);
+                    console.error("Error fetching additional data:", err);
+                } finally {
+                    setIsAdditionalDataLoading(false);
                 }
             }
         };
 
-        if (product) {
-            fetchData();
-        } else {
-            toast.error("Product not found");
-            router.push("/categories/all");
-        }
-    }, [product]);
+        fetchData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [product, loading]);
 
-    if (loading || !isDataReady) return <Loading/>;
+    // Pokazujemy Loading tylko gdy główne dane produktu się ładują
+    if (loading) {
+        return <Loading/>;
+    }
+
+    // Jeśli błąd lub product nie został znaleziony (null/undefined/pusta tablica) - czekamy na przekierowanie
+    if (error || hasRedirected) {
+        return <Loading/>;
+    }
+
+    // Sprawdzamy czy product jest faktycznie załadowany i poprawny
+    const isProductInvalid = !product || Array.isArray(product) || !product._id || !product.name;
+    if (isProductInvalid) {
+        return <Loading/>;
+    }
+
+    // Jeśli produkt nie ma artysty - nadal renderujemy stronę, ale bez sekcji Discover
+    // (produkt może istnieć bez artysty, więc nie przekierowujemy)
 
     return (
         <PageTransition>
@@ -85,10 +142,10 @@ export default function ProductLayout({slug}) {
 
             <Layout>
                 <Gallery
-                    images={product.images}
-                    artist={product.artist}
+                    images={product.images || []}
+                    artist={product.artist || {name: "Unknown", slug: ""}}
                     price={product.price}
-                    category={product.productCategory}
+                    category={product.productCategory || {title: "", slug: ""}}
                     title={product.name}
                     product={product}
                     setOpenGallery={setOpenGallery}
@@ -100,9 +157,10 @@ export default function ProductLayout({slug}) {
                     productDetails={product.details}
                 />
 
-
-                <Discover artworks={artworks.slice(0, 3)} artist={artist}/>
-
+                {/* Pokazujemy Discover tylko gdy dane są załadowane i mamy artystę */}
+                {product.artist && product.artist.id && !isAdditionalDataLoading && artworks.length > 0 && artist && (
+                    <Discover artworks={artworks.slice(0, 3)} artist={artist}/>
+                )}
 
                 {/*<RecommendedProducts />*/}
 

@@ -12,10 +12,8 @@ export default function ArtistCard({avatar, artistLink, artistName, location, in
                 <Image
                     src={`${avatar}`}
                     alt={"Artist Avatar"}
-                    layout={"fill"}
-                    objectFit={"cover"}
-                    objectPosition={"center"}
-                    className={""}
+                    fill
+                    className="object-cover object-center"
                 />
             </Link>
 

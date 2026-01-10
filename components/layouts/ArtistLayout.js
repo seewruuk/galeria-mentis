@@ -28,6 +28,7 @@ export default function ArtistLayout({slug}) {
 
     const [sortOption, setSortOption] = useState("newest");
 
+    // Ładujemy artworks w tle - nie blokują renderowania głównej treści
     useEffect(() => {
         const fetchData = async () => {
             if (artist?._id) {
@@ -44,18 +45,15 @@ export default function ArtistLayout({slug}) {
             }
         };
 
-        if (artist) {
+        if (artist?._id) {
             fetchData();
         }
-    }, [artist]);
+    }, [artist?._id]);
 
+    // Sortowanie artworks
     useEffect(() => {
-        if (artworks) {
-            sortArtworks();
-        }
-    }, [sortOption, artworks]);
-
-    const sortArtworks = () => {
+        if (artworks.length === 0) return;
+        
         let sortedArtworks = [...artworks];
         if (sortOption === "newest") {
             sortedArtworks.sort((a, b) => new Date(b._createdAt) - new Date(a._createdAt));
@@ -67,14 +65,17 @@ export default function ArtistLayout({slug}) {
             sortedArtworks.sort((a, b) => b.price - a.price);
         }
         setFilteredArtworks(sortedArtworks);
-    };
+    }, [sortOption, artworks]);
 
     const paginatedArtworks = filteredArtworks.slice(
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
     );
 
-    if (artistLoading || artworksLoading) return <Loading type={"full"}/>;
+    // Pokazujemy Loading tylko gdy główne dane artysty się ładują
+    if (artistLoading || !artist) {
+        return <Loading type={"full"}/>;
+    }
 
     const ptComponents = {
         block: {
@@ -91,11 +92,13 @@ export default function ArtistLayout({slug}) {
             {artist && <StructuredData data={artist} type="Person" />}
             <Banner backgroundImage={artist?.bannerImage} hugeText="Artist">
                 <motion.div
-                    initial={{scale: 0}}
-                    animate={{scale: 1}}
-                    transition={{duration: 0.5, ease: [0.48, 0.15, 0.25, 0.96]}}
+                    initial={{opacity: 0, scale: 0.9}}
+                    animate={{opacity: 1, scale: 1}}
+                    transition={{duration: 0.3, ease: "easeOut"}}
                     className={"h-[190px] w-[190px] rounded-full aspect-square border-[6px] border-primary max-lg:mb-[21px] relative overflow-hidden"}>
-                    <Image src={artist?.avatar} alt={`${artist?.name} avatar`} layout="fill" objectFit="cover"/>
+                    {artist?.avatar && (
+                        <Image src={artist.avatar} alt={`${artist.name} avatar`} fill className="object-cover"/>
+                    )}
                 </motion.div>
                 <h2 className={"text-[42px]"}>{artist?.name}</h2>
                 <p className="text-primary text-[21px]">
@@ -146,27 +149,36 @@ export default function ArtistLayout({slug}) {
                 </div>
 
 
-                <div className="grid grid-cols-1 gap-5 max-lg:mx-auto md:grid-cols-2 lg:grid-cols-4">
-                    {
-                        paginatedArtworks &&
-                        paginatedArtworks.map((item, index) => (
-                            <ProductCard
-                                key={item._id}
-                                index={index}
-                                title={item.name}
-                                artist={item.artist.name}
-                                artistsLink={item.artist.slug}
-                                price={item.price}
-                                category={item.productCategory.title}
-                                categoryLink={item.productCategory.slug}
-                                slug={item.slug}
-                                image={item.thumbnail ? item.thumbnail : item.images[0]}
-
-                            />
-                        ))
-
-                    }
-                </div>
+                {artworksLoading ? (
+                    <div className="grid grid-cols-1 gap-5 max-lg:mx-auto md:grid-cols-2 lg:grid-cols-4">
+                        {[...Array(8)].map((_, i) => (
+                            <div key={i} className="animate-pulse bg-gray-200 h-64 rounded" />
+                        ))}
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 gap-5 max-lg:mx-auto md:grid-cols-2 lg:grid-cols-4">
+                        {paginatedArtworks && paginatedArtworks.length > 0 ? (
+                            paginatedArtworks.map((item, index) => (
+                                <ProductCard
+                                    key={item._id}
+                                    index={index}
+                                    title={item.name}
+                                    artist={item.artist.name}
+                                    artistsLink={item.artist.slug}
+                                    price={item.price}
+                                    category={item.productCategory.title}
+                                    categoryLink={item.productCategory.slug}
+                                    slug={item.slug}
+                                    image={item.thumbnail ? item.thumbnail : item.images[0]}
+                                />
+                            ))
+                        ) : (
+                            <div className="col-span-full text-center py-12 text-gray-500">
+                                No artworks found
+                            </div>
+                        )}
+                    </div>
+                )}
 
                 <Pagination
                     totalItems={filteredArtworks.length}

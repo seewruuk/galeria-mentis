@@ -56,9 +56,8 @@ export default function FullScreenImages({images, selectedIndex = 0, setOpenGall
                         <Image
                             alt={`gallery-${selectedIndex}`}
                             src={images[selectedIndex]}
-                            layout="fill"
-                            objectFit="contain"
-                            className="mx-auto rounded-2xl"
+                            fill
+                            className="object-contain mx-auto rounded-2xl"
                         />
                     </div>
                 </div>
@@ -69,8 +68,7 @@ export default function FullScreenImages({images, selectedIndex = 0, setOpenGall
                             <Image
                                 alt={`gallery-${index}`}
                                 src={item}
-                                layout="fill"
-                                objectFit="cover"
+                                fill
                                 className={`object-cover ${index === selectedIndex ? "opacity-100 border border-white" : "opacity-40 border border-black"} hover:cursor-pointer transition-all hover:opacity-100 hover:scale-[0.98]`}
                                 onClick={() => setOpenGallery({
                                     status: true,

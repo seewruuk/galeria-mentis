@@ -19,8 +19,28 @@ const merriweather = Merriweather({
 });
 
 export const metadata = {
+    metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://galeria-mentis.vercel.app'),
     title: {
-        template: `%s | Galeria Mentis`
+        template: `%s | Galeria Mentis`,
+        default: 'Galeria Mentis - Contemporary Art',
+    },
+    description: 'Galeria Mentis - discover exceptional contemporary art. Original paintings, sculptures and artworks from recognized artists.',
+    keywords: ['contemporary art', 'art gallery', 'paintings', 'sculptures', 'artists', 'online gallery'],
+    robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+            index: true,
+            follow: true,
+            'max-video-preview': -1,
+            'max-image-preview': 'large',
+            'max-snippet': -1,
+        },
+    },
+    openGraph: {
+        type: 'website',
+        locale: 'en_US',
+        siteName: 'Galeria Mentis',
     },
 }
 

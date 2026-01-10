@@ -40,7 +40,7 @@ function ProductsRootLayout({category}) {
     const [searchQuery, setSearchQuery] = useState("");
     const [priceRange, setPriceRange] = useState(2500);
 
-    const itemsPerLoad = 12;
+    const itemsPerLoad = 50;
     const [visibleCount, setVisibleCount] = useState(0);            // start od 0 — pokażemy partię dopiero po preloadzie
     const [isPreparingBatch, setIsPreparingBatch] = useState(false); // steruje skeletonami podczas preloadu
     const [isLoadingMore, setIsLoadingMore] = useState(false);       // status przy przycisku „Load More”

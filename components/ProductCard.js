@@ -20,19 +20,18 @@ export default function ProductCard({
             {/* Główny link do produktu */}
             <motion.a
                 href={`/products/${slug}`}
-                className="w-full relative overflow-hidden"
+                className="w-full relative overflow-hidden block"
                 whileHover={{ filter: "sepia(1)" }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
             >
-                {/* Zamiast Next.js <Image layout="fill" />, używamy prostego <img>
-            żeby wysokość auto dopasowywała się naturalnie do szerokości kolumny */}
                 <LazyImage
                     src={image}
                     alt={title}
-                    className="w-full"
-
-                    />
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    priority={index !== undefined && index < 4}
+                    className="w-full h-auto"
+                />
             </motion.a>
 
             {/* Kategoria */}

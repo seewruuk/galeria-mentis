@@ -34,10 +34,12 @@ export default function Custom404() {
 
 
 export async function generateMetadata() {
-
     return {
-        title: "",
-        description: "",
+        title: "Page Not Found | Galeria Mentis",
+        description: "The page you are looking for does not exist.",
+        robots: {
+            index: false,
+            follow: true,
+        },
     };
-
 }

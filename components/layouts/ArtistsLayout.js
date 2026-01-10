@@ -27,7 +27,7 @@ function ArtistsRootLayout() {
     const [selectedArtisticStyles, setSelectedArtisticStyles] = useState([]);
     const [selectedPaintingStyles, setSelectedPaintingStyles] = useState([]);
 
-    const itemsPerLoad = 12;
+    const itemsPerLoad = 24;
     const [visibleCount, setVisibleCount] = useState(itemsPerLoad);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
 

@@ -3,7 +3,6 @@
 
 import ProductCard from "@/components/ProductCard";
 import { motion, AnimatePresence } from "framer-motion";
-import { useMemo } from "react";
 
 const listVariants = {
     hidden: {},
@@ -24,9 +23,12 @@ export default function ProductsList({
                                          loading = false,
                                      }) {
     const maxVisible = Math.min(visibleCount, allProducts.length);
+    
+    // Oblicz liczbę partii (batches) na podstawie widocznych produktów
     const numBatches = Math.ceil(maxVisible / itemsPerLoad);
-
-    const getBatchSlice = (batchIndex) => {
+    
+    // Funkcja do pobrania produktów dla danej partii
+    const getBatchProducts = (batchIndex) => {
         const start = batchIndex * itemsPerLoad;
         const end = Math.min(start + itemsPerLoad, maxVisible);
         return allProducts.slice(start, end);
@@ -78,31 +80,32 @@ export default function ProductsList({
                     ))}
                 </motion.div>
             ) : (
+                // Renderuj każdą partię w osobnym kontenerze z kolumnami
+                // Każda partia ma własne CSS columns, więc dodanie nowej nie wpływa na poprzednie
                 [...Array(numBatches)].map((_, batchIdx) => {
-                    const batchItems = getBatchSlice(batchIdx);
+                    const batchProducts = getBatchProducts(batchIdx);
+                    
+                    if (batchProducts.length === 0) return null;
 
                     return (
                         <motion.div
                             key={`batch-${batchIdx}`}
-                            className={`columns-1 md:columns-2 lg:columns-3 gap-5 ${batchIdx > 0 ? "mt-6" : ""}`}
+                            className="columns-1 md:columns-2 lg:columns-3 gap-5"
                             variants={listVariants}
                             initial="hidden"
                             animate="visible"
                         >
                             <AnimatePresence>
-                                {batchItems.map((product, idx) => {
-                                    const key =
-                                        batchIdx === 0
-                                            ? product._id || product.slug.current
-                                            : `${product._id || product.slug.current}-batch-${batchIdx}`;
-                                    const animationIndex = batchIdx * itemsPerLoad + idx;
+                                {batchProducts.map((product, idx) => {
+                                    const globalIndex = batchIdx * itemsPerLoad + idx;
+                                    const key = product._id || product.slug.current;
 
                                     return (
                                         <motion.div
                                             key={key}
                                             className="break-inside-avoid mb-5"
                                             variants={itemVariants}
-                                            custom={animationIndex}
+                                            custom={globalIndex}
                                         >
                                             <ProductCard
                                                 image={product.thumbnail ?? product.images[0]}
@@ -113,7 +116,7 @@ export default function ProductsList({
                                                 category={product.productCategory.title}
                                                 categoryLink={product.productCategory.slug.current}
                                                 slug={product.slug.current}
-                                                index={animationIndex}
+                                                index={globalIndex}
                                             />
                                         </motion.div>
                                     );
