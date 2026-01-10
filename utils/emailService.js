@@ -59,16 +59,16 @@ export function generateOrderEmailHtml({
 
 </head>
 
-<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333333;">
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #fff; color: #333333;">
 
 <table align="center" cellpadding="0" cellspacing="0" width="100%" style="background-color: #ffffff; max-width: 650px;">
     <!-- Header Image -->
     <tr>
         <td style="padding: 0;">
-            <img src=${process.env.NEXT_PUBLIC_BASE_URL + "/email-image.svg"}
+            <img src="https://www.galeriamentis.com/galeriamentis_logo.svg"
                 title="Galeria Mentis Logo"
                 alt="Galeria Mentis Logo"
-                 style="width: 100%; height: 200px; display: block; object-fit: cover;"/>
+                 style="width: 100%; height: 200px; display: block; object-fit: contain;"/>
         </td>
     </tr>
 
