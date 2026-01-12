@@ -1557,6 +1557,34 @@
       {
         "name": "newsletter",
         "type": "boolean"
+      },
+      {
+        "fields": [
+          {
+            "description": "Shipping carrier (e.g., Inpost, DHL, etc.)",
+            "name": "carrier",
+            "type": "string"
+          },
+          {
+            "description": "Tracking number (if available)",
+            "name": "trackingNumber",
+            "type": "string"
+          },
+          {
+            "description": "Date when the parcel was shipped",
+            "name": "shipmentDate",
+            "type": "string",
+            "title": "Date of Shipment"
+          },
+          {
+            "description": "Date and time when the parcel delivery message was last sent to the customer",
+            "name": "parcelDeliverySentAt",
+            "type": "string",
+            "title": "Last Sent At"
+          }
+        ],
+        "name": "parcelDelivery",
+        "type": "object"
       }
     ],
     "name": "order",

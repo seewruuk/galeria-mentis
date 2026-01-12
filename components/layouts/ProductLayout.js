@@ -69,7 +69,7 @@ export default function ProductLayout({slug}) {
                 images: product.images,
             }));
         }
-    }, [product?.images]);
+    }, [product]);
 
     // Ładujemy dodatkowe dane (artworks, artist) w tle - nie blokują renderowania
     useEffect(() => {

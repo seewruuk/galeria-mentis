@@ -10,6 +10,7 @@ import Banner from "@/components/Banner";
 import {PortableText} from "@portabletext/react";
 import {PortableComponents} from "@/lib/PortableComponents";
 import {getBlogSettings} from "@/sanity/getSanity/getBlogSettings";
+import Image from "next/image";
 
 export default function BlogLayout() {
 
@@ -47,8 +48,9 @@ export default function BlogLayout() {
                                 key={post._id}
                                 className="relative isolate flex flex-col justify-end overflow-hidden  bg-gray-900 px-8 pb-8 pt-80 sm:pt-48 lg:pt-80 border-2 border-white hover:border-primary transition-all"
                             >
-                                <img alt={`${post.title} Thumbnail`} src={post.mainImage}
-                                     className="absolute inset-0 -z-10 size-full object-cover"/>
+                                <Image alt={`${post.title} Thumbnail`} src={post.mainImage}
+                                     fill
+                                     className="absolute inset-0 -z-10 object-cover"/>
                                 <div
                                     className="absolute inset-0 -z-10 bg-gradient-to-t from-black via-black/40"/>
                                 <div

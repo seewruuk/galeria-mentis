@@ -15,8 +15,6 @@ const nextConfig = {
     },
     // Optymalizacja kompresji
     compress: true,
-    // Optymalizacja bundle size
-    swcMinify: true,
     // Optymalizacja eksperymentalna (Next.js 15)
     experimental: {
         optimizePackageImports: ['framer-motion', 'lucide-react', 'react-icons'],

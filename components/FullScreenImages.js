@@ -22,7 +22,7 @@ export default function FullScreenImages({images, selectedIndex = 0, setOpenGall
             window.removeEventListener("keydown", handleEscape);
         }
 
-    }, [])
+    }, [openGallery, setOpenGallery])
 
 
     return (

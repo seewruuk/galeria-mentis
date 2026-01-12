@@ -22,6 +22,7 @@ export async function getOrder(id) {
             },
             invoice,
             totalPrice,
+            parcelDelivery,
         }[0]`
     )
 }

@@ -1,5 +1,5 @@
 "use client";
-import {Suspense, useEffect, useState} from "react";
+import {Suspense, useEffect, useState, useCallback} from "react";
 import Banner from "@/components/Banner";
 import Layout from "@/components/Layout";
 import Loading from "@/components/Loading";
@@ -47,13 +47,9 @@ function ArtistsRootLayout() {
         }
     }, [isLoadingMore, visibleCount]);
 
-    useEffect(() => {
-        if (artists) {
-            filterArtists();
-        }
-    }, [artists, searchQuery, selectedArtisticStyles, selectedPaintingStyles]);
-
-    const filterArtists = () => {
+    const filterArtists = useCallback(() => {
+        if (!artists) return;
+        
         let filtered = artists;
 
         if (searchQuery) {
@@ -75,7 +71,13 @@ function ArtistsRootLayout() {
         }
 
         setFilteredArtists(filtered);
-    };
+    }, [artists, searchQuery, selectedArtisticStyles, selectedPaintingStyles]);
+
+    useEffect(() => {
+        if (artists) {
+            filterArtists();
+        }
+    }, [artists, searchQuery, selectedArtisticStyles, selectedPaintingStyles, filterArtists]);
 
 
     if (loadingArtists || loadingArtisticStyles || loadingPaintingStyles || !mounted) return <Loading/>;

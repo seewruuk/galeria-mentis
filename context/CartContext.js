@@ -431,26 +431,29 @@ export default function CartContextProvider({children}) {
 
             if (response.status === 200) {
 
-                const order = await getOrder(orderNumber);
+                // const order = await getOrder(orderNumber);
 
-                const sendEmail = await fetch("/api/sendEmailToCustomer", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        order
-                    })
-                });
+                // const sendEmail = await fetch("/api/sendEmailToCustomer", {
+                //     method: "POST",
+                //     headers: {
+                //         "Content-Type": "application/json"
+                //     },
+                //     body: JSON.stringify({
+                //         order
+                //     })
+                // });
 
-                const emailResult = await sendEmail.json();
+                // const emailResult = await sendEmail.json();
 
-                if (emailResult.status !== 200) {
-                    console.log(emailResult)
-                    toast.error("There was an error sending the email. Please contact us to confirm your order.");
-                } else {
-                    router.push(stripeRedirectUrl);
-                }
+                // if (emailResult.status !== 200) {
+                //     console.log(emailResult)
+                //     toast.error("There was an error sending the email. Please contact us to confirm your order.");
+                // } else {
+                //     router.push(stripeRedirectUrl);
+                // }
+
+                router.push(stripeRedirectUrl);
+
             } else {
                 toast.error("There was an error processing your order. Please try again later.");
             }

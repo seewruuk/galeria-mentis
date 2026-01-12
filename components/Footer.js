@@ -3,7 +3,7 @@ import Layout from "@/components/Layout";
 import {icons} from "@/constans/icons";
 import Link from "next/link";
 import Image from "next/image";
-import {links} from "@/components/Navbar";
+import {useNavigationLinks} from "@/hooks/useNavigationLinks";
 import ContactForm from "@/components/ContactForm";
 import {useState} from "react";
 import FormInput from "@/components/FormInput";
@@ -13,7 +13,7 @@ import {validateEmail} from "@/lib/validateEmail";
 import {saveToNewsletter} from "@/lib/saveToNewsletter";
 
 export default function Footer({showContactForm = true}) {
-
+    const {links} = useNavigationLinks();
     const [userEmail, setUserEmail] = useState("");
     const [isSending, setIsSending] = useState(false);
     const [acceptConditions, setAcceptConditions] = useState(false)

@@ -4,11 +4,12 @@ import {motion} from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import Logo from "@/public/assets/logo-white.svg";
-import {links} from "@/components/Navbar";
+import {useNavigationLinks} from "@/hooks/useNavigationLinks";
 import {useRouter} from "next/navigation";
 import ArrowDown from "@/public/assets/arrow-down.svg"
 
 export const MobileMenu = () => {
+    const {links} = useNavigationLinks();
     const [mobileNavOpen, setMobileNavOpen] = useState(false);
     const [expandedMenus, setExpandedMenus] = useState({});
     const router = useRouter();

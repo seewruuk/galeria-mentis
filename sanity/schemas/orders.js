@@ -262,6 +262,37 @@ export default {
             title: "Newsletter",
             name: "newsletter",
             type: "boolean",
+        },
+        {
+            title: "Parcel Delivery",
+            name: "parcelDelivery",
+            type: "object",
+            fields: [
+                {
+                    title: "Carrier",
+                    name: "carrier",
+                    type: "string",
+                    description: "Shipping carrier (e.g., Inpost, DHL, etc.)",
+                },
+                {
+                    title: "Tracking Number",
+                    name: "trackingNumber",
+                    type: "string",
+                    description: "Tracking number (if available)",
+                },
+                {
+                    title: "Date of Shipment",
+                    name: "shipmentDate",
+                    type: "string",
+                    description: "Date when the parcel was shipped",
+                },
+                {
+                    title: "Last Sent At",
+                    name: "parcelDeliverySentAt",
+                    type: "string",
+                    description: "Date and time when the parcel delivery message was last sent to the customer",
+                },
+            ]
         }
     ]
 }

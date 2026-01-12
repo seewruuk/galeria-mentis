@@ -1,5 +1,5 @@
 "use client";
-import {useContext, useEffect, useState} from "react";
+import {useContext, useState, useEffect} from "react";
 import {usePathname} from "next/navigation"; // Hook do ścieżki
 import {DisplayContext} from "@/context/DisplayContext";
 import Layout from "@/components/Layout";
@@ -7,81 +7,21 @@ import Image from "next/image";
 import Link from "next/link";
 import Button from "@/components/Button";
 import {CartContext} from "@/context/CartContext";
-import {getProductCategories} from "@/sanity/getSanity/getProductCategories";
-import {getArtists} from "@/sanity/getSanity/getArtists";
 import {MobileMenu} from "@/components/MobileMenu";
-import {getBlogPosts} from "@/sanity/getSanity/getBlogPosts";
-
-
-const categories = await getProductCategories();
-const artists = await getArtists();
-const posts = await getBlogPosts();
-
-
-const catLinks = categories.map((category) => {
-    return {
-        name: category.title,
-        link: `/categories/${category.slug}`,
-    };
-});
-
-const blogLinks = posts.map((post) => {
-    return `/blog/${post.slug}`;
-
-});
-
-
-const darkNavLinks = categories.map((category) => {
-    return `/categories/${category.slug}`;
-});
-
-const artistsLinks = artists.map((artist) => {
-    return `/artists/${artist.slug}`;
-});
-
-const index = catLinks.findIndex(item => item.name === "All Artwork");
-
-if( index > -1) {
-    const [temp] = catLinks.splice(index, 1);
-    catLinks.unshift(temp);
-}
-
-
-export const links = [
-    {name: "Home", link: '/'},
-    {
-        name: "Artwork",
-        link: "/categories/all",
-        links: [
-            // {
-            //     name: "All Artworks",
-            //     link: "/categories/all"
-            // },
-            ...catLinks
-        ]
-    },
-    {name: "Artists", link: '/artists'},
-    {name: "Blog", link: '/blog'},
-    {name: "Contact", link: '#contact'},
-];
+import {useNavigationLinks} from "@/hooks/useNavigationLinks";
 
 
 export default function Navbar() {
-    const [mounted, setMounted] = useState(false);
+    const {links, artistsLinks, blogLinks, loading} = useNavigationLinks();
     const {displayVersion} = useContext(DisplayContext);
     const {totalQty} = useContext(CartContext);
     const pathname = usePathname();
 
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
-
-    if (!mounted) return null;
+    if (loading) return null;
 
     switch (displayVersion) {
         case "desktop":
-            return <DesktopMenu pathname={pathname} totalQty={totalQty}/>;
+            return <DesktopMenu pathname={pathname} totalQty={totalQty} links={links} artistsLinks={artistsLinks} blogLinks={blogLinks}/>;
         case "mobile":
             return <MobileMenu/>;
         default:
@@ -89,7 +29,7 @@ export default function Navbar() {
     }
 }
 
-const DesktopMenu = ({pathname, totalQty}) => {
+const DesktopMenu = ({pathname, totalQty, links, artistsLinks, blogLinks}) => {
     const blackNavbarPages = ["/", ...artistsLinks, ...blogLinks]; // Podstrony z białym
     const isBlackTheme = blackNavbarPages.includes(pathname);
 

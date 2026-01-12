@@ -22,6 +22,7 @@ export async function getOrders() {
             totalPrice,
             orderStatus,
             invoice,
+            parcelDelivery,
         } | order(_createdAt desc)`
     );
 

@@ -308,6 +308,52 @@ export default function OrderLayout({params}) {
                                         {/*}*/}
                                     </dl>
 
+                                    {/* Parcel Delivery Information */}
+                                    {order.parcelDelivery && (
+                                        <div className="border-t border-gray-200 pt-10">
+                                            <h3 className="text-base font-medium text-gray-900 mb-4">
+                                                Parcel Delivery Information
+                                            </h3>
+                                            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                                                <div className="flex items-center gap-2 mb-2">
+                                                    <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    </svg>
+                                                    <span className="text-sm font-semibold text-green-800">
+                                                        Parcel delivery message sent to customer
+                                                    </span>
+                                                </div>
+                                                {order.parcelDelivery.parcelDeliverySentAt && (
+                                                    <p className="text-xs text-green-700 mb-3">
+                                                        Last sent: {new Date(order.parcelDelivery.parcelDeliverySentAt).toLocaleString('pl-PL', {
+                                                            year: 'numeric',
+                                                            month: '2-digit',
+                                                            day: '2-digit',
+                                                            hour: '2-digit',
+                                                            minute: '2-digit'
+                                                        })}
+                                                    </p>
+                                                )}
+                                            </div>
+                                            <dl className="grid grid-cols-1 gap-x-6 gap-y-4 text-sm">
+                                                <div>
+                                                    <dt className="font-medium text-gray-900">Carrier</dt>
+                                                    <dd className="mt-1 text-gray-700">{order.parcelDelivery.carrier || 'N/A'}</dd>
+                                                </div>
+                                                {order.parcelDelivery.trackingNumber && (
+                                                    <div>
+                                                        <dt className="font-medium text-gray-900">Tracking Number</dt>
+                                                        <dd className="mt-1 text-gray-700 font-mono">{order.parcelDelivery.trackingNumber}</dd>
+                                                    </div>
+                                                )}
+                                                <div>
+                                                    <dt className="font-medium text-gray-900">Date of Shipment</dt>
+                                                    <dd className="mt-1 text-gray-700">{order.parcelDelivery.shipmentDate || 'N/A'}</dd>
+                                                </div>
+                                            </dl>
+                                        </div>
+                                    )}
+
                                     <h3 className="sr-only">Summary</h3>
                                     <dl className="space-y-6 border-t border-gray-200 pt-10 text-sm">
 

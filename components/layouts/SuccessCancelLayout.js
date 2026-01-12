@@ -15,7 +15,7 @@ export default function SuccessCancelLayout({header, subtitle}) {
     useEffect(() => {
         Cookies.remove("cart");
         setCartItems([])
-    }, []);
+    }, [setCartItems]);
 
     return (
         <PageTransition>
