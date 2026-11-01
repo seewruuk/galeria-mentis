@@ -1,14 +1,14 @@
-export default function robots() {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://galeria-mentis.vercel.app';
+import {SITE_URL} from "@/lib/generateSEO";
 
+export default function robots() {
     return {
         rules: [
             {
                 userAgent: '*',
                 allow: '/',
-                disallow: ['/private/', '/dashboard/', '/studio/', '/api/'],
+                disallow: ['/private/', '/dashboard/', '/studio/', '/api/', '/cart', '/wishlist', '/login', '/register', '/success', '/cancel'],
             },
         ],
-        sitemap: `${baseUrl}/sitemap.xml`,
+        sitemap: `${SITE_URL}/sitemap.xml`,
     };
 }

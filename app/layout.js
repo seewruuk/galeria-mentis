@@ -3,11 +3,11 @@ import {Merriweather} from "next/font/google";
 import Script from "next/script";
 import CartContextProvider from "@/context/CartContext";
 import DisplayContextProvider from "@/context/DisplayContext";
-import Navbar from "@/components/Navbar";
 import {Toaster} from "react-hot-toast";
 import AuthContextProvider from "@/context/AuthContext";
 import WishlistContextProvider from "@/context/WishlistContext";
-import Footer from "@/components/Footer";
+import NavigationContextProvider from "@/context/NavigationContext";
+import {getNavigationData} from "@/lib/server/navigation";
 import ProtectedView from "@/components/ProtectedView";
 import CookieConsent from "@/components/CookieConsent";
 
@@ -44,7 +44,9 @@ export const metadata = {
     },
 }
 
-export default function RootLayout({children}) {
+export default async function RootLayout({children}) {
+    const navigation = await getNavigationData();
+
     return (
         <html lang="en" suppressHydrationWarning>
         <head>
@@ -69,6 +71,7 @@ export default function RootLayout({children}) {
 
         <body className={`${merriweather.variable} antialiased font-serif relative overflow-x-hidden`} suppressHydrationWarning>
 
+        <NavigationContextProvider value={navigation}>
         <DisplayContextProvider>
             <CartContextProvider>
                 <WishlistContextProvider>
@@ -83,6 +86,7 @@ export default function RootLayout({children}) {
                 </WishlistContextProvider>
             </CartContextProvider>
         </DisplayContextProvider>
+        </NavigationContextProvider>
 
         </body>
         </html>

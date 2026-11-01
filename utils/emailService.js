@@ -1,4 +1,17 @@
+import "server-only";
 import {formatPrice} from "@/lib/formatPrice";
+
+// Escapowanie danych wpisanych przez klienta (imię, adres itd.) przed wstawieniem do HTML maila
+function esc(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+}
+
+const slugPath = (value) => encodeURIComponent(String(value ?? ""));
 
 export function generateOrderEmailHtml({
                                            orderNumber,
@@ -19,24 +32,24 @@ export function generateOrderEmailHtml({
                                         <tr>
                                             <td style="font-size: 16px; font-weight: bold; color: #333333;">
                                                 <a 
-                                                href=${process.env.NEXT_PUBLIC_BASE_URL + "/products/" + item.slug} 
+                                                href=${process.env.NEXT_PUBLIC_BASE_URL + "/products/" + slugPath(item.slug)} 
                                                 style="text-decoration: none; color: #333333;" target="_blank">
-                                                ${item.name}
+                                                ${esc(item.name)}
                                                 </a>
                                             </td>
                                         </tr>
                                          <tr>
                                               <td style="font-size: 14px; color: #666666;">
                                                 <a 
-                                                href=${process.env.NEXT_PUBLIC_BASE_URL + "/artists/" + item.authorSlug} 
+                                                href=${process.env.NEXT_PUBLIC_BASE_URL + "/artists/" + slugPath(item.authorSlug)} 
                                                 style="text-decoration: none; color: #333333;" target="_blank">
-                                                Artist: ${item.author}
+                                                Artist: ${esc(item.author)}
                                                 </a>
                                             </td>
                                         </tr>
 
                                         <tr>
-                                            <td style="font-size: 14px; color: #666666;">Quantity: ${item.qty}</td>
+                                            <td style="font-size: 14px; color: #666666;">Quantity: ${esc(item.qty)}</td>
                                         </tr>
                                     </table>
                                 </td>
@@ -88,7 +101,7 @@ export function generateOrderEmailHtml({
                     <td style="font-size: 14px; color: #333333;">Your order number:</td>
                 </tr>
                 <tr>
-                    <td style="font-size: 14px; color: #1d4ed8;">${orderNumber}</td>
+                    <td style="font-size: 14px; color: #1d4ed8;">${esc(orderNumber)}</td>
                 </tr>
             </table>
         </td>
@@ -136,13 +149,13 @@ export function generateOrderEmailHtml({
                 <tr>
                     <td style="font-size: 14px; color: #333333;">
                         <strong>Customer Details</strong><br>
-                        ${personData.name} ${personData.lastname}<br>
-                        ${personData.email} <br>
-                        ${personData.phone} <br>
-                        ${personData.address}, ${personData.apartment} <br>
-                        ${personData.city}, ${personData.country} <br>
-                        ${personData.state}, ${personData.postal} <br>
-                        ${personData.city}
+                        ${esc(personData.name)} ${esc(personData.lastname)}<br>
+                        ${esc(personData.email)} <br>
+                        ${esc(personData.phone)} <br>
+                        ${esc(personData.address)}, ${esc(personData.apartment)} <br>
+                        ${esc(personData.city)}, ${esc(personData.country)} <br>
+                        ${esc(personData.state)}, ${esc(personData.postal)} <br>
+                        ${esc(personData.city)}
 
                     </td>
                 </tr>
@@ -202,7 +215,7 @@ export function generateParcelDeliveryEmailHtml({
         ? `
             <tr>
                 <td style="font-size: 14px; color: #333333;">Tracking Number:</td>
-                <td style="font-size: 14px; color: #1d4ed8; font-weight: bold;">${trackingNumber}</td>
+                <td style="font-size: 14px; color: #1d4ed8; font-weight: bold;">${esc(trackingNumber)}</td>
             </tr>
         `
         : '';
@@ -214,23 +227,23 @@ export function generateParcelDeliveryEmailHtml({
                     <tr>
                         <td style="font-size: 16px; font-weight: bold; color: #333333;">
                             <a 
-                            href=${process.env.NEXT_PUBLIC_BASE_URL + "/products/" + item.slug} 
+                            href=${process.env.NEXT_PUBLIC_BASE_URL + "/products/" + slugPath(item.slug)} 
                             style="text-decoration: none; color: #333333;" target="_blank">
-                            ${item.name}
+                            ${esc(item.name)}
                             </a>
                         </td>
                     </tr>
                     <tr>
                         <td style="font-size: 14px; color: #666666;">
                             <a 
-                            href=${process.env.NEXT_PUBLIC_BASE_URL + "/artists/" + item.authorSlug} 
+                            href=${process.env.NEXT_PUBLIC_BASE_URL + "/artists/" + slugPath(item.authorSlug)} 
                             style="text-decoration: none; color: #333333;" target="_blank">
-                            Artist: ${item.author}
+                            Artist: ${esc(item.author)}
                             </a>
                         </td>
                     </tr>
                     <tr>
-                        <td style="font-size: 14px; color: #666666;">Quantity: ${item.qty}</td>
+                        <td style="font-size: 14px; color: #666666;">Quantity: ${esc(item.qty)}</td>
                     </tr>
                 </table>
             </td>
@@ -280,7 +293,7 @@ export function generateParcelDeliveryEmailHtml({
                     <td style="font-size: 14px; color: #333333;">Your order number:</td>
                 </tr>
                 <tr>
-                    <td style="font-size: 14px; color: #1d4ed8; font-weight: bold;">${orderNumber}</td>
+                    <td style="font-size: 14px; color: #1d4ed8; font-weight: bold;">${esc(orderNumber)}</td>
                 </tr>
             </table>
         </td>
@@ -295,12 +308,12 @@ export function generateParcelDeliveryEmailHtml({
                 </tr>
                 <tr>
                     <td style="font-size: 14px; color: #333333;">Carrier:</td>
-                    <td style="font-size: 14px; color: #1d4ed8; font-weight: bold;">${carrier}</td>
+                    <td style="font-size: 14px; color: #1d4ed8; font-weight: bold;">${esc(carrier)}</td>
                 </tr>
                 ${trackingInfoHtml}
                 <tr>
                     <td style="font-size: 14px; color: #333333;">Date of Shipment:</td>
-                    <td style="font-size: 14px; color: #333333; font-weight: bold;">${shipmentDate}</td>
+                    <td style="font-size: 14px; color: #333333; font-weight: bold;">${esc(shipmentDate)}</td>
                 </tr>
             </table>
         </td>
@@ -340,10 +353,10 @@ export function generateParcelDeliveryEmailHtml({
                 <tr>
                     <td style="font-size: 14px; color: #333333;">
                         <strong>Shipping Address</strong><br>
-                        ${personData.name} ${personData.lastname}<br>
-                        ${personData.address}, ${personData.apartment} <br>
-                        ${personData.city}, ${personData.country} <br>
-                        ${personData.state}, ${personData.postal} <br>
+                        ${esc(personData.name)} ${esc(personData.lastname)}<br>
+                        ${esc(personData.address)}, ${esc(personData.apartment)} <br>
+                        ${esc(personData.city)}, ${esc(personData.country)} <br>
+                        ${esc(personData.state)}, ${esc(personData.postal)} <br>
                     </td>
                 </tr>
             </table>

@@ -1,8 +1,9 @@
 import groq from "groq";
-import {client} from "../lib/client";
+import "server-only";
+import {fetchPublic} from "@/lib/server/sanity";
 
 export async function getArtist(slug) {
-    return client.fetch(
+    return fetchPublic(
         groq`*[_type == "artist" && slug.current == $slug]{
             _id,
             name,
@@ -14,7 +15,7 @@ export async function getArtist(slug) {
             bio,
             seo{
               ...,
-              "ogImage": seo.ogImage.asset->url
+              "ogImage": ogImage.asset->url
             },
             
         }[0]`,

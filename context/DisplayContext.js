@@ -1,38 +1,19 @@
 "use client"
-import {createContext, useEffect, useState} from "react";
+import {createContext, useSyncExternalStore} from "react";
 
 export const DisplayContext = createContext({});
 
+function subscribe(callback) {
+    window.addEventListener("resize", callback);
+    return () => window.removeEventListener("resize", callback);
+}
+
+const getSnapshot = () => (window.innerWidth <= 1024 ? "mobile" : "desktop");
+// Na serwerze nie znamy szerokości ekranu – menu pojawia się po załadowaniu w przeglądarce (jak dotychczas)
+const getServerSnapshot = () => null;
 
 export default function DisplayContextProvider({children}) {
-
-    const [windowDimensions, setWindowDimensions] = useState({width: 0, height: 0});
-    useEffect(() => {
-        function getWindowDimensions() {
-            const {innerWidth: width, innerHeight: height} = window;
-            return {width, height};
-        }
-
-        function handleResize() {
-            setWindowDimensions(getWindowDimensions());
-        }
-
-        if (typeof window !== "undefined") {
-            setWindowDimensions(getWindowDimensions());
-            window.addEventListener("resize", handleResize);
-            return () => window.removeEventListener("resize", handleResize);
-        }
-    }, []);
-
-
-    const {width} = windowDimensions;
-    const isMobile = width <= 1024;
-    const [displayVersion, setDisplayVersion] = useState(isMobile ? "mobile" : "desktop");
-
-    useEffect(() => {
-        setDisplayVersion(isMobile ? "mobile" : "desktop");
-    }, [isMobile]);
-
+    const displayVersion = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
     return (
         <DisplayContext.Provider value={{

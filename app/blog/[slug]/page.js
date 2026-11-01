@@ -1,29 +1,34 @@
+import {notFound} from "next/navigation";
 import SingleBlogPostLayout from "@/components/layouts/SingleBlogPostLayout";
+import StructuredData from "@/components/StructuredData";
 import {getSingleBlogPost} from "@/sanity/getSanity/getSingleBlogPost";
-import {generateSEO} from "@/lib/generateSEO";
+import {generateSEO, SITE_URL} from "@/lib/generateSEO";
 
-export default async function Page({params}){
+export const revalidate = 60;
 
-    const slug = await params.slug;
+export default async function Page({params}) {
+    const {slug} = await params;
+    const data = await getSingleBlogPost(slug);
 
-    return(
-        <SingleBlogPostLayout slug={slug}/>
+    if (!data) notFound();
+
+    return (
+        <>
+            <StructuredData data={data} type="Article"/>
+            <SingleBlogPostLayout data={data}/>
+        </>
     )
 }
 
-
-
-export async function generateMetadata({ params }) {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
-    const slug = await params.slug;
+export async function generateMetadata({params}) {
+    const {slug} = await params;
     const data = await getSingleBlogPost(slug);
 
     if (!data) return {
         title: "Blog post not found",
-        description: "Unfortunately, the blog post you are looking for does not exist."
+        description: "Unfortunately, the blog post you are looking for does not exist.",
+        robots: {index: false},
     };
 
-    const pageUrl = `${baseUrl}/blog/${slug}`;
-    return generateSEO(data, pageUrl);
-
+    return generateSEO(data, `${SITE_URL}/blog/${slug}`);
 }

@@ -1,10 +1,11 @@
 import groq from "groq";
-import {client} from "../lib/client";
+import "server-only";
+import {fetchPublic} from "@/lib/server/sanity";
 
 
 export async function getProduct(slug) {
     try {
-        const result = await client.fetch(
+        const result = await fetchPublic(
             groq`*[_type == "product" && slug.current == $slug]{
             _id,
             name,
@@ -31,7 +32,7 @@ export async function getProduct(slug) {
           },
             seo{
               ...,
-              "ogImage": seo.ogImage.asset->url
+              "ogImage": ogImage.asset->url
             }
             }[0]`
             , {slug}

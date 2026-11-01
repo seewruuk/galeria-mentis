@@ -1,19 +1,26 @@
+import {notFound, redirect} from "next/navigation";
 import OrderLayout from "@/components/layouts/OrderLayout";
+import {getAdminUser} from "@/lib/server/auth";
+import {getOrder} from "@/sanity/getSanity/getOrder";
 
-export default async function Page({params}){
+export const dynamic = "force-dynamic";
 
-    const test = await params;
+export default async function Page({params}) {
+    if (!(await getAdminUser().catch(() => null))) redirect("/login");
+    const resolved = await params;
+    const id = decodeURIComponent(resolved.id);
+    const order = await getOrder(id);
+    if (!order) notFound();
 
-    return(
-        <OrderLayout params={test}/>
+    return (
+        <OrderLayout params={{id}} order={order}/>
     )
 }
 
-
-export async function generateMetadata({ params }) {
-
-
+export async function generateMetadata({params}) {
+    const {id} = await params;
     return {
-        title: `Order ${params.id}`,
+        title: `Order ${decodeURIComponent(id).replace(/^private\.order\./, "")}`,
+        robots: {index: false, follow: false},
     };
 }

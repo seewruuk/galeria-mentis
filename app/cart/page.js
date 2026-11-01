@@ -10,6 +10,7 @@ export default function page() {
 export async function generateMetadata() {
     return {
         title: `Your Cart`,
+        robots: {index: false, follow: true},
         description: `Review the items in your cart and proceed to checkout when you're ready.`
     };
 }

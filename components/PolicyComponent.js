@@ -1,14 +1,17 @@
-"use client";
-
-import {useEffect, useState} from "react";
 import {PortableText} from "@portabletext/react";
 import {getPolicyByType} from "@/sanity/getSanity/getPolicy";
 import Layout from "@/components/Layout";
 
-export default function PolicyComponent({type = "privacyPolicy"}) {
-    const [content, setContent] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+// Komponent serwerowy – treść polityk jest w HTML od razu (wcześniej ładowana w przeglądarce)
+export default async function PolicyComponent({type = "privacyPolicy"}) {
+    let content = null;
+    let error = null;
+    try {
+        const res = await getPolicyByType(type);
+        content = res?.content || null;
+    } catch {
+        error = "Nie udało się pobrać danych. Spróbuj ponownie później.";
+    }
 
     const components = {
         block: {
@@ -54,39 +57,6 @@ export default function PolicyComponent({type = "privacyPolicy"}) {
             },
         },
     };
-
-    useEffect(() => {
-        let cancelled = false;
-        setLoading(true);
-        setError(null);
-
-        (async () => {
-            try {
-                const res = await getPolicyByType(type);
-                if (!cancelled) {
-                    setContent(res?.content || null);
-                }
-            } catch (e) {
-                if (!cancelled) {
-                    setError("Nie udało się pobrać danych. Spróbuj ponownie później.");
-                }
-            } finally {
-                if (!cancelled) setLoading(false);
-            }
-        })();
-
-        return () => {
-            cancelled = true;
-        };
-    }, [type]);
-
-    if (loading) {
-        return (
-            <div role="status" aria-live="polite" className="py-10">
-                <p className="opacity-70">Ładowanie treści…</p>
-            </div>
-        );
-    }
 
     if (error) {
         return (

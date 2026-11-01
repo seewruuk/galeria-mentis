@@ -1,8 +1,5 @@
 "use client"
 import Hero from "@/components/Hero";
-import useSanity from "@/hooks/useSanity";
-import {getHomePage} from "@/sanity/getSanity/getHomePage";
-import {useEffect, useState} from "react";
 import Loading from "@/components/Loading";
 import Layout from "@/components/Layout";
 import SectionHeader from "@/components/SectionHeader";
@@ -16,17 +13,9 @@ import ArtistsList from "@/components/ArtistsList";
 import FeaturedProductsCarousel from "@/components/FeaturedProductsCarousel";
 import ContactForm from "@/components/ContactForm";
 
-export default function HomeLayout() {
+export default function HomeLayout({homePageData}) {
 
-    const [mounted, setMounted] = useState(false);
-    const {data: homePageData, loading} = useSanity(getHomePage);
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
-
-
-    if (loading || !mounted || !homePageData) return <Loading/>
+    if (!homePageData) return <Loading/>
 
 
     return (

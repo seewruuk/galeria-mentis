@@ -1,8 +1,9 @@
 import groq from "groq";
-import {client} from "../lib/client";
+import "server-only";
+import {fetchPublic} from "@/lib/server/sanity";
 
 export async function getHomePage() {
-    return client.fetch(
+    return fetchPublic(
         groq`*[_type == "homepage"]{ 
           heroSection[]{
             title,
@@ -44,13 +45,29 @@ export async function getHomePage() {
             name,
             "avatar": avatar.asset->url,
             location,
-            description
+            description,
+            "artworks": *[_type == "product" && artist._ref == ^._id][0...3]{
+            _id,
+            name,
+            "slug": slug.current,
+            "thumbnail": thumbnail.asset->url,
+            "images": images[].asset->url,
+            artist->{
+                name,
+                "slug": slug.current,
+            },
+            productCategory->{
+                title,
+                "slug": slug.current,
+            },
+            price,
+        },
           },
           benefitsSection[]{ ..., "icon": icon.asset->url },
           "benefitsSection_backgroundImage": benefitsSection_backgroundImage.asset->url,
           seo{
             ...,
-            "ogImage": seo.ogImage.asset->url
+            "ogImage": ogImage.asset->url
           }
         }[0]`
     );

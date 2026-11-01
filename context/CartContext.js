@@ -2,10 +2,7 @@
 import {createContext, useEffect, useState} from "react";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
-import generateOrderNumber from "@/lib/generateOrderNumber";
-import createOrder from "@/lib/createOrder";
 import {useRouter} from "next/navigation";
-import {getOrder} from "@/sanity/getSanity/getOrder";
 import Link from "next/link";
 import {saveToNewsletter} from "@/lib/saveToNewsletter";
 
@@ -15,9 +12,20 @@ export const CartContext = createContext({});
 
 export default function CartContextProvider({children}) {
 
-    const [cartItems, setCartItems] = useState(
-        Cookies.get("cart") ? JSON.parse(Cookies.get("cart")) : []
-    );
+    // Koszyk z ciasteczka wczytujemy po załadowaniu strony (HTML z serwera i pierwszy render w przeglądarce są identyczne)
+    const [cartItems, setCartItems] = useState([]);
+    const [cartLoaded, setCartLoaded] = useState(false);
+
+    useEffect(() => {
+        try {
+            const saved = Cookies.get("cart");
+            const parsed = saved ? JSON.parse(saved) : [];
+            if (Array.isArray(parsed) && parsed.length) setCartItems(parsed);
+        } catch {
+            Cookies.remove("cart");
+        }
+        setCartLoaded(true);
+    }, []);
     const [totalQty, setTotalQty] = useState(0);
     const [subtotal, setSubtotal] = useState(0);
     let totalPrice = subtotal;
@@ -333,8 +341,8 @@ export default function CartContextProvider({children}) {
     useEffect(() => {
         setTotalQty(cartItems.reduce((acc, item) => acc + item.qty, 0));
         setSubtotal(cartItems.reduce((acc, item) => acc + item.qty * item.price, 0));
-        Cookies.set("cart", JSON.stringify(cartItems));
-    }, [cartItems])
+        if (cartLoaded) Cookies.set("cart", JSON.stringify(cartItems), {sameSite: "lax", secure: window.location.protocol === "https:"});
+    }, [cartItems, cartLoaded])
 
 
     const handleBuyEvent = async () => {
@@ -355,7 +363,7 @@ export default function CartContextProvider({children}) {
         }
 
         const disableFormState = form.map(input => ({...input, disabled: true}));
-        toast.loading("Processing order...");
+        const loadingToast = toast.loading("Processing order...");
 
         if (termsAccepted[3].value === true) {
             const saveNewsletter = await saveToNewsletter(form[0].value);
@@ -370,95 +378,74 @@ export default function CartContextProvider({children}) {
         setPreventChange(true);
         setSummaryButtonDisabled(true);
 
-        const orderNumber = generateOrderNumber(`${form[1].value}${form[2].value}`, form[9].value);
+        const unlockForm = () => {
+            setTermsDisabled(false);
+            setForm(form.map(input => ({...input, disabled: false})));
+            setPreventChange(false);
+            setSummaryButtonDisabled(false);
+        };
 
+        const invoiceValue = (name) => invoiceInputs.find(input => input.name === name)?.value || "";
 
-        const stripeResponse = await fetch("/api/createStripeSession", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                cartItems: cartItems,
-                orderNumber: orderNumber
-            })
-        });
-
-        const stripeResult = await stripeResponse.json();
-
-
-        if (stripeResult.status === 200) {
-
-            const stripeRedirectUrl = stripeResult.url
-            const stripeSessionId = stripeResult.sessionId
-
-
-            const response = await createOrder({
-                orderNumber: orderNumber,
-                form: form,
-                fullDate: new Date().toLocaleString('en-GB', {timeZone: 'UTC'}),
-                deliveryMethod: "standard",
-                totalPrice: totalPrice.toFixed(2),
-                products: cartItems,
-                stripeSessionId: stripeSessionId,
-                invoice: invoiceForm && invoiceForm.status ? {
-                    status: invoiceForm.status,
-                    companyType: invoiceForm.companyType,
-                    companyData: {
-                        companyName: invoiceInputs.some(input => input.name === "companyName") ? invoiceInputs.find(input => input.name === "companyName").value : invoiceInputs.find(input => input.name === "name").value,
-                        nip: invoiceInputs.some(input => input.name === "nip") ? invoiceInputs.find(input => input.name === "nip").value : invoiceInputs.find(input => input.name === "lastname").value,
-                        phone: invoiceInputs.find(input => input.name === "phone").value,
-                        address: invoiceInputs.find(input => input.name === "address").value,
-                        companyPostal: invoiceInputs.find(input => input.name === "postalCode").value,
-                        companyCity: invoiceInputs.find(input => input.name === "city").value,
-                        companyCountry: invoiceInputs.find(input => input.name === "country").value,
-                    }
-                } : {
-                    status: false,
-                    companyType: "",
-                    companyData: {
-                        companyName: "",
-                        nip: "",
-                        phone: "",
-                        address: "",
-                        companyPostal: "",
-                        companyCity: "",
-                        companyCountry: ""
-                    }
+        // Cena, dostępność i numer zamówienia są ustalane na serwerze – wysyłamy tylko ID prac i dane klienta
+        try {
+            const response = await fetch("/api/checkout", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
                 },
-                newsletter: termsAccepted[3].value
+                body: JSON.stringify({
+                    items: cartItems.map(item => ({_id: item._id, qty: item.qty})),
+                    expectedTotal: Number(totalPrice.toFixed(2)),
+                    person: {
+                        email: form[0].value,
+                        name: form[1].value,
+                        lastname: form[2].value,
+                        address: form[3].value,
+                        apartment: form[4].value,
+                        city: form[5].value,
+                        country: form[6].value,
+                        state: form[7].value,
+                        postal: form[8].value,
+                        phone: form[9].value,
+                    },
+                    invoice: invoiceForm && invoiceForm.status ? {
+                        status: true,
+                        companyType: invoiceForm.companyType,
+                        companyData: {
+                            companyName: invoiceInputs.some(input => input.name === "companyName") ? invoiceValue("companyName") : invoiceValue("name"),
+                            nip: invoiceInputs.some(input => input.name === "nip") ? invoiceValue("nip") : invoiceValue("lastname"),
+                            phone: invoiceValue("phone"),
+                            address: invoiceValue("address"),
+                            companyPostal: invoiceValue("postalCode"),
+                            companyCity: invoiceValue("city"),
+                            companyCountry: invoiceValue("country"),
+                        }
+                    } : {status: false},
+                    newsletter: termsAccepted[3].value
+                })
             });
 
-            if (response.status === 200) {
+            const result = await response.json().catch(() => ({}));
+            toast.dismiss(loadingToast);
 
-                // const order = await getOrder(orderNumber);
-
-                // const sendEmail = await fetch("/api/sendEmailToCustomer", {
-                //     method: "POST",
-                //     headers: {
-                //         "Content-Type": "application/json"
-                //     },
-                //     body: JSON.stringify({
-                //         order
-                //     })
-                // });
-
-                // const emailResult = await sendEmail.json();
-
-                // if (emailResult.status !== 200) {
-                //     console.log(emailResult)
-                //     toast.error("There was an error sending the email. Please contact us to confirm your order.");
-                // } else {
-                //     router.push(stripeRedirectUrl);
-                // }
-
-                router.push(stripeRedirectUrl);
-
-            } else {
-                toast.error("There was an error processing your order. Please try again later.");
+            if (response.ok && result.status === "ok" && result.url) {
+                window.location.assign(result.url);
+                return;
             }
-        } else {
+
+            if (result.code === "unavailable" && Array.isArray(result.unavailable)) {
+                setCartItems(cartItems.filter(item => !result.unavailable.includes(item._id)));
+            }
+            if (result.code === "price_changed" && result.prices) {
+                setCartItems(cartItems.map(item => result.prices[item._id] !== undefined ? {...item, price: result.prices[item._id]} : item));
+            }
+            toast.error(result.message || "There was an error processing your order. Please try again later.");
+            unlockForm();
+        } catch (error) {
+            toast.dismiss(loadingToast);
             toast.error("There was an error processing your order. Please try again later.");
+            unlockForm();
         }
     }
 

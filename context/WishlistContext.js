@@ -8,16 +8,26 @@ export const WishlistContext = createContext({});
 
 export default function WishlistContextProvider({children}) {
 
-    const [items, setItems] = useState(
-        Cookies.get("wishlist") ? JSON.parse(Cookies.get("wishlist")) : []
-    )
+    const [items, setItems] = useState([]);
+    const [loaded, setLoaded] = useState(false);
 
     let itemsQty = items.length;
 
+    // Lista wczytywana po załadowaniu strony (zgodność HTML serwera i przeglądarki)
+    useEffect(() => {
+        try {
+            const saved = Cookies.get("wishlist");
+            const parsed = saved ? JSON.parse(saved) : [];
+            if (Array.isArray(parsed) && parsed.length) setItems(parsed);
+        } catch {
+            Cookies.remove("wishlist");
+        }
+        setLoaded(true);
+    }, []);
 
     useEffect(() => {
-        Cookies.set("wishlist", JSON.stringify(items));
-    }, [items]);
+        if (loaded) Cookies.set("wishlist", JSON.stringify(items), {sameSite: "lax", secure: window.location.protocol === "https:"});
+    }, [items, loaded]);
 
 
     const removeItem = (id) => {

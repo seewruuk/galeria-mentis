@@ -1,9 +1,10 @@
 import groq from "groq";
-import {client} from "../lib/client";
+import "server-only";
+import {fetchPublic} from "@/lib/server/sanity";
 
 
 export async function getProductCategories() {
-    return client.fetch(
+    return fetchPublic(
         groq`*[_type == "productCategory"]{
         _createdAt,
         title,

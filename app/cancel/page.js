@@ -15,6 +15,7 @@ export default function page() {
 export async function generateMetadata() {
     return {
         title: `There was a problem with your payment...`,
+        robots: {index: false, follow: true},
         description: `We received your order, but there was a problem with your payment. Please try again or contact us for help.`,
     };
 }

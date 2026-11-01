@@ -1,25 +1,38 @@
+import {notFound} from "next/navigation";
 import ArtistLayout from "@/components/layouts/ArtistLayout";
+import StructuredData from "@/components/StructuredData";
 import {getArtist} from "@/sanity/getSanity/getArtist";
-import {generateSEO} from "@/lib/generateSEO";
+import {getArtistArtworks} from "@/sanity/getSanity/getArtistArtworks";
+import {generateSEO, SITE_URL} from "@/lib/generateSEO";
 
-export default function Page({params}){
-    return(
-        <ArtistLayout slug={params.slug} />
+export const revalidate = 60;
+
+export default async function Page({params}) {
+    const {slug} = await params;
+    const artist = await getArtist(slug);
+
+    if (!artist?._id) notFound();
+
+    const artworks = await getArtistArtworks(artist._id, null).catch(() => []);
+    const sorted = [...(artworks || [])].sort((a, b) => new Date(b._createdAt) - new Date(a._createdAt));
+
+    return (
+        <>
+            <StructuredData data={artist} type="Person"/>
+            <ArtistLayout artist={artist} artworks={sorted}/>
+        </>
     )
 }
 
-
-
-export async function generateMetadata({ params }) {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
-    const data = await getArtist(params.slug);
+export async function generateMetadata({params}) {
+    const {slug} = await params;
+    const data = await getArtist(slug);
 
     if (!data) return {
         title: "No artist found",
-        description: "Unfortunately, the artist you are looking for does not exist."
+        description: "Unfortunately, the artist you are looking for does not exist.",
+        robots: {index: false},
     };
 
-    const pageUrl = `${baseUrl}/artists/${params.slug}`;
-    return generateSEO(data, pageUrl);
-
+    return generateSEO(data, `${SITE_URL}/artists/${slug}`);
 }

@@ -1,133 +1,132 @@
 "use client";
-import { createContext, useState, useEffect } from "react";
-import { getUserByEmail} from "@/sanity/getSanity/getUserByEmail";
+import {createContext, useCallback, useEffect, useState} from "react";
 import toast from "react-hot-toast";
-import createHashPassword from "@/lib/createHashPassword";
-import { useRouter } from "next/navigation";
-import generateOrderNumber from "@/lib/generateOrderNumber";
+import {useRouter} from "next/navigation";
 
 export const AuthContext = createContext({});
 
-export default function AuthContextProvider({ children }) {
-    const initialUserState = {
-        _id: "",
-        name: "",
-        lastname: "",
-        email: "",
-        sessionToken: "",
-        role: ""
+const initialUserState = {
+    _id: "",
+    name: "",
+    lastname: "",
+    email: "",
+    role: "",
+};
+
+// Sesja jest w ciasteczku httpOnly ustawianym przez serwer – przeglądarka nie przechowuje już danych logowania.
+function toUserData(user) {
+    if (!user) return initialUserState;
+    return {
+        _id: user._id || "",
+        name: user.name || "",
+        lastname: user.lastname || "",
+        email: user.email || "",
+        role: user.isAdmin ? "admin" : "user",
     };
+}
+
+async function postJson(url, body) {
+    const response = await fetch(url, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(body || {}),
+    });
+    const data = await response.json().catch(() => ({}));
+    return {ok: response.ok, data};
+}
+
+export default function AuthContextProvider({children}) {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(true);
     const [isLogged, setIsLogged] = useState(false);
     const [userData, setUserData] = useState(initialUserState);
 
-    useEffect(() => {
-        if (typeof window !== "undefined") {
-            const storedIsLogged = JSON.parse(localStorage.getItem("isLogged"));
-            const storedUser = JSON.parse(localStorage.getItem("user"));
-
-            if (storedIsLogged) {
-                setIsLogged(storedIsLogged);
-            }
-            if (storedUser) {
-                setUserData(storedUser);
-            }
-        }
-        setIsLoading(false);
+    const applyUser = useCallback((user) => {
+        setIsLogged(!!user);
+        setUserData(toUserData(user));
     }, []);
 
-
     useEffect(() => {
-        if (typeof window !== "undefined") {
-            localStorage.setItem("isLogged", JSON.stringify(isLogged));
-            localStorage.setItem("user", JSON.stringify(userData));
+        // sprzątanie po starej wersji (dane logowania w localStorage)
+        try {
+            localStorage.removeItem("user");
+            localStorage.removeItem("isLogged");
+        } catch {
         }
-    }, [isLogged, userData]);
 
-    const verifyPassword = (password, hash) => createHashPassword(password) === hash;
+        let cancelled = false;
+        fetch("/api/auth/session", {cache: "no-store"})
+            .then((res) => res.json())
+            .then((data) => {
+                if (!cancelled) applyUser(data?.user || null);
+            })
+            .catch(() => {
+            })
+            .finally(() => {
+                if (!cancelled) setIsLoading(false);
+            });
+        return () => {
+            cancelled = true;
+        };
+    }, [applyUser]);
 
     const login = async (e, email, password) => {
-        e.preventDefault();
+        e?.preventDefault?.();
 
         try {
-            const findUser = await getUserByEmail(email);
-
-            if (!findUser) {
-                toast.error("User not found");
-                return;
+            const {ok, data} = await postJson("/api/auth/login", {email, password});
+            if (!ok || data.status !== "ok") {
+                toast.error(data.message || "Niepoprawne dane logowania");
+                return false;
             }
-
-
-            const passwordToVerify = findUser.userInfo.hashPassword;
-
-            if (verifyPassword(password, passwordToVerify)) {
-                const user = {
-                    _id: findUser._id,
-                    name: findUser.userInfo.name,
-                    lastname: findUser.userInfo.lastname,
-                    email: findUser.userInfo.email,
-                    sessionToken: findUser.sessionToken,
-                    role: findUser.role
-                };
-
-                setIsLogged(true);
-                setUserData(user);
-                router.push("/dashboard");
-            } else {
-                toast.error("Niepoprawne dane logowania");
-            }
+            applyUser(data.user);
+            router.push("/dashboard");
+            router.refresh();
+            return true;
         } catch (error) {
             toast.error("Wystąpił błąd podczas logowania");
             console.error(error);
+            return false;
         }
     };
 
-    const logout = () => {
-        setIsLogged(false);
-        setUserData(initialUserState);
-        if (typeof window !== "undefined") {
-            localStorage.removeItem("user");
-            localStorage.removeItem("isLogged");
+    const logout = async () => {
+        try {
+            await postJson("/api/auth/logout");
+        } catch {
         }
+        applyUser(null);
         router.refresh();
     };
 
     const register = async (e, user) => {
-        toast.loading("Tworzenie konta...");
-        e.preventDefault();
+        e?.preventDefault?.();
 
         if (user.password !== user.confirmPassword) {
             toast.error("Hasła nie są takie same");
             return;
         }
 
-        const item = {
-            name: user.name,
-            lastname: user.lastname,
-            email: user.email,
-            hashPassword: createHashPassword(user.password),
-            sessionToken: generateOrderNumber(user.name, user.email)
-        };
-
+        const toastId = toast.loading("Tworzenie konta...");
         try {
-            const response = await fetch("/api/createUser", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ item })
+            const {ok, data} = await postJson("/api/auth/register", {
+                name: user.name,
+                lastname: user.lastname,
+                email: user.email,
+                password: user.password,
             });
+            toast.dismiss(toastId);
 
-            const data = await response.json();
-            if (data.status === "ok") {
-                await login(e, user.email, user.password);
+            if (ok && data.status === "ok") {
+                applyUser(data.user);
                 toast.success("Konto zostało utworzone");
                 router.push("/dashboard");
+                router.refresh();
             } else {
-                toast.error("Wystąpił błąd podczas tworzenia konta");
+                toast.error(data.message || "Wystąpił błąd podczas tworzenia konta");
             }
         } catch (error) {
+            toast.dismiss(toastId);
             toast.error("Wystąpił błąd podczas tworzenia konta");
             console.error(error);
         }
@@ -141,7 +140,7 @@ export default function AuthContextProvider({ children }) {
         logout,
         login,
         register,
-        isLoading
+        isLoading,
     };
 
     return (

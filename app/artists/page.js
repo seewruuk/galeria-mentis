@@ -1,15 +1,29 @@
 import ArtistsLayout from "@/components/layouts/ArtistsLayout";
 import {getArtistsSettings} from "@/sanity/getSanity/getArtistsSettings";
-import {generateSEO} from "@/lib/generateSEO";
+import {getArtists} from "@/sanity/getSanity/getArtists";
+import {getArtisticStyles} from "@/sanity/getSanity/getArtisticStyles";
+import {getPaintingStyles} from "@/sanity/getSanity/getPaintingStyles";
+import {generateSEO, SITE_URL} from "@/lib/generateSEO";
 
-export default function Page(){
-    return(
-        <ArtistsLayout />
+export const revalidate = 60;
+
+export default async function Page() {
+    const [artists, artisticStyles, paintingStyles] = await Promise.all([
+        getArtists(),
+        getArtisticStyles(),
+        getPaintingStyles(),
+    ]);
+
+    return (
+        <ArtistsLayout
+            artists={artists || []}
+            artisticStyles={artisticStyles || []}
+            paintingStyles={paintingStyles || []}
+        />
     )
 }
 
 export async function generateMetadata() {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
     const data = await getArtistsSettings();
 
     if (!data) return {
@@ -17,6 +31,5 @@ export async function generateMetadata() {
         description: "Meet our artists and discover their exceptional artworks at Galeria Mentis",
     };
 
-    const pageUrl = `${baseUrl}/artists`;
-    return generateSEO(data, pageUrl);
+    return generateSEO(data, `${SITE_URL}/artists`);
 }

@@ -1,9 +1,35 @@
 "use client";
-import React, {useContext, useState, useEffect} from "react";
-import {getOrders} from "@/sanity/getSanity/getOrders";
+import React, {useContext, useState} from "react";
 import {AuthContext} from "@/context/AuthContext";
 import OrderList from "@/components/OrderList";
-// import createExcel from "@/hooks/createExcel";
+
+// Eksport zamówień do pliku CSV (otwiera się w Excelu). Wcześniej przycisk wywoływał nieistniejącą funkcję.
+function createExcel(orders) {
+    const columns = [
+        ["Order number", (o) => o.orderNumber],
+        ["Date", (o) => o.orderDate],
+        ["Status", (o) => o.orderStatus],
+        ["Name", (o) => `${o.personData?.name || ""} ${o.personData?.lastname || ""}`.trim()],
+        ["Email", (o) => o.personData?.email],
+        ["Phone", (o) => o.personData?.phone],
+        ["Address", (o) => [o.personData?.address, o.personData?.apartment, o.personData?.postal, o.personData?.city, o.personData?.state, o.personData?.country].filter(Boolean).join(", ")],
+        ["Products", (o) => (o.products || []).map((p) => `${p.name} x${p.qty}`).join("; ")],
+        ["Total", (o) => o.totalPrice],
+    ];
+    const cell = (value) => {
+        let text = String(value ?? "");
+        if (/^[=+\-@]/.test(text)) text = `'${text}`; // ochrona przed formułami w Excelu
+        return `"${text.replace(/"/g, '""')}"`;
+    };
+    const csv = [columns.map(([title]) => cell(title)).join(";"), ...orders.map((o) => columns.map(([, get]) => cell(get(o))).join(";"))].join("\r\n");
+    const blob = new Blob(["\ufeff" + csv], {type: "text/csv;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `orders-${new Date().toISOString().slice(0, 10)}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+}
 import {orderLabel} from "@/utils";
 import toast from "react-hot-toast";
 import Layout from "@/components/Layout";
@@ -14,34 +40,15 @@ import Footer from "@/components/Footer";
 const statusOptions = ["new", "paid", "done", "cancelled"];
 const itemsPerPageOptions = [50, 100, 150, 200];
 
-export default function OrdersLayout() {
+export default function OrdersLayout({initialOrders = []}) {
     const {userData, logout} = useContext(AuthContext);
-    const [orders, setOrders] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const orders = initialOrders || [];
     const [selectedOrders, setSelectedOrders] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [filterStatus, setFilterStatus] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("");
     const [itemsPerPage, setItemsPerPage] = useState(itemsPerPageOptions[0]);
     const [selectedStatus, setSelectedStatus] = useState(statusOptions[0]);
-
-    useEffect(() => {
-        const fetchOrders = async () => {
-            setLoading(true);
-            try {
-                const {orders} = await getOrders();
-                setOrders(orders);
-            } catch (err) {
-                console.error("Error fetching orders:", err);
-                setError(err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchOrders();
-    }, []);
 
     const filteredOrders = orders.filter(
         (order) => !filterStatus || order.orderStatus === filterStatus
@@ -107,8 +114,6 @@ export default function OrdersLayout() {
         }
     };
 
-    if (loading) return <Loading/>;
-    if (error) return <div>Error loading orders: {error.message}</div>;
 
     return (
         <PageTransition>

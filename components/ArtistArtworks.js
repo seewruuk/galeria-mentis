@@ -1,37 +1,22 @@
-"use client";
-import { useState, useEffect } from "react";
 import ProductCard from "@/components/ProductCard";
-import { getArtistArtworks } from "@/sanity/getSanity/getArtistArtworks";
 
-export default function ArtistArtworks({ artistId, limit = 3, excludeProdId = "" }) {
-    const [artworks, setArtworks] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        async function fetchArtworks() {
-            const fetchedArtworks = await getArtistArtworks(artistId, excludeProdId);
-            // Pobieramy tylko określoną liczbę prac (limit)
-            setArtworks(fetchedArtworks.slice(0, limit));
-            setLoading(false);
-        }
-        fetchArtworks();
-    }, [artistId, limit, excludeProdId]);
-
-    if (loading) return <div>Loading artworks...</div>;
+// Prace artysty przychodzą razem z danymi artysty z serwera (wcześniej osobne zapytanie z przeglądarki dla każdego artysty)
+export default function ArtistArtworks({ artistId, artworks = [], limit = 3 }) {
+    const visible = (artworks || []).slice(0, limit);
 
     return (
         <div className={`grid grid-cols-2 gap-6 max-w-[300px] mx-auto md:grid-cols-2 md:max-w-[650px] lg:max-w-none lg:grid-cols-${limit} `}>
-            {artworks.map((artwork, index) => (
+            {visible.map((artwork, index) => (
                 <ProductCard
                     key={`${artistId}-${artwork._id}-${index}`}
-                    image={artwork.thumbnail ? artwork.thumbnail : artwork.images[0]}
+                    image={artwork.thumbnail ? artwork.thumbnail : artwork.images?.[0]}
                     title={artwork.name}
-                    artist={artwork.artist.name}
-                    artistsLink={artwork.artist.slug}
+                    artist={artwork.artist?.name}
+                    artistsLink={artwork.artist?.slug}
                     price={artwork.price}
                     slug={artwork.slug}
-                    category={artwork.productCategory.title}
-                    categoryLink={artwork.productCategory.slug}
+                    category={artwork.productCategory?.title}
+                    categoryLink={artwork.productCategory?.slug}
                 />
             ))}
         </div>

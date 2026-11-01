@@ -1,8 +1,9 @@
 import groq from "groq";
-import {client} from "../lib/client";
+import "server-only";
+import {fetchFresh} from "@/lib/server/sanity";
 
 export async function getOrders() {
-    const orders = await client.fetch(
+    const orders = await fetchFresh(
         groq`*[_type == "order"]{
             _createdAt,
             _id,

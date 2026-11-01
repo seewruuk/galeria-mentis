@@ -3,26 +3,15 @@ import {Suspense, useEffect, useState, useCallback} from "react";
 import Banner from "@/components/Banner";
 import Layout from "@/components/Layout";
 import Loading from "@/components/Loading";
-import useSanity from "@/hooks/useSanity";
-import {getArtists} from "@/sanity/getSanity/getArtists";
-import {getArtisticStyles} from "@/sanity/getSanity/getArtisticStyles";
-import {getPaintingStyles} from "@/sanity/getSanity/getPaintingStyles";
 import Pagination from "@/components/Pagination";
 import ArtistFilters from "@/components/ArtistFilters";
 import ArtistsList from "@/components/ArtistsList";
 import PageTransition from "@/components/PageTransition";
 import Footer from "@/components/Footer";
-import {getArtistsSettings} from "@/sanity/getSanity/getArtistsSettings";
 import {AnimatePresence, motion} from "framer-motion";
 
-function ArtistsRootLayout() {
-    const {data: artists, loading: loadingArtists} = useSanity(getArtists);
-    const {data: artisticStyles, loading: loadingArtisticStyles} = useSanity(getArtisticStyles);
-    const {data: paintingStyles, loading: loadingPaintingStyles} = useSanity(getPaintingStyles);
-    const {data: artistsPageSettings, loading: loadingArtistsPageSettings} = useSanity(getArtistsSettings)
-
-    const [mounted, setMounted] = useState(false);
-    const [filteredArtists, setFilteredArtists] = useState([]);
+function ArtistsRootLayout({artists = [], artisticStyles = [], paintingStyles = []}) {
+    const [filteredArtists, setFilteredArtists] = useState(artists || []);
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedArtisticStyles, setSelectedArtisticStyles] = useState([]);
     const [selectedPaintingStyles, setSelectedPaintingStyles] = useState([]);
@@ -31,10 +20,6 @@ function ArtistsRootLayout() {
     const [visibleCount, setVisibleCount] = useState(itemsPerLoad);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
 
     useEffect(() => {
         setVisibleCount(itemsPerLoad);
@@ -80,7 +65,6 @@ function ArtistsRootLayout() {
     }, [artists, searchQuery, selectedArtisticStyles, selectedPaintingStyles, filterArtists]);
 
 
-    if (loadingArtists || loadingArtisticStyles || loadingPaintingStyles || !mounted) return <Loading/>;
 
     return (
         <PageTransition>
@@ -152,10 +136,10 @@ function ArtistsRootLayout() {
     );
 }
 
-export default function ArtistsLayout() {
+export default function ArtistsLayout(props) {
     return (
         <Suspense fallback={<Loading type={"full"}/>}>
-            <ArtistsRootLayout/>
+            <ArtistsRootLayout {...props}/>
         </Suspense>
     );
 }

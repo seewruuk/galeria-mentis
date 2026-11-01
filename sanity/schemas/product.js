@@ -1,4 +1,3 @@
-import { PlayIcon } from '@sanity/icons'
 import {BsBoxSeam} from "react-icons/bs";
 export default {
     name: 'product',

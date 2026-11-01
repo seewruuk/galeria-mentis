@@ -1,9 +1,10 @@
 import groq from "groq";
-import {client} from "../lib/client";
+import "server-only";
+import {fetchPublic} from "@/lib/server/sanity";
 
 
 export async function getSingleBlogPost(slug){
-    return client.fetch(
+    return fetchPublic(
         groq`*[_type == "blog" && slug.current == $slug]{
             _id,
             _createdAt,
@@ -14,7 +15,7 @@ export async function getSingleBlogPost(slug){
             body,
             seo{
               ...,
-              "ogImage": seo.ogImage.asset->url
+              "ogImage": ogImage.asset->url
             },
         }[0]`,
         {slug}

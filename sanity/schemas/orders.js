@@ -259,6 +259,12 @@ export default {
             type: "string",
         },
         {
+            title: "Amount paid (pence, from Stripe)",
+            name: "amountTotal",
+            type: "number",
+            readOnly: true,
+        },
+        {
             title: "Newsletter",
             name: "newsletter",
             type: "boolean",
