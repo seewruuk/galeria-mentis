@@ -136,7 +136,7 @@ export function generateOrderEmailHtml({
                 </tr>
                 <tr>
                     <td style="font-weight: bold; color: #333333;">Total Price</td>
-                    <td style="text-align: right; font-weight: bold; color: #333333;">${formatPrice(parseInt(totalPrice))}</td>
+                    <td style="text-align: right; font-weight: bold; color: #333333;">${formatPrice(Number(totalPrice))}</td>
                 </tr>
             </table>
         </td>
@@ -340,7 +340,7 @@ export function generateParcelDeliveryEmailHtml({
             <table width="100%" cellpadding="0" cellspacing="0" style="font-size: 14px; color: #666666;">
                 <tr>
                     <td style="font-weight: bold; color: #333333;">Total Price</td>
-                    <td style="text-align: right; font-weight: bold; color: #333333;">${formatPrice(parseInt(totalPrice))}</td>
+                    <td style="text-align: right; font-weight: bold; color: #333333;">${formatPrice(Number(totalPrice))}</td>
                 </tr>
             </table>
         </td>

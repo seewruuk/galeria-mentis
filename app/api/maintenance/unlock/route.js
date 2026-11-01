@@ -1,12 +1,19 @@
 import {NextResponse} from "next/server";
 import {getMaintenanceMode} from "@/sanity/getSanity/getMaintenanceMode";
-import {MAINTENANCE_COOKIE, unlockToken} from "@/lib/server/maintenance";
+import {isMaintenanceUnlocked, MAINTENANCE_COOKIE, unlockToken} from "@/lib/server/maintenance";
 import {safeEqual} from "@/lib/server/secrets";
 import {createRateLimiter, getClientIp, isSameOrigin, readJson} from "@/lib/server/http";
 
 export const dynamic = "force-dynamic";
 
 const limiter = createRateLimiter({windowMs: 15 * 60 * 1000, max: 10});
+
+// Stan odblokowania dla bieżącej przeglądarki (ciasteczko httpOnly jest czytelne tylko na serwerze)
+export async function GET() {
+    const maintenance = await getMaintenanceMode().catch(() => null);
+    const unlocked = await isMaintenanceUnlocked(maintenance);
+    return NextResponse.json({unlocked}, {headers: {"Cache-Control": "no-store"}});
+}
 
 export async function POST(request) {
     if (!isSameOrigin(request)) {

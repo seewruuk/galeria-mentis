@@ -38,6 +38,10 @@ export async function POST(request) {
     try {
         const session = await stripe.checkout.sessions.retrieve(sessionId);
         const result = await fulfillCheckoutSession(session);
+        if (result.status === "order_not_found") {
+            // 500 → Stripe ponowi próbę i zdarzenie będzie widoczne jako błąd w panelu Stripe
+            return NextResponse.json({received: false, result: result.status}, {status: 500});
+        }
         return NextResponse.json({received: true, result: result.status});
     } catch (error) {
         console.error("[webhook]", error.message);

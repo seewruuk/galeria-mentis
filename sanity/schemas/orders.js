@@ -265,6 +265,12 @@ export default {
             readOnly: true,
         },
         {
+            title: "Oversold (paid, but artwork was already sold – refund needed)",
+            name: "oversold",
+            type: "boolean",
+            readOnly: true,
+        },
+        {
             title: "Newsletter",
             name: "newsletter",
             type: "boolean",
