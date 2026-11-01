@@ -3,21 +3,27 @@
 import { useState } from "react";
 import Image from "next/image";
 
-export default function Timeout({ onUnlock, maintenanceData }) {
+export default function Timeout({ maintenanceData }) {
     const [input, setInput] = useState("");
     const [error, setError] = useState(false);
-    const correctPassword = maintenanceData?.password || "";
 
-    const handleSubmit = (e) => {
+    // Hasło sprawdzane jest na serwerze – po poprawnym wpisaniu serwer ustawia ciasteczko i strona się odświeża
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (input === correctPassword) {
-            // Store in localStorage to persist across page reloads
-            localStorage.setItem("maintenance_unlocked", "true");
-            onUnlock();
-        } else {
-            setError(true);
-            setInput("");
+        try {
+            const response = await fetch("/api/maintenance/unlock", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({password: input}),
+            });
+            if (response.ok) {
+                window.location.reload();
+                return;
+            }
+        } catch {
         }
+        setError(true);
+        setInput("");
     };
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://galeria-mentis.vercel.app";

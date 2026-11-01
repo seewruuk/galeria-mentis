@@ -1,6 +1,4 @@
 "use client"
-import useSanity from "@/hooks/useSanity";
-import {getOrder} from "@/sanity/getSanity/getOrder";
 import {statuses} from "@/constans/styles";
 import {Menu, MenuButton, MenuItem, MenuItems, Transition} from "@headlessui/react";
 import {EllipsisVerticalIcon} from "@heroicons/react/20/solid";
@@ -18,9 +16,7 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-export default function OrderLayout({params}) {
-
-    const {data: order, loading} = useSanity(getOrder, params.id);
+export default function OrderLayout({params, order}) {
 
     const [messageSend, setMessageSend] = useState(false);
 
@@ -33,7 +29,7 @@ export default function OrderLayout({params}) {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({order}),
+            body: JSON.stringify({orderId: order._id}),
         });
 
         const emailResult = await emailResponse.json();
@@ -46,7 +42,7 @@ export default function OrderLayout({params}) {
         }
     }
 
-    if (!order || loading) return null;
+    if (!order) return null;
 
     return (
         <PageTransition>
@@ -63,7 +59,7 @@ export default function OrderLayout({params}) {
                                           className={"text-[12px] font-medium underline text-blue-600"}>Back to
                                         orders</Link>
                                     <h1 className="text-base font-medium text-gray-600">Order details</h1>
-                                    <p className="mt-2 text-4xl font-bold tracking-tight">{params.id}</p>
+                                    <p className="mt-2 text-4xl font-bold tracking-tight">{order.orderNumber || params.id}</p>
                                     <p className="mt-2 text-base text-gray-500">{order.orderDate}</p>
 
                                     <dl className="text-sm font-medium flex flex-col items-start gap-3">

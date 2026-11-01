@@ -1,46 +1,29 @@
 import {NextResponse} from "next/server";
+import {requireAdmin} from "@/lib/server/adminGuard";
+import {readJson} from "@/lib/server/http";
+import {ORDER_STATUSES, setOrderStatus} from "@/lib/server/orders";
 
-export async function POST(req, res) {
+export const dynamic = "force-dynamic";
 
-    const body = await req.json();
-    const {orderId, orderStatus} = await body;
+// Zmiana statusu zamówienia – tylko administrator
+export async function POST(request) {
+    const {response} = await requireAdmin(request, {mutating: true});
+    if (response) return response;
 
-    const sanityProjectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID.toString();
-    const sanityDataSet = process.env.NEXT_PUBLIC_SANITY_DATASET.toString();
-    const sanityApiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION.toString();
-    const token = process.env.NEXT_PUBLIC_SANITY_API_TOKEN.toString();
+    const body = await readJson(request);
+    const orderId = typeof body?.orderId === "string" ? body.orderId : "";
+    const orderStatus = body?.orderStatus;
 
-    const url = `https://${sanityProjectId}.api.sanity.io/v${sanityApiVersion}/data/mutate/${sanityDataSet}`;
+    if (!orderId || !ORDER_STATUSES.includes(orderStatus)) {
+        return NextResponse.json({status: "error", message: "Invalid data"}, {status: 400});
+    }
 
     try {
-        const mutations = [{
-            patch: {
-                id: orderId,
-                set: {
-                    "orderStatus": orderStatus
-                }
-            }
-        }];
-
-        const sanityResponse = await fetch(url, {
-            method: 'post',
-            headers: {
-                'Content-type': 'application/json',
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify({mutations})
-        });
-
-        const result = await sanityResponse.json();
-
-        return NextResponse.json({
-            status: "ok",
-            message: "Order updated",
-            data: result
-        });
-
+        const result = await setOrderStatus(orderId, orderStatus);
+        if (!result) return NextResponse.json({status: "error", message: "Order not found"}, {status: 404});
+        return NextResponse.json({status: "ok", message: "Order updated"});
     } catch (err) {
-        console.error(err);
-        return NextResponse.json({status: "error", message: "Order not updated"});
+        console.error("[updateOrder]", err.message);
+        return NextResponse.json({status: "error", message: "Order not updated"}, {status: 500});
     }
 }

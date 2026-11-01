@@ -1,24 +1,13 @@
 "use client";
 import PageTransition from "@/components/PageTransition";
-import useSanity from "@/hooks/useSanity";
-import { getSingleBlogPost } from "@/sanity/getSanity/getSingleBlogPost";
-import { useEffect, useState } from "react";
 import Banner from "@/components/Banner";
 import Layout from "@/components/Layout";
 import { PortableText } from "@portabletext/react";
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 import Footer from "@/components/Footer";
-import StructuredData from "@/components/StructuredData";
 
-export default function SingleBlogPostLayout({ slug }) {
-    const { data, error } = useSanity(getSingleBlogPost, slug);
-    const [mounted, setMounted] = useState(false);
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
-
+export default function SingleBlogPostLayout({ data }) {
     const ptComponents = {
         block: {
             normal: ({ children }) => (
@@ -33,7 +22,7 @@ export default function SingleBlogPostLayout({ slug }) {
         types: {
             image: ({ value }) => (
                 <div className="grid place-items-center my-8">
-                    <Image
+                    value?.asset?._ref ? <Image
                         src={urlFor(value.asset._ref, {
                             width: 1300,
                             height: 1300,
@@ -47,19 +36,18 @@ export default function SingleBlogPostLayout({ slug }) {
                         sizes="(max-width: 768px) 100vw, 650px"
                         className="max-w-[650px] h-auto object-contain"
                         loading="lazy"
-                    />
+                    /> : null
                 </div>
             ),
         },
     };
 
-    if (!mounted) {
+    if (!data) {
         return null;
     }
 
     return (
         <PageTransition>
-            {data && <StructuredData data={data} type="Article" />}
             <Banner backgroundImage={data.mainImage}
                     hugeText={"Blog"}>
                 <h2 className={"text-[32px]"}>{data.title}</h2>

@@ -1,9 +1,10 @@
 import groq from "groq";
-import {client} from "../lib/client";
+import "server-only";
+import {fetchPublic} from "@/lib/server/sanity";
 
 
 export async function getArtisticStyles() {
-    return client.fetch(
+    return fetchPublic(
         groq`*[_type == "artisticStyle"]{
         title,
         description,

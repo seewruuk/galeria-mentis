@@ -1,8 +1,9 @@
 import groq from "groq";
-import {client} from "../lib/client";
+import "server-only";
+import {fetchPublic} from "@/lib/server/sanity";
 
 export async function getProductCategory(slug) {
-    return client.fetch(
+    return fetchPublic(
         groq`*[_type == "productCategory" && slug.current == $slug]{
             title,
             "slug": slug.current,
@@ -12,7 +13,7 @@ export async function getProductCategory(slug) {
             subText,
             seo{
               ...,
-              "ogImage": seo.ogImage.asset->url
+              "ogImage": ogImage.asset->url
             },
         }[0]`,
         { slug }

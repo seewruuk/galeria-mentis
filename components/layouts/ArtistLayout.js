@@ -1,60 +1,27 @@
 "use client";
 
-import useSanity from "@/hooks/useSanity";
-import {getArtist} from "@/sanity/getSanity/getArtist";
-import {useEffect, useState} from "react";
+import {useMemo, useState} from "react";
 import PageTransition from "@/components/PageTransition";
 import Layout from "@/components/Layout";
 import Banner from "@/components/Banner";
 import Loading from "@/components/Loading";
 import {PortableText} from "@portabletext/react";
 import ProductCard from "@/components/ProductCard";
-import {getArtistArtworks} from "@/sanity/getSanity/getArtistArtworks";
 import Pagination from "@/components/Pagination";
 import Footer from "@/components/Footer";
 import Image from "next/image";
 import {motion} from "framer-motion";
-import StructuredData from "@/components/StructuredData";
 
 
-export default function ArtistLayout({slug}) {
-    const {data: artist, loading: artistLoading} = useSanity(getArtist, slug);
-    const [artworks, setArtworks] = useState([]);
-    const [filteredArtworks, setFilteredArtworks] = useState([]);
-    const [artworksLoading, setArtworksLoading] = useState(false);
-
+export default function ArtistLayout({artist, artworks = []}) {
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8;
 
     const [sortOption, setSortOption] = useState("newest");
 
-    // Ładujemy artworks w tle - nie blokują renderowania głównej treści
-    useEffect(() => {
-        const fetchData = async () => {
-            if (artist?._id) {
-                setArtworksLoading(true);
-                try {
-                    const data = await getArtistArtworks(artist._id, null);
-                    setArtworks(data);
-                    setFilteredArtworks(data);
-                } catch (err) {
-                    console.error("Error fetching artworks:", err);
-                } finally {
-                    setArtworksLoading(false);
-                }
-            }
-        };
-
-        if (artist?._id) {
-            fetchData();
-        }
-    }, [artist?._id]);
-
     // Sortowanie artworks
-    useEffect(() => {
-        if (artworks.length === 0) return;
-        
-        let sortedArtworks = [...artworks];
+    const filteredArtworks = useMemo(() => {
+        const sortedArtworks = [...(artworks || [])];
         if (sortOption === "newest") {
             sortedArtworks.sort((a, b) => new Date(b._createdAt) - new Date(a._createdAt));
         } else if (sortOption === "oldest") {
@@ -64,7 +31,7 @@ export default function ArtistLayout({slug}) {
         } else if (sortOption === "price-high-low") {
             sortedArtworks.sort((a, b) => b.price - a.price);
         }
-        setFilteredArtworks(sortedArtworks);
+        return sortedArtworks;
     }, [sortOption, artworks]);
 
     const paginatedArtworks = filteredArtworks.slice(
@@ -72,8 +39,7 @@ export default function ArtistLayout({slug}) {
         currentPage * itemsPerPage
     );
 
-    // Pokazujemy Loading tylko gdy główne dane artysty się ładują
-    if (artistLoading || !artist) {
+    if (!artist) {
         return <Loading type={"full"}/>;
     }
 
@@ -89,7 +55,6 @@ export default function ArtistLayout({slug}) {
 
     return (
         <PageTransition>
-            {artist && <StructuredData data={artist} type="Person" />}
             <Banner backgroundImage={artist?.bannerImage} hugeText="Artist">
                 <motion.div
                     initial={{opacity: 0, scale: 0.9}}
@@ -149,13 +114,7 @@ export default function ArtistLayout({slug}) {
                 </div>
 
 
-                {artworksLoading ? (
-                    <div className="grid grid-cols-1 gap-5 max-lg:mx-auto md:grid-cols-2 lg:grid-cols-4">
-                        {[...Array(8)].map((_, i) => (
-                            <div key={i} className="animate-pulse bg-gray-200 h-64 rounded" />
-                        ))}
-                    </div>
-                ) : (
+                {(
                     <div className="grid grid-cols-1 gap-5 max-lg:mx-auto md:grid-cols-2 lg:grid-cols-4">
                         {paginatedArtworks && paginatedArtworks.length > 0 ? (
                             paginatedArtworks.map((item, index) => (

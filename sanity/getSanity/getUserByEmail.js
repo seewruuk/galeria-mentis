@@ -1,12 +1,15 @@
 import groq from "groq";
-import {client} from "../lib/client";
+import "server-only";
+import {fetchFresh} from "@/lib/server/sanity";
 
 export async function getUserByEmail(email) {
-    return client.fetch(
-        groq`*[_type == "user" && userInfo.email == "${email}"]{
+    if (typeof email !== "string" || !email.trim()) return null;
+    return fetchFresh(
+        groq`*[_type == "user" && lower(userInfo.email) == lower($email)] | order(length(_id) desc)[0]{
             _id,
             userInfo,
             role,
-        }[0]`
+        }`,
+        {email: email.trim()}
     )
 }

@@ -1,68 +1,51 @@
-// /app/api/webhook/route.js
 import {NextResponse} from "next/server";
-import {buffer} from 'micro';
-import Stripe from 'stripe';
-import {getOrder} from "@/sanity/getSanity/getOrder";
-import {sendEmailToCustomer} from "@/utils/emailService";
-import {decreaseQty} from "@/utils/decreaseQty";
+import {getStripe} from "@/lib/server/checkout";
+import {fulfillCheckoutSession} from "@/lib/server/fulfillment";
 
-export async function POST(req) {
-    const body = await req.json();
-    const {data} = await body;
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL?.toString();
+export const dynamic = "force-dynamic";
+
+const HANDLED_EVENTS = new Set(["checkout.session.completed", "checkout.session.async_payment_succeeded"]);
+
+/**
+ * Webhook Stripe. Nie ufamy treści żądania: identyfikator sesji pobieramy z API Stripe
+ * (kluczem tajnym) i dopiero na tej podstawie oznaczamy zamówienie jako opłacone.
+ * Jeśli ustawiono STRIPE_WEBHOOK_SECRET, dodatkowo weryfikujemy podpis.
+ */
+export async function POST(request) {
+    const rawBody = await request.text();
+    const stripe = getStripe();
+
+    let event;
+    try {
+        if (process.env.STRIPE_WEBHOOK_SECRET) {
+            event = stripe.webhooks.constructEvent(rawBody, request.headers.get("stripe-signature") || "", process.env.STRIPE_WEBHOOK_SECRET);
+        } else {
+            event = JSON.parse(rawBody);
+        }
+    } catch {
+        return NextResponse.json({message: "Invalid payload"}, {status: 400});
+    }
+
+    if (!HANDLED_EVENTS.has(event?.type)) {
+        return NextResponse.json({received: true});
+    }
+
+    const sessionId = event?.data?.object?.id;
+    if (typeof sessionId !== "string" || !sessionId.startsWith("cs_")) {
+        return NextResponse.json({message: "Missing session"}, {status: 400});
+    }
 
     try {
-        const orderId = data?.object?.client_reference_id;
-        const stripeSessionId = data?.object?.id;
-
-        if (!orderId || !stripeSessionId) {
-            return NextResponse.json({status: 400, message: "Missing orderId or sessionId"});
+        const session = await stripe.checkout.sessions.retrieve(sessionId);
+        const result = await fulfillCheckoutSession(session);
+        if (result.status === "order_not_found") {
+            // 500 → Stripe ponowi próbę i zdarzenie będzie widoczne jako błąd w panelu Stripe
+            return NextResponse.json({received: false, result: result.status}, {status: 500});
         }
-
-        const checkPaymentStatusRequest = await fetch(`${baseUrl}/api/checkPaymentStatus`, {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({sessionId: stripeSessionId}),
-        });
-
-        const checkPaymentStatus = await checkPaymentStatusRequest.json();
-        if (checkPaymentStatus.payment_status !== "paid") {
-            return NextResponse.json({status: 500, message: "Payment status not checked"});
-        }
-
-        const updateOrder = await fetch(`${baseUrl}/api/updateOrder`, {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({orderId, orderStatus: "paid"}),
-        });
-
-        const sanityData = await updateOrder.json();
-        if (sanityData.status === "ok") {
-            const orderInfo = await getOrder(orderId);
-            if (!orderInfo) {
-                return NextResponse.json({status: 500, message: "Order not found"});
-            }
-
-            // Ustawienie ilości na 0 dla wszystkich produktów z zamówienia
-            const decreaseQtyResult = await decreaseQty(orderInfo);
-
-            const updateProductQty = await fetch(`${baseUrl}/api/updateProductQty`, {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({orderInfo}),
-            });
-            const responseUpdateProductQty = await updateProductQty.json();
-
-            const emailResponse = await sendEmailToCustomer(orderInfo);
-            if (emailResponse.status !== 200) {
-                return NextResponse.json({ status: 500, message: "Error sending email" });
-            }
-
-            return NextResponse.json({status: 200, message: "ALl operations completed successfully"});
-        } else {
-            return NextResponse.json({status: 500, message: "Order status not updated"});
-        }
-    } catch (err) {
-        return NextResponse.json({status: 400, message: "Webhook not received", error: err?.message});
+        return NextResponse.json({received: true, result: result.status});
+    } catch (error) {
+        console.error("[webhook]", error.message);
+        // 500 → Stripe ponowi próbę
+        return NextResponse.json({message: "Webhook processing failed"}, {status: 500});
     }
 }

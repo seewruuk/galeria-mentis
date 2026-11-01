@@ -1,16 +1,20 @@
 import BlogLayout from "@/components/layouts/BlogLayout";
 import {getBlogSettings} from "@/sanity/getSanity/getBlogSettings";
-import {generateSEO} from "@/lib/generateSEO";
+import {getBlogPosts} from "@/sanity/getSanity/getBlogPosts";
+import {generateSEO, SITE_URL} from "@/lib/generateSEO";
 
-export default function Page(){
-    return(
-        <BlogLayout />
+export const revalidate = 60;
+
+export default async function Page() {
+    const posts = await getBlogPosts();
+
+    return (
+        <BlogLayout posts={posts || []}/>
     )
 }
 
 
 export async function generateMetadata() {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
     const data = await getBlogSettings();
 
     if (!data) return {
@@ -18,8 +22,5 @@ export async function generateMetadata() {
         description: "Discover the latest articles about contemporary art at Galeria Mentis",
     };
 
-    const pageUrl = `${baseUrl}/blog`;
-    return generateSEO(data, pageUrl);
-
+    return generateSEO(data, `${SITE_URL}/blog`);
 }
-

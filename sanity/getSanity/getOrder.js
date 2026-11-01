@@ -1,10 +1,15 @@
 import groq from "groq";
-import {client} from "../lib/client";
+import {privateId} from "@/sanity/privateIds";
+import "server-only";
+import {fetchFresh} from "@/lib/server/sanity";
 
 export async function getOrder(id) {
-    return client.fetch(
-        groq`*[_type == "order" && _id == "${id}"]{
+    if (typeof id !== "string" || !id || id.length > 100) return null;
+    // Zamówienie może mieć stare (publiczne) albo nowe ukryte ID – preferujemy "private."
+    return fetchFresh(
+        groq`*[_type == "order" && (_id in [$id, $privateId] || orderNumber == $id)] | order(length(_id) desc){
             _id,
+            _rev,
             orderDate,
             orderStatus,
             orderNumber,
@@ -23,6 +28,9 @@ export async function getOrder(id) {
             invoice,
             totalPrice,
             parcelDelivery,
-        }[0]`
+            stripeSessionId,
+            newsletter,
+        }[0]`,
+        {id, privateId: privateId("order", id)}
     )
 }

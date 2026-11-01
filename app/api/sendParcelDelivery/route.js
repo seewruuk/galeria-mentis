@@ -1,10 +1,24 @@
 import {NextResponse} from "next/server";
 import {sendParcelDeliveryEmail} from "@/utils/emailService";
 import {getOrder} from "@/sanity/getSanity/getOrder";
+import {requireAdmin} from "@/lib/server/adminGuard";
+import {readJson} from "@/lib/server/http";
+import {writeClient} from "@/lib/server/sanity";
 
-export async function POST(req, res) {
-    const body = await req.json();
-    const {orderId, carrier, trackingNumber, shipmentDate} = body;
+export const dynamic = "force-dynamic";
+
+const str = (value, max = 200) => (typeof value === "string" ? value.trim().slice(0, max) : "");
+
+// Zapis danych wysyłki + e-mail do klienta – tylko administrator
+export async function POST(request) {
+    const {response} = await requireAdmin(request, {mutating: true});
+    if (response) return response;
+
+    const body = await readJson(request);
+    const orderId = str(body?.orderId);
+    const carrier = str(body?.carrier);
+    const trackingNumber = str(body?.trackingNumber);
+    const shipmentDate = str(body?.shipmentDate, 40);
 
     if (!orderId || !carrier || !shipmentDate) {
         return NextResponse.json({
@@ -13,89 +27,39 @@ export async function POST(req, res) {
         });
     }
 
-    const sanityProjectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID.toString();
-    const sanityDataSet = process.env.NEXT_PUBLIC_SANITY_DATASET.toString();
-    const sanityApiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION.toString();
-    const token = process.env.NEXT_PUBLIC_SANITY_API_TOKEN.toString();
-
-    const url = `https://${sanityProjectId}.api.sanity.io/v${sanityApiVersion}/data/mutate/${sanityDataSet}`;
-
     try {
-        // Get current date and time for sentAt
-        const sentAt = new Date().toISOString();
-        
-        // Save parcel delivery data to order
-        const mutations = [{
-            patch: {
-                id: orderId,
-                set: {
-                    "parcelDelivery": {
-                        carrier: carrier,
-                        trackingNumber: trackingNumber || "",
-                        shipmentDate: shipmentDate,
-                        parcelDeliverySentAt: sentAt,
-                    }
-                }
-            }
-        }];
+        const existing = await getOrder(orderId);
+        if (!existing?._id) {
+            return NextResponse.json({status: 404, message: "Order not found"});
+        }
 
-        const sanityResponse = await fetch(url, {
-            method: 'post',
-            headers: {
-                'Content-type': 'application/json',
-                Authorization: `Bearer ${token}`
+        await writeClient.patch(existing._id).set({
+            parcelDelivery: {
+                carrier,
+                trackingNumber,
+                shipmentDate,
+                parcelDeliverySentAt: new Date().toISOString(),
             },
-            body: JSON.stringify({mutations})
-        });
+        }).commit();
 
-        const result = await sanityResponse.json();
+        const order = await getOrder(existing._id);
 
-        if (!sanityResponse.ok) {
-            return NextResponse.json({
-                status: 500,
-                message: "Error saving parcel delivery data",
-                data: result
-            });
-        }
-
-        // Get full order data to send email
-        const order = await getOrder(orderId);
-        
-        if (!order) {
-            return NextResponse.json({
-                status: 404,
-                message: "Order not found"
-            });
-        }
-
-        // Send email
-        const emailResult = await sendParcelDeliveryEmail(order, {
-            carrier,
-            trackingNumber,
-            shipmentDate,
-        });
+        const emailResult = await sendParcelDeliveryEmail(order, {carrier, trackingNumber, shipmentDate});
 
         if (emailResult.status !== 200) {
             return NextResponse.json({
                 status: 500,
                 message: "Parcel delivery data saved but email failed to send",
-                emailError: emailResult
             });
         }
 
         return NextResponse.json({
             status: 200,
             message: "Parcel delivery data saved and email sent successfully",
-            data: result
         });
 
     } catch (err) {
-        console.error(err);
-        return NextResponse.json({
-            status: 500,
-            message: "Error processing parcel delivery",
-            error: err.message
-        });
+        console.error("[sendParcelDelivery]", err.message);
+        return NextResponse.json({status: 500, message: "Error processing parcel delivery"});
     }
 }
-

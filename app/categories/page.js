@@ -1,18 +1,20 @@
 import ProductsLayout from "@/components/layouts/ProductsLayout";
-import {generateSEO} from "@/lib/generateSEO";
+import {generateSEO, SITE_URL} from "@/lib/generateSEO";
+import {getCatalogData} from "@/lib/server/catalog";
 
-export default function Page({params}) {
+export const revalidate = 60;
+
+export default async function Page() {
+    const data = await getCatalogData("all");
 
     return (
-        <ProductsLayout category={"all"}/>
+        <ProductsLayout category={"all"} {...data}/>
     )
 }
 
 
 export async function generateMetadata() {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
-    const pageUrl = `${baseUrl}/categories`;
-
+    // Ta sama treść co /categories/all – wskazujemy jeden adres kanoniczny
     return generateSEO({
         title: "All Artworks",
         description: "Explore our collection of artworks from various categories.",
@@ -21,5 +23,5 @@ export async function generateMetadata() {
             metaDescription: "Explore our collection of artworks from various categories.",
             keywords: ["art", "artworks", "collection", "categories", "paintings", "sculptures"],
         }
-    }, pageUrl);
+    }, `${SITE_URL}/categories/all`);
 }

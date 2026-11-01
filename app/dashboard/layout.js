@@ -1,28 +1,16 @@
-"use client";
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "@/context/AuthContext";
-import { useRouter } from "next/navigation";
+import {redirect} from "next/navigation";
+import {getAdminUser} from "@/lib/server/auth";
 
-export default function Page({ children }) {
-    const { isLogged, userData, isLoading } = useContext(AuthContext);
-    const [mounted, setMounted] = useState(false);
-    const router = useRouter();
+export const dynamic = "force-dynamic";
 
-    useEffect(() => {
-        if (!isLoading) {
-            if (!isLogged) {
-                router.push("/login");
-            } else if (userData?.role !== process.env.NEXT_PUBLIC_ADMIN_ROLE_CODE) {
-                router.push("/login");
-            } else {
-                setMounted(true);
-            }
-        }
-    }, [isLogged, userData?.role, isLoading, router]);
+export const metadata = {
+    robots: {index: false, follow: false},
+};
 
-    if (isLoading || !mounted) {
-        return null;
-    }
+// Dostęp do panelu sprawdzany na serwerze (sesja w ciasteczku httpOnly + rola z Sanity)
+export default async function DashboardLayout({children}) {
+    const admin = await getAdminUser().catch(() => null);
+    if (!admin) redirect("/login");
 
     return <section>{children}</section>;
 }

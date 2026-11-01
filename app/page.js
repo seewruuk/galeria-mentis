@@ -1,17 +1,19 @@
 import HomeLayout from "@/components/layouts/HomeLayout";
 import {getHomePage} from "@/sanity/getSanity/getHomePage";
-import {generateSEO} from "@/lib/generateSEO";
+import {generateSEO, SITE_URL} from "@/lib/generateSEO";
 
-export default function Page() {
+export const revalidate = 60;
+
+export default async function Page() {
+    const homePageData = await getHomePage();
 
     return (
-        <HomeLayout/>
+        <HomeLayout homePageData={homePageData}/>
     );
 }
 
 
 export async function generateMetadata() {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
     const data = await getHomePage();
 
     if (!data) return {
@@ -19,5 +21,5 @@ export async function generateMetadata() {
         description: "Discover exceptional contemporary art at Galeria Mentis",
     }
 
-    return generateSEO(data, baseUrl);
+    return generateSEO(data, SITE_URL);
 }

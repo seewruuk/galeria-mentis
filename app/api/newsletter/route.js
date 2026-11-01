@@ -1,44 +1,31 @@
-import { NextResponse } from "next/server";
+import {NextResponse} from "next/server";
+import {createRateLimiter, getClientIp, isSameOrigin, readJson} from "@/lib/server/http";
+import {subscribeToNewsletter} from "@/lib/server/newsletter";
 
-export async function POST(req, res) {
-    const body = await req.json(); // poprawne pobranie body
+export const dynamic = "force-dynamic";
 
-    const url = "https://api.getresponse.com/v3/contacts";
+const limiter = createRateLimiter({windowMs: 60 * 60 * 1000, max: 10});
 
-    let data = JSON.stringify({
-        "campaign": {
-            "campaignId": "XKpP3"
-        },
-        "email": body.dataToSend.email // użycie email z przesłanego body
-    });
+export async function POST(request) {
+    if (!isSameOrigin(request)) {
+        return NextResponse.json({status: "error", message: "Forbidden"}, {status: 403});
+    }
+    if (limiter.hit(`ip:${getClientIp(request)}`)) {
+        return NextResponse.json({status: "error", message: "Too many requests"}, {status: 429});
+    }
+
+    const body = await readJson(request);
+    // zgodność wstecz: dawniej {dataToSend: {email}}
+    const email = body?.email ?? body?.dataToSend?.email;
 
     try {
-        const newsletterResponse = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${body.dataToSend.token}`, // użycie token z przesłanego body
-                'Content-Type': 'application/json',
-            },
-            body: data, // poprawne użycie body zamiast data
-        });
-
-        if(newsletterResponse.status === 202){
-            return NextResponse.json({
-                status: "success",
-                message: "Dodano do newslettera"
-            });
-        }else{
-            return NextResponse.json({
-                status: "error",
-                message: "Wystąpił błąd podczas dodawania do newslettera",
-                error: newsletterResponse
-            });
+        const result = await subscribeToNewsletter(email);
+        if (result.ok) {
+            return NextResponse.json({status: "success", message: "Dodano do newslettera"});
         }
+        return NextResponse.json({status: "error", message: "Wystąpił błąd podczas dodawania do newslettera"}, {status: result.reason === "invalid" ? 400 : 502});
     } catch (error) {
-        return NextResponse.json({
-            status: "error",
-            message: "Wystąpił błąd podczas dodawania do newslettera",
-            error: error.message // zwrócenie wiadomości błędu
-        });
+        console.error("[newsletter]", error.message);
+        return NextResponse.json({status: "error", message: "Wystąpił błąd podczas dodawania do newslettera"}, {status: 500});
     }
 }

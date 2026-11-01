@@ -29,35 +29,22 @@ export default function ContactForm() {
             return;
         }
 
-        const emailAccessToken =  "qzXhywFh-Yx4-k-KkmM8N";
-        const emailServiceId = "service_3vl3ici";
-        const emailTemplateId = "template_772xy2q";
-        const emailUserId = "3EHJcCUf8rYArVWb0"
-
-        const emailResponse = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({
-                service_id: emailServiceId,
-                template_id: emailTemplateId,
-                user_id: emailUserId,
-                template_params: {
-                    name: formData.name,
-                    desc: formData.subject + " " + new Date().toISOString(),
-                    message: formData.message,
-                    customer_email: formData.email,
-                },
-                accessToken: emailAccessToken,
-                // accessToken: "",
-            }),
-        });
-
-        const emailResultText = await emailResponse.text();
-        if (emailResultText.trim() !== "OK") {
+        try {
+            const response = await fetch("/api/contact", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(formData),
+            });
+            const result = await response.json().catch(() => ({}));
+            if (!response.ok || result.status !== "ok") {
+                toast.error(result.message || "There was an error sending the message. Please try again later.");
+                setIsSending(false);
+                return;
+            }
+        } catch {
             toast.error("There was an error sending the message. Please try again later.");
-            console.log(emailResultText);
             setIsSending(false);
-            return ;
+            return;
         }
         toast.success("Email sent successfully.");
         setFormData({

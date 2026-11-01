@@ -12,12 +12,10 @@ import {useNavigationLinks} from "@/hooks/useNavigationLinks";
 
 
 export default function Navbar() {
-    const {links, artistsLinks, blogLinks, loading} = useNavigationLinks();
+    const {links, artistsLinks, blogLinks} = useNavigationLinks();
     const {displayVersion} = useContext(DisplayContext);
     const {totalQty} = useContext(CartContext);
     const pathname = usePathname();
-
-    if (loading) return null;
 
     switch (displayVersion) {
         case "desktop":

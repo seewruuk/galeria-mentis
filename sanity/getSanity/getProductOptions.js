@@ -1,8 +1,9 @@
 import groq from "groq";
-import { client } from "../lib/client";
+import "server-only";
+import {fetchPublic} from "@/lib/server/sanity";
 
 export async function getProductOptions() {
-    return client.fetch(
+    return fetchPublic(
         groq`
       *[_type == "product-details" && showOnWebsite == true]{
         _id,

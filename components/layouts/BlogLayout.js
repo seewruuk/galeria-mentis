@@ -1,7 +1,4 @@
 "use client"
-import useSanity from "@/hooks/useSanity";
-import {getBlogPosts} from "@/sanity/getSanity/getBlogPosts";
-import {useEffect, useState} from "react";
 import Link from "next/link";
 import PageTransition from "@/components/PageTransition";
 import Layout from "@/components/Layout";
@@ -9,25 +6,9 @@ import Footer from "@/components/Footer";
 import Banner from "@/components/Banner";
 import {PortableText} from "@portabletext/react";
 import {PortableComponents} from "@/lib/PortableComponents";
-import {getBlogSettings} from "@/sanity/getSanity/getBlogSettings";
 import Image from "next/image";
 
-export default function BlogLayout() {
-
-    const [mounted, setMounted] = useState(false)
-    const {data: posts, loading, error} = useSanity(getBlogPosts);
-    const {data: blogSettings, loading: loadingBlogSettings, error: errorBlogSettings} = useSanity(getBlogSettings);
-
-    useEffect(() => {
-        setMounted(true)
-    }, [])
-
-
-    if (
-        loading ||
-        loadingBlogSettings ||
-        !mounted
-    ) return null;
+export default function BlogLayout({posts = []}) {
 
     return (
         <PageTransition>
@@ -43,7 +24,7 @@ export default function BlogLayout() {
                 <div className="bg-white pt-[150px]">
                     <div
                         className="mx-auto mt-16 grid max-w-2xl auto-rows-fr grid-cols-1 gap-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-                        {posts.map((post) => (
+                        {(posts || []).map((post) => (
                             <article
                                 key={post._id}
                                 className="relative isolate flex flex-col justify-end overflow-hidden  bg-gray-900 px-8 pb-8 pt-80 sm:pt-48 lg:pt-80 border-2 border-white hover:border-primary transition-all"
@@ -58,11 +39,12 @@ export default function BlogLayout() {
 
                                 <div
                                     className="flex flex-wrap items-center gap-y-1 overflow-hidden text-sm/6 text-gray-300">
-                                    <time dateTime={post.datetime} className="mr-8">
+                                    <time dateTime={post._createdAt} className="mr-8">
                                         {new Date(post._createdAt).toLocaleDateString('en-US', {
                                             month: 'short',
                                             day: 'numeric',
-                                            year: 'numeric'
+                                            year: 'numeric',
+                                            timeZone: 'UTC'
                                         })}
                                     </time>
                                 </div>
@@ -76,7 +58,7 @@ export default function BlogLayout() {
                                     </Link>
                                 </h3>
                                 <p className={"text-white/70 mt-[16px]"}>{
-                                    post.description.length > 100 ?
+                                    post.description?.length > 100 ?
                                         post.description.slice(0, 100) + "..." : post.description
 
                                 }</p>

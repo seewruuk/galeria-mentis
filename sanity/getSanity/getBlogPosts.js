@@ -1,10 +1,11 @@
 
 import groq from "groq";
-import {client} from "../lib/client";
+import "server-only";
+import {fetchPublic} from "@/lib/server/sanity";
 
 
 export async function getBlogPosts(){
-    return client.fetch(
+    return fetchPublic(
         groq`*[_type == "blog"]{
             _id,
             _createdAt,

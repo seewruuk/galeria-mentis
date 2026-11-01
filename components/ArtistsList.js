@@ -43,7 +43,7 @@ export default function ArtistsList({ artists, artworksLimit = 3 }) {
                                 description={artist.description}
                             />
                             <div className="lg:flex-grow w-full">
-                                <ArtistArtworks artistId={artist._id} limit={artworksLimit} />
+                                <ArtistArtworks artistId={artist._id} artworks={artist.artworks} limit={artworksLimit} />
                             </div>
                         </motion.div>
                     ))

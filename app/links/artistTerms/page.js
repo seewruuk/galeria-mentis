@@ -1,6 +1,8 @@
 import PolicyComponent from "@/components/PolicyComponent";
 import {getPolicyByType} from "@/sanity/getSanity/getPolicy";
-import {generateSEO} from "@/lib/generateSEO";
+import {generateSEO, SITE_URL} from "@/lib/generateSEO";
+
+export const revalidate = 60;
 
 export default function Page(){
     return(
@@ -9,7 +11,6 @@ export default function Page(){
 }
 
 export async function generateMetadata() {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
     const data = await getPolicyByType('artistTerms');
 
     if (!data) {
@@ -19,6 +20,6 @@ export async function generateMetadata() {
         };
     }
 
-    const pageUrl = `${baseUrl}/links/artistTerms`;
+    const pageUrl = `${SITE_URL}/links/artistTerms`;
     return generateSEO(data, pageUrl);
 }
